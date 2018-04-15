@@ -14,3 +14,14 @@ $factory->define(App\Project::class, function (Faker $faker) {
         'share'          => $faker->boolean(50)
     ];
 });
+
+$factory->state(App\Project::class, 'firstProject', [
+    'name'           => 'sillaj-l Test Project',
+    'description'    => 'This is a static Test Project used for unit tests, etc.',
+    'display'        => TRUE,
+    'use_in_reports' => TRUE,
+    'share'          => TRUE
+]);
+
+
+

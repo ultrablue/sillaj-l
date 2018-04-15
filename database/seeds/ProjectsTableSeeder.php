@@ -14,6 +14,8 @@ class ProjectsTableSeeder extends Seeder
         // Get all the Users from the database.
         $users = App\User::all();
         
+        factory('App\Project')->states('firstProject')->create(['user_id' => $users->first()->id]);
+        
         // Seed Projects.
         $users->each(function ($user) {
             // Make some that have share set to TRUE.
