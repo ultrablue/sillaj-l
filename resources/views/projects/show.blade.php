@@ -17,8 +17,8 @@
                          <li class="list-group-item">Display: {{$project->display}}</li>
                          <li class="list-group-item">Share: {{$project->share}}</li>
                          <li class="list-group-item">Use in Reports: {{$project->use_in_reports}}</li>
-                         <li class="list-group-item">Created: {{$project->created_at}}</li>
-                         <li class="list-group-item">Modified: {{$project->updated_at}}</li>
+                         <li class="list-group-item">Created: {{$project->created_at->diffForHumans()}}</li>
+                         <li class="list-group-item">Modified: {{$project->updated_at->diffForHumans()}}</li>
                     </ul>
                 </div>
             </div>
