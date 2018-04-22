@@ -29,6 +29,15 @@ class User extends Authenticatable
 
 
     /**
+    * Get the User's Projects.
+    * 
+    * @var ?? A collection?
+    */
+    public function projects() {
+        return $this->hasMany('App\Project');
+    }
+
+    /**
     * Get the User's Tasks.
     * 
     * @var ?? A collection?
