@@ -13,7 +13,8 @@ class ProjectTest extends TestCase
     public function setUp() {
         
         parent::setUp();
-        $this->project = factory('App\Project')->create();
+        $this->user = factory('App\User')->create();
+        $this->project = factory('App\Project')->create(['user_id' => $this->user->id]);
 
     }
 
