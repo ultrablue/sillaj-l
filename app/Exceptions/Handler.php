@@ -48,6 +48,10 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        // GG added this per the video.
+        if (app()->environment() === 'testing') {
+            throw $exception;
+        }
         return parent::render($request, $exception);
     }
 }
