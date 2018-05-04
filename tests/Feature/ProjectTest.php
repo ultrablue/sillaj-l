@@ -21,7 +21,8 @@ class ProjectTest extends TestCase
     /** @test */
     public function a_user_can_view_all_projects()
     {
-
+        // TODO These tests need to be authenticated users!
+        // TODO Also, we need tests for non-authenticated users.
         $response = $this->get('/projects');
         $response->assertSee($this->project->name);
 

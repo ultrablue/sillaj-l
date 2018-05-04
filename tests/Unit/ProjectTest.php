@@ -10,13 +10,39 @@ class ProjectTest extends TestCase
 {
     use DatabaseMigrations;
 
-    /** @test */
-    public function a_project_has_an_owner() {
-        // So I guess the idea here is to check that the references are working? In that case, it's ok to create a new User just for this.
-        $user = factory('App\User')->create();
-        $project = factory('App\Project')->create(['user_id' => $user->id]);
-        $this->assertInstanceOf('App\User', $project->owner);
-        $this->assertInstanceOf('App\Project', $user->projects->first());
+    protected $guarded = [];
+    protected $user;
+    protected $project;
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->user = factory('App\User')->create();
+        $this->project = factory('App\Project')
+            ->create(['user_id' => $this->user->id]);
     }
 
+    /** @test */
+    public function a_project_has_an_owner()
+    {
+        $this->assertInstanceOf('App\User', $this->project->owner);
+        $this->assertInstanceOf('App\Project', $this->user->projects->first());
+    }
+
+    /* TODO !! Add a project_has_tasks, please!! */
+
+    /** @test */
+    public function a_project_can_add_a_task()
+    {
+       $this->project->addTask([
+            'user_id'        => $this->user->id,
+            'name'           => 'A test Task.',
+            'description'    => 'Test Task\'s description.',
+            'display'        => TRUE,
+            'use_in_reports' => TRUE,
+            'share'          => TRUE,
+        ]);
+
+      $this->assertCount(1, $this->project->tasks);
+    }
 }

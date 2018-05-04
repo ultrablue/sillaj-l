@@ -3,10 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Task;
+use App\Project;
 use Illuminate\Http\Request;
 
 class TasksController extends Controller
 {
+
+    /**
+     *
+     *
+     */
+    public function __construct(){
+        // TODO We can also move this to routes.
+        $this->middleware('auth');   
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -30,12 +42,22 @@ class TasksController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Project $project
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Project $project)
     {
-        //
+        $project->addTask([
+            'user_id'        => auth()->id(),
+            'name'           => request('name'),
+            'description'    => request('description'),
+            'display'        => request('display'),
+            'use_in_reports' => request('use_in_reports'),
+            'share'          => request('share'),
+        ]);
+
+        // Send them back...
+        return back(); 
     }
 
     /**
