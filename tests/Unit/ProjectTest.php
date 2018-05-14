@@ -1,4 +1,5 @@
 <?php
+// TODO What happens if we try to save a different Project with the same ID?
 
 namespace Tests\Unit;
 
@@ -29,12 +30,14 @@ class ProjectTest extends TestCase
         $this->assertInstanceOf('App\Project', $this->user->projects->first());
     }
 
-    /* TODO !! Add a project_has_tasks, please!! */
+    /* TODO !! Add a project_has_tasks, please!! IOW, multiple tasks. Or refactor the one below to also add another Task and test for that? */
 
     /** @test */
     public function a_project_can_add_a_task()
     {
-       $this->project->addTask([
+        // Tests the many to many relationship between Projects and Tasks.
+        // TODO Use Faker for this?? Or the Factory???
+        $this->project->addTask([
             'user_id'        => $this->user->id,
             'name'           => 'A test Task.',
             'description'    => 'Test Task\'s description.',

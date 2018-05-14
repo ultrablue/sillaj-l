@@ -8,9 +8,9 @@
                 <div class="card-header">{{$project->name}}</div>
 
                 <div class="card-body">
-                     <div class="card-text">
+                     <h5 class="card-title">
                         {{ $project->description }}
-                     </div>
+                     </h5>
                      <ul class="list-group list-group-flush">
                          <li class="list-group-item">ID: {{$project->id}}</li>
                          <li class="list-group-item">User: {{$project->user_id}}</li>
@@ -21,13 +21,16 @@
                          <li class="list-group-item">Modified: {{$project->updated_at->diffForHumans()}}</li>
                     </ul>
                 </div>
-            </div>
-            <div class="card-header">Tasks</div>
+
+            <div class="card-body">
+                <h5 class="card-title">Tasks</h5>
                 <ul class="list-group list-group-flush">
                     @foreach ($project->tasks as $task)
                     <li class="list-group-item">{{$task->name}}</li>
                     @endforeach
-                </ul> 
+                </ul>
+            </div>
+                
         </div>
     </div>
 </div>
