@@ -32,6 +32,7 @@ class ProjectTest extends TestCase
     }
 
     /* TODO !! Add a project_has_tasks, please!! IOW, multiple tasks. Or refactor the one below to also add another Task and test for that? */
+    /* TODO Do I even need these?? It seems like I'm testing the many to many features of Laravel itself, no?
 
     /** @test */
     public function a_project_can_add_a_task()
@@ -56,8 +57,10 @@ class ProjectTest extends TestCase
         $users = factory('App\User', 2)->create();
         foreach ($users as $user) {
             factory('App\Project', 2)->create(['user_id' => $user->id, 'share' => TRUE]);
+            factory('App\Project', 2)->create(['user_id' => $user->id, 'share' => FALSE]);
         }
-            $this->assertEquals($this->project->shared()->count(), 4);
+        $this->assertEquals($this->project->shared()->count(), 4);
+        $this->assertEquals($this->project->otherShared($users[0])->count(), 2);
     } 
 
 }
