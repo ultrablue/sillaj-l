@@ -12,10 +12,12 @@ class ProjectsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $projects = Project::latest()->get();
-        return view('projects.index', compact('projects'));
+        // Get the User's Projects.
+        $projects = Project::where('user_id', $request->user()->id)->orderBy('name')->get();
+        $otherSharedProjects = Project::where([['user_id', '<>',$request->user()->id], ['share', '=', TRUE]])->get();
+        return view('projects.index', compact('projects', 'otherSharedProjects'));
     }
 
     /**

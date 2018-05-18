@@ -63,4 +63,11 @@ class Project extends Model
         ])->get();
     }
 
+    /**
+     * Returns shared Projects that don't belong to $user.
+     * Keep in mind that this query doesn't rely on a many to many.
+     */
+    public function usersTasks() {
+        return $this->where(['user_id', '=', Auth::user])->get();
+    }
 }

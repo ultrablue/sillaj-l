@@ -10,7 +10,17 @@
                 <div class="card-body">
                     @foreach ($projects as $project)
                     <article>
-                        <h4><a href="{{$project->path()}}">{{ $project->name }}</a></h4>
+                        <h5><a href="{{$project->path()}}">{{ $project->name }}</a>@if ($project->share === 1) <span class="badge badge-info">Shared<span>@endif</h5>
+                        <div>{{ $project->description }}</div>
+                        <hr />
+                    </article>
+                    @endforeach 
+                </div>
+
+                <div class="card-body">
+                    @foreach ($otherSharedProjects as $project)
+                    <article>
+                        <h4>{{ $project->name }}</h4>
                         <div>{{ $project->description }}</div>
                         <hr />
                     </article>
@@ -20,7 +30,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Add a Project</h5>
                     <div class="card-text">
-                    <form method="POST" action="{{ $project->path() . '/tasks' }}">
+                    <form method="POST" action="{{ $project->path() . '/what-should-this-be?' }}">
                         <div class="form-group">
                             <label for="name">Name</label>
                             <input type="text" class="form-control" id="name">
