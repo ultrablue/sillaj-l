@@ -26,6 +26,7 @@ class ProjectTest extends TestCase
     /** @test */
     public function a_project_has_an_owner()
     {
+        // TODO Wouldn't this be better if it created a NEW Project?
         $this->assertInstanceOf('App\User', $this->project->owner);
         $this->assertInstanceOf('App\Project', $this->user->projects->first());
     }
@@ -48,4 +49,15 @@ class ProjectTest extends TestCase
 
       $this->assertCount(1, $this->project->tasks);
     }
+
+    /** @test */
+    public function a_project_can_list_all_shared_projects() {
+        // The idea here is to see whether the shared Projects created by any User are returned by the Model.
+        $users = factory('App\User', 2)->create();
+        foreach ($users as $user) {
+            factory('App\Project', 2)->create(['user_id' => $user->id, 'share' => TRUE]);
+        }
+            $this->assertEquals($this->project->shared()->count(), 4);
+    } 
+
 }
