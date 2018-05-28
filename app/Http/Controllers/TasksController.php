@@ -13,9 +13,10 @@ class TasksController extends Controller
      *
      *
      */
-    public function __construct(){
+    public function __construct()
+    {
         // TODO We can also move this to routes.
-        $this->middleware('auth');   
+        $this->middleware('auth');
     }
 
 
@@ -57,7 +58,7 @@ class TasksController extends Controller
         ]);
 
         // Send them back...
-        return back(); 
+        return back();
     }
 
     /**

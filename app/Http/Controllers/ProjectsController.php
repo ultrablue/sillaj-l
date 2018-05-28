@@ -15,8 +15,8 @@ class ProjectsController extends Controller
     public function index(Request $request)
     {
         // Get the User's Projects.
-        $projects = Project::where('user_id', $request->user()->id)->orderBy('name')->get();
-        $otherSharedProjects = Project::where([['user_id', '<>',$request->user()->id], ['share', '=', TRUE]])->get();
+        $projects = Project::where('user_id', $request->user()->id)->orderBy('name')->get() ?? '';
+        $otherSharedProjects = Project::where([['user_id', '<>',$request->user()->id], ['share', '=', true]])->get();
         return view('projects.index', compact('projects', 'otherSharedProjects'));
     }
 
@@ -49,7 +49,7 @@ class ProjectsController extends Controller
      */
     public function show(Project $project)
     {
-        return view('projects.show', compact('project')); 
+        return view('projects.show', compact('project'));
     }
 
     /**

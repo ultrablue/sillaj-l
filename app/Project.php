@@ -7,9 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
-
-
-    public function tasks() 
+    public function tasks()
     {
         return $this->belongsToMany(Task::class)->withTimestamps();
     }
@@ -18,20 +16,20 @@ class Project extends Model
     /**
      *
      * Returns the string representation of the URI for this Model.
-     * 
+     *
      * @return String the path(?).
      *
      * TODO There's an eloqent helper that might be able to do this.
      */
-    public function path() 
+    public function path()
     {
         // TODO If this is /projects/... it breaks. You should fix that.
-        return 'projects/' . $this->id; 
+        return 'projects/' . $this->id;
     }
 
-    public function owner() 
+    public function owner()
     {
-        return $this->belongsTo(User::class, 'user_id'); 
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
@@ -39,9 +37,9 @@ class Project extends Model
      * Add a Task to a Project.
      * TODO Do we check here if the User owns the Project? Or in the Controller?
      *      It seems like we should be able to assume that the Project has already
-     *      been chosen because it belongs to the User?? 
+     *      been chosen because it belongs to the User??
      */
-    public function addTask($task) 
+    public function addTask($task)
     {
         $this->tasks()->create($task);
     }
@@ -49,17 +47,19 @@ class Project extends Model
     /**
      * Returns all shared Projects.
      */
-    public function shared() {
-       return $this->where('share', TRUE)->get(); 
+    public function shared()
+    {
+        return $this->where('share', true)->get();
     }
 
     /**
      * Returns shared Projects that don't belong to $user.
      * Keep in mind that this query doesn't rely on a many to many.
      */
-    public function otherShared(User $user) {
+    public function otherShared(User $user)
+    {
         return $this->where([
-            ['share', '=',  TRUE], ['user_id', '<>', $user->id]
+            ['share', '=',  true], ['user_id', '<>', $user->id]
         ])->get();
     }
 
@@ -67,7 +67,8 @@ class Project extends Model
      * Returns shared Projects that don't belong to $user.
      * Keep in mind that this query doesn't rely on a many to many.
      */
-    public function usersTasks() {
+    public function usersTasks()
+    {
         return $this->where(['user_id', '=', Auth::user])->get();
     }
 }
