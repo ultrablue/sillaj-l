@@ -32,6 +32,9 @@ Session.vim
 # Auto-generated tag files
 tags
 
+
+.php_cs.cache
+
 # End vim ingores
 #############################################################################
 
