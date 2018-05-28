@@ -31,20 +31,19 @@ class ProjectTest extends TestCase
     /** @test */
     public function an_authenticated_user_can_view_all_projects()
     {
-        // First, we need to make a User.
-        // The User should be able to see:
-        //  All of the User's Projects.
-        //  All shared Projects.
-        //
-        // TODO These tests need to be authenticated users!
         // TODO Also, we need tests for non-authenticated users.
-        //Given we have an authenticatd User
+        //Given we have an authenticatd User;
         $user = factory('App\User')->create();
-        //$this->be($user);
-        $response = $this->actingAs($user)->get('/projects');
+        // And that User has a Project;
         $project = factory('App\Project')->create(['user_id' => $user->id]);
-        //$response->assertViewHas('projects');
-        $response->assertSee($this->project->name);
+        // And another User made a shared Project;
+        $sharedProject = factory('App\Project')->create(['user_id' => $this->user->id, 'share' => TRUE]);
+        // When we get the list of Projects...
+        $response = $this->actingAs($user)->get('/projects');
+        // Do we see the Project that the User made?
+        $response->assertSee($project->name);
+        // Do we see the shared Project?
+        $response->assertSee($sharedProject->name);
 
     }
 
