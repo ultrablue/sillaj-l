@@ -25,9 +25,12 @@ class TasksController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        // Get the User's Projects.
+        $tasks = Task::where('user_id', $request->user()->id)->orderBy('name')->get() ?? '';
+        $otherSharedTasks = Task::where([['user_id', '<>',$request->user()->id], ['share', '=', true]])->get();
+        return view('tasks.index', compact('tasks', 'otherSharedTasks'));
     }
 
     /**
@@ -69,7 +72,7 @@ class TasksController extends Controller
      */
     public function show(Task $task)
     {
-        //
+       return view('tasks.show', compact('task')); 
     }
 
     /**

@@ -52,7 +52,6 @@ class ProjectTest extends TestCase
     {
         $this->expectException('Illuminate\Auth\AuthenticationException');
         $response = $this->get('/projects/' . $this->project->id);
-        $response->assertSee($this->project->name);
     }
 
     /** @test */
@@ -65,7 +64,7 @@ class ProjectTest extends TestCase
 
     
     /** @test */
-    public function a_authenticated_user_can_view_a_projects_tasks()
+    public function an_authenticated_user_can_view_a_projects_tasks()
     {
         $task = factory('App\Task')->create();
         $this->project->tasks()->attach($task); 
@@ -79,11 +78,8 @@ class ProjectTest extends TestCase
     public function an_unathenticated_user_can_not_view_a_projects_tasks()
     {
         $this->expectException('Illuminate\Auth\AuthenticationException');
-        $task = factory('App\Task')->create();
-        $this->project->tasks()->attach($task); 
         
         $response = $this->get('/projects/' . $this->project->id);
-        $response->assertSee($task->name);
          
     }
 
