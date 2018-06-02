@@ -25,7 +25,7 @@
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                    {{ config('app.name', 'Laravel xxx') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -34,7 +34,8 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item"><a href="projects" class="nav-link">Projects</a></li>
+                        <li class="nav-item"><a href="/~sillaj-l-01/sillaj-l/public/projects" class="nav-link">Projects</a></li>
+                        <li class="nav-item"><a href="/~sillaj-l-01/sillaj-l/public/tasks" class="nav-link">Tasks</a></li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
