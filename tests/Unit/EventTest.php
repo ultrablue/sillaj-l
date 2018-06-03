@@ -5,54 +5,39 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Event;
 
 class EventTest extends TestCase
 {
     use DatabaseMigrations;
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    public function testExample()
-    {
-        $this->assertTrue(true);
-    }
 
+    public function setUp() {
+        parent:: setup();
+        $this->user = factory('App\User')->create();
+        $this->project = factory('App\Project')->create(['user_id'=> $this->user->id]);
+        $this->task    = factory('App\Task')->create(['user_id'=> $this->user->id]);
+        $this->event   = factory('App\Event')->create(['user_id'=> $this->user->id, 'project_id' => $this->project->id, 'task_id' => $this->task->id]);
+        
+ 
+    }
+    
     /** @test */
     public function an_event_has_an_owner() {
         // Testing the Model's owner() method.
-        $user = factory('App\User')->create();
-        $project = factory('App\Project')->create(['user_id'=> $user->id]);
-        $task    = factory('App\Task')->create(['user_id'=> $user->id]);
-        $event   = factory('App\Event')->create(['user_id'=> $user->id, 'project_id' => $project->id, 'task_id' => $task->id]);
-        
-        $this->assertInstanceOf('App\User', $event->owner);
+                $this->assertInstanceOf('App\User', $this->event->owner);
     }
-
 
     /** @test */
     public function an_event_has_a_task() {
-        // Testing the Model's owner() method.
-        $user = factory('App\User')->create();
-        $project = factory('App\Project')->create(['user_id'=> $user->id]);
-        $task    = factory('App\Task')->create(['user_id'=> $user->id]);
-        $event   = factory('App\Event')->create(['user_id'=> $user->id, 'project_id' => $project->id, 'task_id' => $task->id]);
+        // Testing the Model's task() method.
         
-        $this->assertInstanceOf('App\Task', $event->task);
+        $this->assertInstanceOf('App\Task', $this->event->task);
     }
-
 
     /** @test */
     public function an_event_has_a_project() {
-        // Testing the Model's owner() method.
-        $user = factory('App\User')->create();
-        $project = factory('App\Project')->create(['user_id'=> $user->id]);
-        $task    = factory('App\Task')->create(['user_id'=> $user->id]);
-        $event   = factory('App\Event')->create(['user_id'=> $user->id, 'project_id' => $project->id, 'task_id' => $task->id]);
+        // Testing the Model's project() method.
         
-        $this->assertInstanceOf('App\Project', $event->project);
+        $this->assertInstanceOf('App\Project', $this->event->project);
     }
 
 }
