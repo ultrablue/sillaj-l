@@ -15,10 +15,15 @@
 // https://laravel.com/docs/5.6/authentication#protecting-routes
 // https://laravel.com/docs/5.6/controllers#controller-middleware
 
+// See the Home Controller for an example of protecting the entire Controller
+// with auth.
+Route::get('/', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@index')->name('home');
+
 // TODO Add auth here, too, please.
-Route::get('/', function () {
-    return view('welcome');
-});
+//Route::get('/', function () {
+//    return view('welcome');
+//});
 
 // Projects
 Route::get('/projects', 'ProjectsController@index')->middleware('auth');
@@ -37,4 +42,3 @@ Route::post('/tasks/{task}/projects', 'TasksController@store');
 // Framework generated helper for Authentication.
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
