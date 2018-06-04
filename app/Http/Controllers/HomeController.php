@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Event;
 use Illuminate\Http\Request;
+
+use Carbon\Carbon;
 
 class HomeController extends Controller
 {
@@ -21,8 +24,9 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('home');
+        $events = Event::where(['user_id' => $request->user()->id])->whereDate('event_date' , Carbon::now()->toDateString())->get();
+        return view('home', compact('events'));
     }
 }

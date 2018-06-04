@@ -14,8 +14,27 @@
                         </div>
                     @endif
 
-                    You are logged in!
+
                 </div>
+                <div class="card-body">
+                    <p>You are logged in!</p>
+                </div>
+                <div class="card-body">
+                    @if ($events->count() === 0)
+                    <div class="alert alert-warning">
+                        You don't have any events, yet.
+                    </div>
+                @else
+                    <div class="card-text">
+                        <ul class="list-group list-group-flush">
+                        @foreach ($events as $event)
+                            <li class="list-group-item">{{ $event->note }}</li>
+                   @endforeach
+                        </ul>
+                    </div>
+                @endif
+                </div>
+
             </div>
         </div>
     </div>

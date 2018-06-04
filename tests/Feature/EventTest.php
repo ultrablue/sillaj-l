@@ -3,18 +3,36 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Carbon\Carbon;
 
 class EventTest extends TestCase
 {
+    use DatabaseMigrations;
+    
+    /** @test */
+    public function an_authenticated_user_with_no_events_for_a_given_date_sees_no_events_in_the_dashboard() {
+        $user = factory('App\User')->create();
+        $response = $this->actingAs($user)->get('/');
+        $response->assertSee('You don\'t have any events, yet.');
+    }
+
+
     /**
-     * A basic test example.
-     *
-     * @return void
+     * @test
      */
-    public function testExample()
-    {
-        $this->assertTrue(true);
+    public function an_authenticated_user_can_view_all_events_for_a_given_date() {
+        // Given an authenticated User;
+        $user = factory('App\User')->create();
+        // and a date;
+        $date = Carbon::now();
+        // the User can see Events for that Date.
+        $firstProject = factory('App\Project')->create(['user_id' => $user->id]);
+        $firstTask = factory('App\Task')->create(['user_id' => $user->id]);
+        
+        $firstEvent = factory('App\Event')->create(['user_id' => $user->id, 'project_id' => $firstProject->id, 'task_id' => $firstTask->id, 'event_date' => $date]);
+        $response = $this->actingAs($user)->get('/');
+        $response->assertSee($firstEvent->note);
     }
 }
