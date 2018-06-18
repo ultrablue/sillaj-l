@@ -4,6 +4,7 @@ namespace App;
 
 use App\Task;
 use Illuminate\Database\Eloquent\Model;
+use Auth;
 
 class Project extends Model
 {
@@ -67,8 +68,8 @@ class Project extends Model
      * Returns shared Projects that don't belong to $user.
      * Keep in mind that this query doesn't rely on a many to many.
      */
-    public function usersTasks()
+    public function scopeUsersProjects()
     {
-        return $this->where(['user_id', '=', Auth::user])->get();
+        return $this->where('user_id', '=', 1);
     }
 }
