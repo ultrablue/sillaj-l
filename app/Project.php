@@ -74,10 +74,6 @@ class Project extends Model
                 $query->where('share', '=', true);
                 $query->where('user_id', '<>', Auth::id());
             });
-            
-            
-            //'share', '=',  true)
-            //->where('user_id', '<>', Auth::id());
     }
 
 
