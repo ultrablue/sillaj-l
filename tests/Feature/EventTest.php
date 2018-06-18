@@ -35,4 +35,33 @@ class EventTest extends TestCase
         $response = $this->actingAs($user)->get('/');
         $response->assertSee($firstEvent->note);
     }
+    
+    /**
+     * @test
+     */
+    public function an_authenticated_user_can_view_new_the_event_form() {
+        // Given a User...
+        $user= factory('App\User')->create();
+        // ...that User can see the Event Form (which is where???)
+        $response = $this->actingAs($user)->get('/events/create');
+        $response->assertSee('Create Event');
+    }
+    /**
+     * @test
+     */
+    public function an_authenticated_user_can_create_a_new_task_with_a_start_and_end_date() {
+        // Given a User...
+        $user= factory('App\User')->create();
+        // ... a Date
+        $date = Carbon::now();
+        
+    }
+
+    // More Tests:
+    // Test POST
+    // Make sure validation works.
+    // Start/End versus duration.
+    // Shared tasks/projects?
+
+
 }

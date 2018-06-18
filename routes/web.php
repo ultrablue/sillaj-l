@@ -25,6 +25,10 @@ Route::get('/home', 'HomeController@index')->name('home');
 //    return view('welcome');
 //});
 
+// Events
+Route::get('/events/create', 'EventController@create');
+
+
 // Projects
 Route::get('/projects', 'ProjectsController@index')->middleware('auth');
 Route::get('/projects/{project}', 'ProjectsController@show')->middleware('auth');

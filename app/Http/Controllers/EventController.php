@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Event;
 use Illuminate\Http\Request;
 
+use App\Project;
+use Auth;
+
 class EventController extends Controller
 {
     /**
@@ -24,7 +27,12 @@ class EventController extends Controller
      */
     public function create()
     {
-        //
+        // We'll need a list of Projects
+        //dd(Auth::user());
+        $projects = Project::allAvailable()->orderBy('name')->get();
+        //dd($projects);
+        // And a list of Tasks.
+        return view('events.create', compact('projects'));
     }
 
     /**
