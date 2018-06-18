@@ -57,12 +57,29 @@ class Project extends Model
      * Returns shared Projects that don't belong to $user.
      * Keep in mind that this query doesn't rely on a many to many.
      */
-    public function otherShared(User $user)
+    public function scopeOtherShared()
     {
-        return $this->where([
-            ['share', '=',  true], ['user_id', '<>', $user->id]
-        ])->get();
+        return $this->where('share', '=',  true)
+            ->where('user_id', '<>', Auth::id());
     }
+    
+    /**
+     * Returns the User's Projects and Shared Projects that belong to any User.
+     * Keep in mind that this query doesn't rely on a many to many.
+     */
+    public function scopeAllAvailable()
+    {
+        return $this->where('user_id','=',Auth::id())
+            ->orWhere(function($query){
+                $query->where('share', '=', true);
+                $query->where('user_id', '<>', Auth::id());
+            });
+            
+            
+            //'share', '=',  true)
+            //->where('user_id', '<>', Auth::id());
+    }
+
 
     /**
      * Returns shared Projects that don't belong to $user.
