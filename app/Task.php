@@ -4,6 +4,7 @@ namespace App;
 
 use App\Project;
 use Illuminate\Database\Eloquent\Model;
+use Auth;
 
 class Task extends Model
 {
@@ -39,4 +40,21 @@ class Task extends Model
         // We have to indicate that the column is actually called 'user_id'.
         return $this->belongsTo(User::class, 'user_id');
     }
+  
+    /**
+     * Returns the User's Tasks and Shared Tasks that belong to any User.
+     * Keep in mind that this query doesn't rely on a many to many.
+     *
+     * TODO - Should this go in User?
+     */
+    public function scopeAllAvailable()
+    {
+        return $this->where('user_id','=',Auth::id())
+            ->orWhere(function($query){
+                $query->where('share', '=', true);
+                $query->where('user_id', '<>', Auth::id());
+            });
+    }
+
+
 }

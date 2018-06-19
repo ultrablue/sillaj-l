@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Event extends Model
 {
 
+    protected $fillable=['task_id', 'project_id', 'time_start', 'time_end', 'duration', 'event_date', 'note'];
+
     /**
      * TODO I need some phpDoc, please.
      */

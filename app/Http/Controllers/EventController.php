@@ -6,10 +6,23 @@ use App\Event;
 use Illuminate\Http\Request;
 
 use App\Project;
+use App\Task;
 use Auth;
 
 class EventController extends Controller
 {
+    /**
+     * Add authentication to this entire Controller; it has no publicly
+     * available methods.
+     *
+     */
+    public function __construct()
+    {
+        // TODO We can also move this to routes.
+        $this->middleware('auth');
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -28,11 +41,16 @@ class EventController extends Controller
     public function create()
     {
         // We'll need a list of Projects
-        //dd(Auth::user());
         $projects = Project::allAvailable()->orderBy('name')->get();
         //dd($projects);
+        
+        
         // And a list of Tasks.
-        return view('events.create', compact('projects'));
+        $tasks = Task::allAvailable()->orderBy('name')->get();
+        //dd($tasks);
+        
+        
+        return view('events.create', compact('projects', 'tasks'));
     }
 
     /**
@@ -43,7 +61,9 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //dd(request()->all()); 
+        //Event::create(request( ['date', 'project_id', 'task_id'] ));
+        Auth::user()->events()->create(request( ['date', 'project_id', 'task_id', 'event_date', 'duration', 'note', 'time_start', 'time_end'] ));
     }
 
     /**

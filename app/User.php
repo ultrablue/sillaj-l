@@ -29,6 +29,18 @@ class User extends Authenticatable
 
 
     /**
+    * The User's Events.
+    *
+    * @var ?? A collection?
+    */
+    public function events()
+    {
+        return $this->hasMany('App\Event');
+    }
+
+
+
+    /**
     * Get the User's Projects.
     *
     * @var ?? A collection?

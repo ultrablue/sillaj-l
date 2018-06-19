@@ -66,6 +66,8 @@ class Project extends Model
     /**
      * Returns the User's Projects and Shared Projects that belong to any User.
      * Keep in mind that this query doesn't rely on a many to many.
+     *
+     * TODO - Should this go in User?
      */
     public function scopeAllAvailable()
     {
