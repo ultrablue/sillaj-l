@@ -26,12 +26,31 @@
                     </div>
                 @else
                     <div class="card-text">
-                        <ul class="list-group list-group-flush">
-                        @foreach ($events as $event)
-                            <li class="list-group-item">{{ $event->note }}</li>
-                   @endforeach
-                        </ul>
-                    </div>
+                        <div class="table-responsive">
+                            <table class="table table-sm" style="font-size:.75rem;">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Start</th>
+                                        <th scope="col">End</th>
+                                        <th scope="col">Duration</th>
+                                        <th scope="col">Project</th>
+                                        <th scope="col">Task</th>
+                                        <th scope="col">Note</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                @foreach ($events as $event)
+                                    <tr>
+                                        <td>@if (null !== $event->time_start){{ $event->start()->format('H:i') }}@endif</td>
+                                        <td>@if (null !== $event->time_end){{ $event->end()->format('H:i') }}@endif</td>
+                                        <td>{{ $event->duration }}</td>
+                                        <td>{{ $event->project->name }}</td>
+                                        <td>{{ $event->task->name }}</td>
+                                        <td>{{ str_limit($event->note,100) }}</td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                        </div>
                 @endif
                 </div>
 

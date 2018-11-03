@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <form action="/~sillaj-l-01/sillaj-l/public/events" method="post">
+        <form action="/~sillaj-l-01/sillaj-l/public/event" method="post">
         @csrf
             <div class="form-group">
                 <label for="date">Date</label>

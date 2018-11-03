@@ -26,8 +26,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 //});
 
 // Events
-Route::get('/events/create', 'EventController@create');
-Route::post('/events', 'EventController@store');
+Route::get('/event/create', 'EventController@create');
+Route::post('/event', 'EventController@store');
 
 
 // Projects
