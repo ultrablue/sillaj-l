@@ -93,6 +93,7 @@ class EventController extends Controller
 		->withInput();
 	} 
 	dd($request->all());
+ */
             
         // Are both the start time and the end time populated? If so, we use them to calculate and set the duration.
         if ($request['time_start'] && $request['time_end']) {
@@ -109,7 +110,6 @@ class EventController extends Controller
             //dd($duration);
             $request['duration'] = $duration;
         }
- */
         Auth::user()->events()->create(request( ['date', 'project_id', 'task_id', 'event_date', 'duration', 'note', 'time_start', 'time_end'] ));
         return redirect()->route('home');
     }
