@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class EventTest extends TestCase
 {
     use DatabaseMigrations;
+    use RefreshDatabase;
 
     public function setUp() {
         parent:: setup();

@@ -10,7 +10,8 @@ use Carbon\Carbon;
 class EventTest extends TestCase
 {
     use DatabaseMigrations;
-    
+    use RefreshDatabase;
+
     /** @test */
     public function an_authenticated_user_with_no_events_for_a_given_date_sees_no_events_in_the_dashboard() {
         $user = factory('App\User')->create();
