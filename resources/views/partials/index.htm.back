@@ -1,0 +1,316 @@
+<!doctype html> 
+<html lang="en">
+	<head>
+		<!-- Required meta tags -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+
+		<title>Sillaj Bootstrap Test Calendar CSS</title>
+	</head>
+
+
+
+<style>
+    * {box-sizing: border-box;}
+    ul {list-style-type: none;}
+
+    .month {
+        padding: 7px 20px;
+        width: 100%;
+        background: #1abc9c;
+        text-align: center;
+    }
+
+    .month ul {
+        margin: 0;
+        padding: 0;
+    }
+
+    .month ul li {
+        color: white;
+        font-size: 15px;
+        text-transform: capitalize;
+        /*letter-spacing: 3px;*/
+    }
+
+    .month .prev {
+        float: left;
+        padding-top: 0px;
+    }
+
+    .month .next {
+        float: right;
+        padding-top: 0px;
+    }
+
+    .weekdays {
+        margin: 0;
+        padding: 10px 0;
+        background-color: #ddd;
+    }
+
+    .weekdays li {
+        display: inline-block;
+        width: 12.6%;
+        color: #666;
+        text-align: center;
+        font-size:12px;
+    }
+
+    .days {
+        padding: 0px 0;
+        background: #eee;
+        margin: 0;
+    }
+
+    .days li {
+        list-style-type: none;
+        display: inline-block;
+        width: 12.6%;
+        text-align: center;
+        margin-bottom: 5px;
+        font-size:12px;
+        color: #777;
+    }
+
+    .days li .active {
+        padding: 5px;
+        background: #1abc9c;
+        color: white !important
+    }
+
+    /* Add media queries for smaller screens 
+    @media screen and (max-width:720px) {
+        .weekdays li, .days li {width: 13.1%;}
+    }
+
+    @media screen and (max-width: 420px) {
+        .weekdays li, .days li {width: 12.5%;}
+        .days li .active {padding: 2px;}
+    }
+
+    @media screen and (max-width: 290px) {
+        .weekdays li, .days li {width: 12.2%;}
+    }*/
+</style>
+
+
+
+
+
+
+
+
+<body>
+
+
+    <nav class="navbar navbar-expand-md bg-light navbar-light">
+        <!-- Brand -->
+        <a class="navbar-brand" href="#">Navbar</a>
+
+        <!-- Toggler/collapsibe Button -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+			<!-- Navbar links -->
+			<div class="collapse navbar-collapse" id="collapsibleNavbar">
+				<ul class="navbar-nav">
+					<li class="nav-item active">
+						<a class="nav-link" href="#">My Time</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">Projects</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">Tasks</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">Reports</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">User</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">Logout</a>
+					</li>
+				</ul>
+			</div>
+		</nav> 
+
+
+
+		<div class="container">
+
+
+
+			<div class="container" style="margin-top:30px">
+				<div class="row">
+					<div class="col-sm-4" style="background: lightgreen;">
+
+
+
+
+
+
+
+                        <!-- Calendar Navigation -->
+                        <div class="month">      
+                            <ul>
+                                <li class="prev">&#10094;</li>
+                                <li class="next">&#10095;</li>
+                                <li>2019-09 September</li>
+                            </ul>
+                        </div>
+
+                        <ul class="weekdays">
+                            <li>Mo</li>
+                            <li>Tu</li>
+                            <li>We</li>
+                            <li>Th</li>
+                            <li>Fr</li>
+                            <li>Sa</li>
+                            <li>Su</li>
+                        </ul>
+
+                        <ul class="days">  
+                            <li><a href="">1</a></li>
+                            <li>2</li>
+                            <li>3</li>
+                            <li>4</li>
+                            <li>5</li>
+                            <li>6</li>
+                            <li>7</li>
+                            <li>8</li>
+                            <li>9</li>
+                            <li><a href=""><span class="active">10</span></a></li>
+                            <li>11</li>
+                            <li>12</li>
+                            <li>13</li>
+                            <li>14</li>
+                            <li>15</li>
+                            <li>16</li>
+                            <li>17</li>
+                            <li>18</li>
+                            <li>19</li>
+                            <li>20</li>
+                            <li>21</li>
+                            <li>22</li>
+                            <li>23</li>
+                            <li>24</li>
+                            <li>25</li>
+                            <li>26</li>
+                            <li>27</li>
+                            <li>28</li>
+                            <li>29</li>
+                            <li>30</li>
+                            <li>31</li>
+                        </ul>
+
+
+                        <!-- End Calendar Navigation -->
+
+
+
+
+
+
+                        <hr class="d-sm-none">
+
+
+
+
+
+
+
+
+                        <form style="padding-top:1em; padding-bottom:3em;">
+                            <div class="form-group" style="">
+                                <label for="project">Project</label>
+                                <select class="form-control form-control-sm" id="project" name="project">
+                                    <option>IT</option>
+                                    <option>IT - Some Task</option>
+                                    <option>IT - Another Task</option>
+                                    <option>IT - This is your life now dude learn to live with it or don't whatever.</option>
+                                    <option>5</option>
+                                </select>
+                            </div>
+
+
+                            <div class="form-group input-sm" style="">
+                                <label for="task">Task</label>
+                                <select class="form-control form-control-sm" id="task" name="task">
+                                    <option>Email, News, Etc.</option>
+                                    <option>Meeting</option>
+                                    <option>Coding</option>
+                                    <option>Leave, Annual</option>
+                                    <option>Leave, Sick</option>
+                                </select>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="duration">Duration</label>
+                                <input type="time" class="form-control form-control-sm" id="duration" name="duration" aria-describedby="duration" placeholder="Duration">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="start">Start Time</label>
+                                <input type="time" class="form-control form-control-sm" id="start" name="start" aria-describedby="start" placeholder="Start Time">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="end">End Time</label>
+                                <input type="time" class="form-control form-control-sm" id="end" name="end" aria-describedby="end" placeholder="End Time">
+                            </div>
+
+
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input id="email" type="text" class="form-control form-control-sm" name="email" placeholder="Email">
+                            </div>
+
+
+                            <div class="form-row align-items-center">
+                                <div class="col-sm-5 my-1">
+                                    <label class="sr-only" for="inlineFormInputName">Name</label>
+                                    <input type="text" class="form-control" id="inlineFormInputName" placeholder="Jane Doe">
+                                </div>
+                            </div>
+
+
+
+
+
+                        </form>
+
+
+
+
+
+
+
+
+
+                    </div>
+                    <div class="col-sm-8" style="background: aliceblue;">
+                        Right Col
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </body>
+</html>

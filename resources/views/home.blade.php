@@ -1,64 +1,42 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Dashboard</div>
-                <div class="card-body">
-                    {{ today()->format('l, F jS, Y') }}
-                </div>
-                @include('navigation.calendar')
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+
+    
+
+    <div class="container" style="margin-top:30px">
+
+        <div class="row"><!-- Top row -->
+
+            <div class="col-sm-4" style="background:cornsilk;"><!-- Calendar Nav -->
+		Calendar Nav
+		@include('partials.calendar-nav')                
+            </div><!-- /Calendar Nav -->
 
 
-                </div>
-                <div class="card-body">
-                    <p>You are logged in!</p>
-                </div>
-                <div class="card-body">
-                    @if ($events->count() === 0)
-                    <div class="alert alert-warning">
-                        You don't have any events, yet.
-                    </div>
-                @else
-                    <div class="card-text">
-                        <div class="table-responsive">
-                            <table class="table table-sm" style="font-size:.75rem;">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Start</th>
-                                        <th scope="col">End</th>
-                                        <th scope="col">Duration</th>
-                                        <th scope="col">Project</th>
-                                        <th scope="col">Task</th>
-                                        <th scope="col">Note</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                @foreach ($events as $event)
-                                    <tr>
-                                        <td>@if (null !== $event->time_start){{ $event->start()->format('H:i') }}@endif</td>
-                                        <td>@if (null !== $event->time_end){{ $event->end()->format('H:i') }}@endif</td>
-                                        <td>{{ $event->duration }}</td>
-                                        <td>{{ $event->project->name }}</td>
-                                        <td>{{ $event->task->name }}</td>
-                                        <td>{{ str_limit($event->note,100) }}</td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                        </div>
-                @endif
-                </div>
 
-            </div>
-        </div>
-    </div>
-</div>
+
+
+            <div class="col-sm-8" style="background:rosybrown;"><!-- Entry Form -->
+                Entry Form
+		@include('partials.event-form')
+	    </div><!-- /Entry Form -->
+
+
+        </div><!-- /Top row -->
+
+
+
+
+        <div class="row"><!-- Second Row -->
+            <div class="col-sm-12" style="background: khaki;"><!-- Event List -->
+                Event List
+            </div><!-- /Event List -->
+        </div><!-- /Second Row -->
+
+    </div><!-- /container -->
+
+
+
+
 @endsection
