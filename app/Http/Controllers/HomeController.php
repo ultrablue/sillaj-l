@@ -6,6 +6,8 @@ use App\Event;
 use Illuminate\Http\Request;
 
 use Carbon\Carbon;
+use Solution10\Calendar\Calendar as Calendar;
+use Solution10\Calendar\Resolution\MonthResolution;
 
 class HomeController extends Controller
 {
@@ -35,10 +37,17 @@ class HomeController extends Controller
                 abort(404);
             }
         }
+        $calendar = new Calendar($searchForDate);
+        $calendar->setResolution(new MonthResolution());
+        $viewData = $calendar->viewData();
+        // Calendar always returns an array of Months, but we just need one, so let's just get the first element of the array. 
+        $month = $viewData['contents'][0];
+        //dd($calendar);
+
 
         //dd($eventdate);
         // This is a comment.
         $events = Event::where(['user_id' => $request->user()->id])->whereDate('event_date' , Carbon::now()->toDateString())->get();
-        return view('home', compact('events'));
+        return view('home', compact('events', 'month'));
     }
 }
