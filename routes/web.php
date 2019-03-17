@@ -17,8 +17,10 @@
 
 // See the Home Controller for an example of protecting the entire Controller
 // with auth.
-Route::get('/', 'HomeController@index')->name('home');
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home/{eventdate?}', 'HomeController@index')->name('home');
+Route::get('/{eventdate?}', 'HomeController@index')->name('home');
+#Route::get('/', 'HomeController@index')->name('home');
+#Route::get('/home/', 'HomeController@index')->name('home');
 
 // TODO Add auth here, too, please.
 //Route::get('/', function () {

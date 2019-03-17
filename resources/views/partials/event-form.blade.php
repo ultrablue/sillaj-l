@@ -1,55 +1,56 @@
 <form style="padding-top:1em; padding-bottom:3em;">
-    <div class="form-group" style="">
-        <label for="project">Project</label>
-        <select class="form-control form-control-sm" id="project" name="project">
-            <option>IT</option>
-            <option>IT - Some Task</option>
-            <option>IT - Another Task</option>
-            <option>IT - This is your life now dude learn to live with it or don't whatever.</option>
-            <option>5</option>
-        </select>
-    </div>
-
-
-    <div class="form-group input-sm" style="">
-        <label for="task">Task</label>
-        <select class="form-control form-control-sm" id="task" name="task">
-            <option>Email, News, Etc.</option>
-            <option>Meeting</option>
-            <option>Coding</option>
-            <option>Leave, Annual</option>
-            <option>Leave, Sick</option>
-        </select>
-    </div>
-
-
-    <div class="form-group">
-        <label for="duration">Duration</label>
-        <input type="time" class="form-control form-control-sm" id="duration" name="duration" aria-describedby="duration" placeholder="Duration">
-    </div>
-
-    <div class="form-group">
-        <label for="start">Start Time</label>
-        <input type="time" class="form-control form-control-sm" id="start" name="start" aria-describedby="start" placeholder="Start Time">
-    </div>
-
-    <div class="form-group">
-        <label for="end">End Time</label>
-        <input type="time" class="form-control form-control-sm" id="end" name="end" aria-describedby="end" placeholder="End Time">
-    </div>
-
-
-    <div class="input-group">
-        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-        <input id="email" type="text" class="form-control form-control-sm" name="email" placeholder="Email">
-    </div>
-
-
-    <div class="form-row align-items-center">
-        <div class="col-sm-5 my-1">
-            <label class="sr-only" for="inlineFormInputName">Name</label>
-            <input type="text" class="form-control" id="inlineFormInputName" placeholder="Jane Doe">
+    <div class="form-row">
+        <div class="col" style="">
+            <label for="project">Project</label>
+            <select class="form-control form-control-sm" id="project" name="project">
+                <option>IT</option>
+                <option>IT - Some Task</option>
+                <option>IT - Another Task</option>
+                <option>IT - This is your life now dude learn to live with it or don't whatever.</option>
+                <option>5</option>
+            </select>
         </div>
-    </div>
+
+
+        <div class="col" style="">
+            <label for="task">Task</label>
+            <select class="form-control form-control-sm" id="task" name="task" placeholder="Task">
+                <option>Email, News, Etc.</option>
+                <option>Meeting</option>
+                <option>Coding</option>
+                <option>Leave, Annual</option>
+                <option>Leave, Sick</option>
+            </select>
+        </div>
+    </div><!-- /form-row-->
+
+    
+    <div class="form-row">
+
+        <div class="col-md-4">
+            <label for="duration">Duration</label>
+            <input type="time" class="form-control form-control-sm" id="duration" name="duration" aria-describedby="duration" placeholder="Duration">
+        </div>
+
+        <div class="col-md-4">
+            <label for="start">Start Time</label>
+            <input type="time" class="form-control form-control-sm" id="start" name="start" aria-describedby="start" placeholder="Start Time">
+        </div>
+
+        <div class="col-md-4">
+            <label for="end">End Time</label>
+            <input type="time" class="form-control form-control-sm" id="end" name="end" aria-describedby="end" placeholder="End Time">
+        </div>
+
+    </div><!-- /form-row-->
+
+    <div class="form-row">
+        <label for="description">Notes</label>
+        <textarea class="form-control" id="description" rows="3"></textarea>
+    </div><!-- /form-row-->
+
+    <div class="form-row">
+        <button type="submit" class="btn btn-primary my-2">Confirm identity</button>
+    </div><!-- /form-row-->
 
 </form>

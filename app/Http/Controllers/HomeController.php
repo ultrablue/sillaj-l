@@ -24,8 +24,20 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, $eventdate = null)
     {
+
+        if (!$eventdate){
+            $searchForDate  = Carbon::now();
+        } else {
+            $searchForDate = Carbon::createFromFormat('Y-m-d', $eventdate);
+            if ($searchForDate->format('Y-m-d') != $eventdate) {
+                abort(404);
+            }
+        }
+
+        //dd($eventdate);
+        // This is a comment.
         $events = Event::where(['user_id' => $request->user()->id])->whereDate('event_date' , Carbon::now()->toDateString())->get();
         return view('home', compact('events'));
     }
