@@ -6,6 +6,7 @@ use App\Event;
 use Illuminate\Http\Request;
 
 use Carbon\Carbon;
+
 use Solution10\Calendar\Calendar as Calendar;
 use Solution10\Calendar\Resolution\MonthResolution;
 
