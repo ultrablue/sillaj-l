@@ -56,9 +56,17 @@ class EventController extends Controller
         // This is a comment.
         $events = Event::where(['user_id' => $request->user()->id])->whereDate('event_date' , Carbon::now()->toDateString())->get();
  
+        // We'll need a list of Projects
+        $projects = Project::allAvailable()->orderBy('name')->get();
+        //dd($projects);
+        
+        
+        // And a list of Tasks.
+        $tasks = Task::allAvailable()->orderBy('name')->get();
+        //dd($tasks);
+ 
 
-
-       return view('events.index', compact('events', 'month')); 
+       return view('events.index', compact('events', 'month', 'projects', 'tasks')); 
     }
 
     /**
