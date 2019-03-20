@@ -54,7 +54,7 @@ class EventController extends Controller
 
         //dd($eventdate);
         // This is a comment.
-        $events = Event::where(['user_id' => $request->user()->id])->whereDate('event_date' , Carbon::now()->toDateString())->get();
+        $events = Event::where(['user_id' => $request->user()->id])->whereDate('event_date' , Carbon::now()->toDateString())->orderBy('time_start')->get();
  
         // We'll need a list of Projects
         $projects = Project::allAvailable()->orderBy('name')->get();
