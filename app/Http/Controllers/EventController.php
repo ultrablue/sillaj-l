@@ -36,6 +36,7 @@ class EventController extends Controller
      */
     public function index(Request $request, $eventdate = null)
     {
+        $now = Carbon::now();
         if (!$eventdate){
             $searchForDate  = Carbon::now();
         } else {
@@ -66,7 +67,7 @@ class EventController extends Controller
         //dd($tasks);
  
 
-       return view('events.index', compact('events', 'month', 'projects', 'tasks')); 
+       return view('events.index', compact('now', 'events', 'month', 'projects', 'tasks')); 
     }
 
     /**

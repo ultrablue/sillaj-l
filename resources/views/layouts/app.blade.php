@@ -86,11 +86,16 @@
 	    color: #777;
 	}
 
-	.days li .active {
-	    padding: 5px;
-	    background: #1abc9c;
+	.days li.active {
+	    /*background: #1abc9c;*/
+            border:1px solid red;
 	    color: white !important
 	}
+	
+        .days li.overflow {
+            color:#ccc; 
+            border:1px solid black;
+        }
 
 	/* Add media queries for smaller screens
 	   @media screen and (max-width:720px) {

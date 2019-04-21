@@ -1,5 +1,8 @@
 <!-- Calendar Navigation -->
 <div class="card border-secondary">
+    <div class="card-header">
+        {{ $now->format('l, F jS, Y') }} 
+    </div>
     <div class="card-body">
         <div class="month">      
             <ul>
@@ -19,7 +22,14 @@
         <ul class="days">
             @foreach ($month->weeks() as $week)
                 @foreach ($week->days() as $day)
-                    <li>{{ $day->date()->format('j') }}</li>
+                    @if ($day->isOverflow())<li class="overflow">
+                    @elseif($now->isSameDay($day->date()))<li class="active">
+                    @else
+                        <li>
+                    @endif
+                    <a href="{{$day->date()->format('Y-m-d')}}" class="">{{ $day->date()->format('j') }}</a>
+                        </li>
+                    </li>
                 @endforeach
             @endforeach
         </ul>
