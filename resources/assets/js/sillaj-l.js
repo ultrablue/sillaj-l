@@ -15,7 +15,7 @@ $(function() {
 		console.log(data);		
 		$('#task').empty(); // clear the current elements in select box
 		for (row in data) {
-		    $('#task').append($('<option></option>').attr('value', data[row].idd).text(data[row].name));
+		    $('#task').append($('<option></option>').attr('value', data[row].id).text(data[row].name));
 		}
 	    },
 	    error: function(jqXHR, textStatus, errorThrown) {
