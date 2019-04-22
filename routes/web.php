@@ -18,6 +18,7 @@
 // See the Home Controller for an example of protecting the entire Controller
 // with auth.
 Route::get('/home/', 'EventController@index')->name('home');
+Route::get('/{eventdate?}', 'EventController@index')->name('home')->where('eventdate', '\d\d\d\d-\d\d-\d\d');
 Route::get('/', 'EventController@index')->name('home');
 #Route::get('/', 'HomeController@index')->name('home');
 #Route::get('/home/', 'HomeController@index')->name('home');

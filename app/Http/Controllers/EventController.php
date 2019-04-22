@@ -52,11 +52,18 @@ class EventController extends Controller
         $month = $viewData['contents'][0];
         //dd($calendar);
 
+        $previousMonth = $searchForDate->copy()->subMonth()->startOfMonth();
+        $nextMonth = $searchForDate->copy()->addMonth()->startOfMonth();
 
         //dd($eventdate);
         // This is a comment.
-        $events = Event::where(['user_id' => $request->user()->id])->whereDate('event_date' , Carbon::now()->toDateString())->orderBy('time_start')->get();
- 
+        $thisDaysEvents = Event::where(['user_id' => $request->user()->id])->whereDate('event_date' , $searchForDate->toDateString())->orderBy('time_start')->get();
+
+
+        // Please comment this!! It's crazy.
+        $thisMonthsEvents = Event::whereMonth('event_date', $searchForDate->month)->whereYear('event_date', $searchForDate->year)->select('event_date')->distinct()->orderBy('event_date')->pluck('event_date');
+        //dd($thisMonthsEvents);
+
         // We'll need a list of Projects
         $projects = Project::allAvailable()->orderBy('name')->get();
         //dd($projects);
@@ -67,7 +74,7 @@ class EventController extends Controller
         //dd($tasks);
  
 
-       return view('events.index', compact('now', 'events', 'month', 'projects', 'tasks')); 
+       return view('events.index', compact('now', 'previousMonth', 'nextMonth', 'thisDaysEvents', 'searchForDate', 'thisMonthsEvents', 'month', 'projects', 'tasks')); 
     }
 
     /**

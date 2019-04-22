@@ -88,13 +88,22 @@
 
 	.days li.active {
 	    /*background: #1abc9c;*/
-            border:1px solid red;
+            border:2px solid red;
 	    color: white !important
 	}
-	
+
+        .days li.current {
+            border: 2px solid pink;
+        }
+
+        .days li.has-events {
+            border:2px solid green;
+            font-weight: bold;
+        }
+
         .days li.overflow {
             color:#ccc; 
-            border:1px solid black;
+            border:2px solid black;
         }
 
 	/* Add media queries for smaller screens

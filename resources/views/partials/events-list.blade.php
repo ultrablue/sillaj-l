@@ -13,7 +13,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($events as $event)
+                @foreach($thisDaysEvents as $event)
                     <tr>
                         <td>{{ $event->id }}</td>
                         <td>{{$event->task->name}}</td>

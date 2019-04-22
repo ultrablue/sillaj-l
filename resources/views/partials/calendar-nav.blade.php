@@ -6,8 +6,8 @@
     <div class="card-body">
         <div class="month">      
             <ul>
-                <li class="prev">&#10094;</li>
-                <li class="next">&#10095;</li>
+                <li class="prev"><a href="{{$previousMonth->format('Y-m-d')}}" class="">&#10094;</a></li>
+                <li class="next"><a href="{{$nextMonth->format('Y-m-d')}}" class="">&#10095;</a></li>
                 <li>{{ $month->title('Y-m F') }}</li>
             </ul>
         </div>
@@ -24,12 +24,13 @@
                 @foreach ($week->days() as $day)
                     @if ($day->isOverflow())<li class="overflow">
                     @elseif($now->isSameDay($day->date()))<li class="active">
+                    @elseif($searchForDate->isSameDay($day->date()))<li class="current">
+                    @elseif($thisMonthsEvents->contains($day->date()))<li class="has-events">
                     @else
                         <li>
                     @endif
                     <a href="{{$day->date()->format('Y-m-d')}}" class="">{{ $day->date()->format('j') }}</a>
                         </li>
-                    </li>
                 @endforeach
             @endforeach
         </ul>
