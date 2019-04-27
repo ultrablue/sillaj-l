@@ -1,12 +1,12 @@
 <div class="card border-secondary">
     <div class="card-body">
-        <form style="" action="/~sillaj-l-01/sillaj-l/public/event" method="post">
+        <form style="" action="{{action('EventController@store')}}" method="post">
             @csrf
             <div class="form-row">
                 <div class="col" style="">
 
                     <label for="project">Project</label>
-                    <select class="form-control form-control-sm" id="project" name="project_id">
+                    <select class="form-control form-control-sm" id="project" name="project_id" autofocus>
                         @foreach($projects as $project)
                             <option value="{{$project->id}}">{{$project->name}}</option>
                         @endforeach
