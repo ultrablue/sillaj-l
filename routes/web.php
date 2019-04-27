@@ -17,9 +17,10 @@
 
 // See the Home Controller for an example of protecting the entire Controller
 // with auth.
-Route::get('/home/', 'EventController@index')->name('home');
-Route::get('/{eventdate?}', 'EventController@index')->name('home')->where('eventdate', '\d\d\d\d-\d\d-\d\d');
-Route::get('/', 'EventController@index')->name('home');
+Route::get('/home/', 'HomeController@index')->name('home');
+// where() constrains the route to the regex supplied.
+Route::get('/{eventdate?}', 'HomeController@index')->name('home')->where('eventdate', '\d\d\d\d-\d\d-\d\d');
+Route::get('/', 'HomeController@index')->name('home');
 #Route::get('/', 'HomeController@index')->name('home');
 #Route::get('/home/', 'HomeController@index')->name('home');
 
@@ -29,9 +30,9 @@ Route::get('/', 'EventController@index')->name('home');
 //});
 
 // Events
-Route::get('/event/{eventdate?}', 'EventController@index');
-Route::get('/event/create', 'EventController@create');
-Route::post('/event', 'EventController@store');
+Route::get('/events/{eventdate?}', 'EventController@index');
+Route::get('/events/create', 'EventController@create');
+Route::post('/events', 'EventController@store');
 
 
 // Projects
