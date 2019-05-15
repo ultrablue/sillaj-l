@@ -30,22 +30,26 @@
 
                 <div class="col-md-3">
                     <label for="date">Date</label>
-                    <input type="date" class="form-control form-control-sm" id="date" name="event_date" aria-describedby="Date" placeholder="Enter date">
+                    <input type="text" class="form-control form-control-sm" id="date" name="event_date"
+                           aria-describedby="Date" placeholder="Enter date">
                 </div>
 
                 <div class="col-md-3">
                     <label for="duration">Duration</label>
-                    <input type="time" class="form-control form-control-sm" id="duration" name="duration" aria-describedby="duration" placeholder="Duration">
+                    <input type="text" class="form-control form-control-sm" id="duration" name="duration"
+                           aria-describedby="duration" placeholder="Duration">
                 </div>
 
                 <div class="col-md-3">
                     <label for="start">Start Time</label>
-                    <input type="time" class="form-control form-control-sm" id="start" name="time_start" aria-describedby="start" placeholder="Start Time">
+                    <input type="text" class="form-control form-control-sm" id="start" name="time_start"
+                           aria-describedby="start" placeholder="Start Time">
                 </div>
 
                 <div class="col-md-3">
                     <label for="end">End Time</label>
-                    <input type="time" class="form-control form-control-sm" id="end" name="time_end" aria-describedby="end" placeholder="End Time">
+                    <input type="text" class="form-control form-control-sm" id="end" name="time_end"
+                           aria-describedby="end" placeholder="End Time">
                 </div>
 
             </div><!-- /form-row-->
