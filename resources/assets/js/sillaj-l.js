@@ -1,4 +1,20 @@
 $(document).ready(function () {
+
+    $(document).on('click', '.row_data', function (event) {
+        // console.info(event);
+
+        event.preventDefault();
+
+        //make div editable
+        $(this).closest('div').attr('contenteditable', 'true');
+
+        //add bg css
+        $(this).addClass('bg-light');
+
+        $(this).focus();
+    });
+
+
     let today = new Date();
 
     if (!$('#date').attr('value')) {
