@@ -10,7 +10,7 @@
                 <th scope="col">End</th>
                 <th scope="col">Duration</th>
                 <th scope="col">Note</th>
-                <th scope="col">Actions</th>
+                <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
