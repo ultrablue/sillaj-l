@@ -16,7 +16,7 @@
             <tbody>
             @foreach($thisDaysEvents as $event)
                 <tr row_id="{{$event->id}}">
-                    <td>{{ $event->id }}</td>
+                    <td>{{$event->id}}</td>
                     <td>{{$event->task->name}}</td>
                     <td>{{$event->project->name}}</td>
                     <td>
@@ -30,7 +30,13 @@
                     <td>
                         <div class="row_data" edit_type="click" col_name="note">{{$event->note}}</div>
                     </td>
-                    <td><span class="fa-glass"></span></td>
+                    <td>
+                        <span class="btn_edit"><a href="#" class="btn btn-link" row_id="{{$event->id}}"><span class="oi oi-pencil" title="Edit" aria-hidden="true"></span></a></span>
+
+                        <span class="btn_save"><a href="#" class="btn btn-link" row_id="{{$event->id}}"><span class="oi oi-circle-check text-success" title="Save" aria-hidden="true"></span></a></span>
+                        <span class="btn_cancel"><a href="#" class="btn btn-link" row_id="{{$event->id}}"><span class="oi oi-circle-x text-danger" title="Cancel" aria-hidden="true"></span></a></span>
+
+                    </td>
                 </tr>
             @endforeach
             </tbody>
