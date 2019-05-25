@@ -57,7 +57,7 @@ class EventController extends Controller
 
         $event->fill($request->all());
         $event->save();
-        // return $request->all();
+        return $event;
     }
 
     /**

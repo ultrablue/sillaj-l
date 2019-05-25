@@ -20,5 +20,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('projects/{project}/tasks', 'Api\ProjectController@getTasks');
 
+Route::apiResource('events', 'Api\EventController');
+//Route::put('events/{id}', 'Api\EventController@update');
+
 
 

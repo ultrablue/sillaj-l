@@ -21,10 +21,10 @@
                     <td>{{$event->project->name}}</td>
                     <td>
                         <div class="row_data" edit_type="click"
-                             col_name="start">{{$event->start()->format('H:i')}}</div>
+                             col_name="time_start">{{$event->start()->format('H:i')}}</div>
                     </td>
                     <td>
-                        <div class="row_data" edit_type="click" col_name="end">{{$event->end()->format('H:i')}}</div>
+                        <div class="row_data" edit_type="click" col_name="time_end">{{$event->end()->format('H:i')}}</div>
                     </td>
                     <td>{{$event->duration}}</td>
                     <td>

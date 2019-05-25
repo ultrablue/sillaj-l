@@ -3,6 +3,8 @@ $(document).ready(function () {
     // All of this is heavily based upon https://codewithmark.com/easily-edit-html-table-rows-or-cells-with-jquery.
     // Very useful!!! 🙂
 
+    var ajax_url = "api/events/";
+
     $(document).find('.btn_save').hide();
     $(document).find('.btn_cancel').hide();
 
@@ -115,8 +117,38 @@ $(document).ready(function () {
         });
         //--->get row data > end
 
-        console.info('Saving whole row [' + row_id + ']');
-        console.table(arr);
+        $.ajax({
+                url: ajax_url + row_id,
+                type: 'PUT',
+                dataType: 'json',
+                data: arr,
+                beforeSend: function (xhr, settings) {
+                    console.info('Saving single field [' + row_id + '] ');
+                    console.table(arr);
+                },
+                success: function (data, status, xhr) {
+                    console.log("Save was successful! 😊 " + status);
+                    console.table(data);
+                    // TODO make this update a toast or something.
+                    var msg = ''
+                        + '<h3>Successfully updated your entry</h3>'
+                        + '<pre class="bg-success">' + JSON.stringify(arr, null, 2) + '</pre>'
+                        + '';
+
+                    $('.post_msg').html(msg);
+                },
+                error: function (xhr, status, error) {
+                    console.warn("PATCH failed! " + status + " " + error);
+                    var msg = ''
+                        + '<h3>There was an error while trying to update your entry</h3>'
+                        + '<pre class="bg-danger">' + JSON.stringify(arr, null, 2) + '</pre>'
+                        + '';
+
+                    $('.post_msg').html(msg);
+                },
+            }
+        );
+
 
         //use the "arr"	object for your ajax call
         $.extend(arr, {row_id: row_id});
@@ -137,6 +169,9 @@ $(document).ready(function () {
             return false;
         }
 
+        //get the original entry
+        var original_entry = $(this).attr('original_entry');
+
         let row_id = $(this).closest('tr').attr('row_id');
 
 
@@ -147,22 +182,76 @@ $(document).ready(function () {
         let col_val = row_div.html();
 
         let arr = {};
+        //get the col name and value
         arr[col_name] = col_val;
+        //get row id value
+        arr['row_id'] = row_id;
 
-        console.info('Saving single field [' + row_id + '] ' + 'field: ' + col_name)
-        console.table(arr);
+        if (original_entry != col_val) {
+            console.log("Valid change detected, moving on with PUT.");
+            //remove the attr so that new entry can take place
+            $(this).removeAttr('original_entry');
 
-        //use the "arr"	object for your ajax call
+            //ajax api json data
+
+            var data_obj =
+                {
+                    id: row_id,
+                    col_name: col_name,
+                    col_val: col_val,
+                    call_type: 'single_entry',
+                };
+            data_obj[col_name] = col_val;
+            console.table(data_obj);
+
+            //call ajax api to update the database record
+            $.ajax({
+                    url: ajax_url + row_id,
+                    type: 'PUT',
+                    dataType: 'json',
+                    data: data_obj,
+                    beforeSend: function (xhr, settings) {
+                        console.info('Saving single field [' + row_id + '] ' + 'field: ' + col_name);
+                    },
+                    success: function (data, status, xhr) {
+                        console.log("Save was successful! 😊 " + status);
+                        console.table(data);
+                        // TODO make this update a toast or something.
+                        var msg = ''
+                            + '<h3>Successfully updated your entry</h3>'
+                            + '<pre class="bg-success">' + JSON.stringify(arr, null, 2) + '</pre>'
+                            + '';
+
+                        $('.post_msg').html(msg);
+                    },
+                    error: function (xhr, status, error) {
+                        console.warn("PATCH failed! " + status + " " + error);
+                        var msg = ''
+                            + '<h3>There was an error while trying to update your entry</h3>'
+                            + '<pre class="bg-danger">' + JSON.stringify(arr, null, 2) + '</pre>'
+                            + '';
+
+                        $('.post_msg').html(msg);
+                    },
+                }
+            );
+        } else {
+            console.log("Nothing changed, nothing to PUT.");
+            $('.post_msg').html('');
+        }
+
+
+//use the "arr"	object for your ajax call
         $.extend(arr, {row_id: row_id});
 
-        //output to show
+//output to show
         $('.post_msg').html('<pre class="bg-success">' + JSON.stringify(arr, null, 2) + '</pre>');
 
     })
-    //--->save single field data > end
+//--->save single field data > end
 
 
-    //////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
 
     let today = new Date();
 
@@ -198,7 +287,8 @@ $(document).ready(function () {
             }
         });
     });
-});
+})
+;
 
 
 
