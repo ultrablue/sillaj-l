@@ -27,14 +27,17 @@ class HomeController extends Controller
     /**
      * Show the application dashboard.
      *
+     * @param Request $request
+     * @param String $eventdate The date in yyyy-mm-dd format.
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request, $eventdate = null)
     {
 
+
         $now = Carbon::now();
-        if (!$eventdate){
-            $searchForDate  = Carbon::now();
+        if (!$eventdate) {
+            $searchForDate = Carbon::now();
         } else {
             $searchForDate = Carbon::createFromFormat('Y-m-d', $eventdate);
             if ($searchForDate->format('Y-m-d') != $eventdate) {
@@ -52,9 +55,8 @@ class HomeController extends Controller
         $nextMonth = $searchForDate->copy()->addMonth()->startOfMonth();
 
         //dd($eventdate);
-        // This is a comment.
-        $thisDaysEvents = Event::where(['user_id' => $request->user()->id])->whereDate('event_date' , $searchForDate->toDateString())->orderBy('time_start')->get();
-
+        $thisDaysEvents = Event::where(['user_id' => $request->user()->id])->whereDate('event_date', $searchForDate->toDateString())->orderBy('time_start')->get();
+//        dd($thisDaysEvents);
 
         // Please comment this!! It's crazy.
         $thisMonthsEvents = Event::whereMonth('event_date', $searchForDate->month)->whereYear('event_date', $searchForDate->year)->select('event_date')->distinct()->orderBy('event_date')->pluck('event_date');

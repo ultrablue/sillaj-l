@@ -5,7 +5,7 @@
  */
 
 require('./bootstrap');
-require('./sillaj-l');
+// require('./sillaj-l');
 
 // window.Vue = require('vue');
 
