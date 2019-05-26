@@ -8,11 +8,19 @@ use App\Project;
 
 class ProjectController extends Controller
 {
-
-    // TODO phpDocs here, please!!!
+    /**
+     * Gets the Tasks related to this Project.
+     *
+     * TODO This might be better in a TaskController?
+     *
+     *
+     * @param Project $project
+     * @return mixed
+     */
     public function getTasks(Project $project){
-        return $project->tasks;
+        return $project->tasks()->orderBy('name')->get();
     }
 
+    // The essence of life is to communicate love.
 
 }
