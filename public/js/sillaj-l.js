@@ -123,38 +123,28 @@ $(document).ready(function () {
                 dataType: 'json',
                 data: arr,
                 beforeSend: function (xhr, settings) {
-                    console.info('Saving single field [' + row_id + '] ');
-                    console.table(arr);
+                    // console.info('Saving single field [' + row_id + '] ');
+                    // console.table(arr);
                 },
                 success: function (data, status, xhr) {
-                    console.log("Save was successful! 😊 " + status);
-                    console.table(data);
-                    // TODO make this update a toast or something.
-                    var msg = ''
-                        + '<h3>Successfully updated your entry</h3>'
-                        + '<pre class="bg-success">' + JSON.stringify(arr, null, 2) + '</pre>'
-                        + '';
-
-                    $('.post_msg').html(msg);
+                    // console.log("Save was successful! 😊 " + status);
+                    // console.table(data);
+                    // TODO Can we make this a function or something? See Issue #16.
+                    $('#success-toast-header > strong').html("Event updated.");
+                    $('#success-toast-body').html("Event ID " + row_id + " was updated.");
+                    $('#toast-success').toast({delay: 2500, animation: true}).toast('show');
                 },
                 error: function (xhr, status, error) {
-                    console.warn("PATCH failed! " + status + " " + error);
-                    var msg = ''
-                        + '<h3>There was an error while trying to update your entry</h3>'
-                        + '<pre class="bg-danger">' + JSON.stringify(arr, null, 2) + '</pre>'
-                        + '';
+                    // console.warn("PATCH failed! " + status + " " + error);
 
-                    $('.post_msg').html(msg);
+                    // TODO Can we make this a function or something? See Issue #16.
+                    $('#failure-toast-header > strong').html("☹ Something went wrong.");
+                    $('#failure-toast-body').html("Event ID " + row_id + " was not updated. You might want to try again.");
+                    $('#toast-failure').toast({autohide: false, animation: true}).toast('show');
+
                 },
             }
         );
-
-
-        //use the "arr"	object for your ajax call
-        $.extend(arr, {row_id: row_id});
-
-        //output to show
-        $('.post_msg').html('<pre class="bg-success">' + JSON.stringify(arr, null, 2) + '</pre>')
 
 
     });
@@ -215,23 +205,21 @@ $(document).ready(function () {
                     },
                     success: function (data, status, xhr) {
                         console.log("Save was successful! 😊 " + status);
-                        console.table(data);
-                        // TODO make this update a toast or something.
-                        var msg = ''
-                            + '<h3>Successfully updated your entry</h3>'
-                            + '<pre class="bg-success">' + JSON.stringify(arr, null, 2) + '</pre>'
-                            + '';
+                        // console.table(data);
 
-                        $('.post_msg').html(msg);
+                        // TODO Can we make this a function or something? See Issue #16.
+                        $('#success-toast-header > strong').html("Event updated.");
+                        $('#success-toast-body').html("Event ID " + row_id + " was updated.");
+                        $('#toast-success').toast({delay: 2500, animation: true}).toast('show');
+
+
                     },
                     error: function (xhr, status, error) {
-                        console.warn("PATCH failed! " + status + " " + error);
-                        var msg = ''
-                            + '<h3>There was an error while trying to update your entry</h3>'
-                            + '<pre class="bg-danger">' + JSON.stringify(arr, null, 2) + '</pre>'
-                            + '';
-
-                        $('.post_msg').html(msg);
+                        // console.warn("PATCH failed! " + status + " " + error);
+                        // TODO Can we make this a function or something? See Issue #16.
+                        $('#failure-toast-header > strong').html("☹ Something went wrong.");
+                        $('#failure-toast-body').html("Event ID " + row_id + " was not updated. You might want to try again.");
+                        $('#toast-failure').toast({autohide: false, animation: true}).toast('show');
                     },
                 }
             );

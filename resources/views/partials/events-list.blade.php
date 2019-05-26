@@ -1,4 +1,36 @@
+<div class="toast hide bg-success" role="alert" aria-live="assertive" aria-atomic="true" id="toast-success">
+    <div class="toast-header" id="success-toast-header">
+        <strong class="mr-auto"></strong>
+
+        <button type="button" class="close" data-dismiss="toast">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="toast-body" id="success-toast-body">
+
+    </div>
+</div>
+
+
+<div class="toast hide bg-danger" role="alert" aria-live="assertive" aria-atomic="true" id="toast-failure">
+    <div class="toast-header" id="failure-toast-header">
+        <strong class="mr-auto"></strong>
+
+        <button type="button" class="close" data-dismiss="toast">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="toast-body" id="failure-toast-body">
+
+    </div>
+</div>
+
+
 <div class="card border-secondary mt-3">
+
+
     <div class="card-body">
         <table class="table table-hover">
             <thead>
