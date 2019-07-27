@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Event;
+use Carbon\CarbonInterval;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -71,34 +72,25 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        //TODO I need some validation, please!
 
-        // If no end time was sent, set the end time to the start time.
-        if (!$request['time_end']) {
-            $request['time_end'] = $request['time_start'];
-        }
+        // TODO Make the space one work for multiple spaces, eg: 1       1.
+        $timeAndDurationRegex = '#^(\d{1,2})?([ :\.])?(\d{1,2})?$#';
 
 
-        // TODO move this to a Mutator in the Model?
-        // Are both the start time and the end time populated? If so, we use them to calculate and set the duration.
-        if (empty($request['time_start'])) {
-            throw new Exception("Start time is required.");
-        } elseif ($request['time_start'] && $request['time_end']) {
-            // Using strtotime instead of Carbon because it seems easier.
-            $start = strtotime($request['time_start']);
-            $end = strtotime($request['time_end']);
-            $request['duration'] = $end - $start;
-        } // Since neither start time nor end time were present, parse HH:MM duration.
-        elseif ($request['duration']) {
-            // TODO We don't want or need seconds here?!?!?!?
-            // TODO Add the duration to the start time to get end time, please.
-            list($hours, $minutes, $seconds) = array_pad(explode(':', $request['duration']), 3, 0);
-            $duration = ($hours * 60 * 60) + ($minutes * 60) + $seconds;
-            $request['duration'] = $duration;
-        } else {
-            throw new Exception("Either start time or duration are required.");
-        }
-        Auth::user()->events()->create(request(['date', 'project_id', 'task_id', 'event_date', 'duration', 'note', 'time_start', 'time_end']));
+        $validatedData = $request->validate([
+            'duration' => "nullable|regex:$timeAndDurationRegex",
+            'time_start' => "nullable|regex:$timeAndDurationRegex",
+            'time_end' => "nullable|regex:$timeAndDurationRegex",
+        ]);
+
+//        dd($validatedData);
+
+
+//        dd($request->all());
+
+        $event = Auth::user()->events()->create($request->all());
+
+
         return redirect()->route('home');
     }
 
@@ -108,7 +100,8 @@ class EventController extends Controller
      * @param \App\Event $event
      * @return Response
      */
-    public function show(Event $event)
+    public
+    function show(Event $event)
     {
         //
     }
@@ -119,7 +112,8 @@ class EventController extends Controller
      * @param \App\Event $event
      * @return Response
      */
-    public function edit(Event $event)
+    public
+    function edit(Event $event)
     {
         //
     }
@@ -131,7 +125,8 @@ class EventController extends Controller
      * @param \App\Event $event
      * @return Response
      */
-    public function update(Request $request, Event $event)
+    public
+    function update(Request $request, Event $event)
     {
         //
     }
@@ -142,7 +137,8 @@ class EventController extends Controller
      * @param \App\Event $event
      * @return Response
      */
-    public function destroy(Event $event)
+    public
+    function destroy(Event $event)
     {
         //
     }

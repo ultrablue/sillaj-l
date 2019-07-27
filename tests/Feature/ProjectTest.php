@@ -11,8 +11,9 @@ class ProjectTest extends TestCase
     use DatabaseMigrations;
 
 
-    public function setUp() {
-        
+    public function setUp(): void
+    {
+
         parent::setUp();
         $this->user = factory('App\User')->create();
         $this->project = factory('App\Project')->create(['user_id' => $this->user->id]);
@@ -20,13 +21,12 @@ class ProjectTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_with_no_projects_sees_no_projects_in_projects_list() {
+    public function an_authenticated_user_with_no_projects_sees_no_projects_in_projects_list()
+    {
         $user = factory('App\User')->create();
         $response = $this->actingAs($user)->get('/projects');
         $response->assertSee('You don\'t have any projects, yet.');
     }
-
-
 
 
     /** @test */
@@ -63,25 +63,25 @@ class ProjectTest extends TestCase
         $response->assertSee($this->project->name);
     }
 
-    
+
     /** @test */
     public function an_authenticated_user_can_view_a_projects_tasks()
     {
         $task = factory('App\Task')->create();
-        $this->project->tasks()->attach($task); 
-        
+        $this->project->tasks()->attach($task);
+
         $response = $this->actingAs($this->user)->get('/projects/' . $this->project->id);
         $response->assertSee($task->name);
-         
+
     }
 
     /** @test */
     public function an_unathenticated_user_can_not_view_a_projects_tasks()
     {
         $this->expectException('Illuminate\Auth\AuthenticationException');
-        
+
         $response = $this->get('/projects/' . $this->project->id);
-         
+
     }
 
     /** @test */

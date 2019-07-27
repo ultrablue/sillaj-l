@@ -49,16 +49,20 @@
             @foreach($thisDaysEvents as $event)
                 <tr row_id="{{$event->id}}">
                     <td>{{$event->id}}</td>
-                    <td>{{$event->task->name}}</td>
-                    <td>{{$event->project->name}}</td>
+                    <td>{{$event->task->name ?? "No Task!"}}</td>
+                    <td>{{$event->project->name ?? "No Project!"}}</td>
                     <td>
                         <div class="row_data" edit_type="click"
-                             col_name="time_start">{{$event->start()->format('H:i')}}</div>
+                             col_name="time_start">@isset($event->time_start)
+                                {{$event->start()->format('H:i')}}
+                            @endisset</div>
                     </td>
                     <td>
-                        <div class="row_data" edit_type="click" col_name="time_end">{{$event->end()->format('H:i')}}</div>
+                        <div class="row_data" edit_type="click" col_name="time_end">@isset($event->time_end)
+                                {{$event->end()->format('H:i')}}
+                            @endisset</div>
                     </td>
-                    <td>{{$event->duration}}</td>
+                    <td>{{$event->iso_8601_duration->forHumans()}}</td>
                     <td>
                         <div class="row_data" edit_type="click" col_name="note">{{$event->note}}</div>
                     </td>

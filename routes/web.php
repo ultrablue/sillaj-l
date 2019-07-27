@@ -1,5 +1,8 @@
 <?php
 
+//dd(App::environment());
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -32,6 +35,7 @@ Route::get('/', 'HomeController@index')->name('home');
 // Events
 Route::get('/events/{eventdate?}', 'EventController@index');
 Route::get('/events/create', 'EventController@create');
+//Route::post('/events', 'EventController@store')->middleware(\App\Http\Middleware\processTemporalInputs::class);
 Route::post('/events', 'EventController@store');
 
 

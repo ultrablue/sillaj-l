@@ -161,6 +161,11 @@ return [
         //App\Providers\TelescopeServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /*
+         * Sillaj-l Service Providers...
+         */
+        App\Providers\EventModelServiceProvider::class,
+
     ],
 
     /*
