@@ -24,7 +24,7 @@ class EventObserver
             $carbonStartTime = Carbon::parse($event->time_start);
             $carbonEndTime = Carbon::parse($event->time_end);
             $event->duration = $carbonEndTime->diffAsCarbonInterval($carbonStartTime)->total('seconds');
-            dump($event);
+//            dump($event);
 //            dd("Calculate Duration");
         } elseif ($event->time_start && $event->duration) { // Calculate End Time.
             $carbonDuration = $this->parseDuration($event->duration);
