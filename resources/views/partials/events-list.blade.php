@@ -62,7 +62,7 @@
                                 {{$event->end()->format('H:i')}}
                             @endisset</div>
                     </td>
-                    <td>{{$event->iso_8601_duration->forHumans()}}</td>
+                    <td>{{$event->iso_8601_duration->format('%H:%I')}}</td>
                     <td>
                         <div class="row_data" edit_type="click" col_name="note">{{$event->note}}</div>
                     </td>
