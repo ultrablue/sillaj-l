@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Event;
 use App\Project;
 use App\Task;
+use Carbon\CarbonInterval;
 use Illuminate\Http\Request;
 
 use Carbon\Carbon;
@@ -56,7 +57,17 @@ class HomeController extends Controller
 
         //dd($eventdate);
         $thisDaysEvents = Event::where(['user_id' => $request->user()->id])->whereDate('event_date', $searchForDate->toDateString())->orderBy('time_start')->get();
-//        dd($thisDaysEvents);
+
+        $justDurations = $thisDaysEvents->pluck('iso_8601_duration');
+
+        $totalDuration = new CarbonInterval(0);
+//        dump($totalDuration);
+        foreach ($justDurations as $duration) {
+            $totalDuration = $totalDuration->add($duration);
+        }
+//        dump($justDurations);
+
+//        dd($totalDuration->cascade()->format('%H %I'));
 
         // Please comment this!! It's crazy.
         $thisMonthsEvents = Event::whereMonth('event_date', $searchForDate->month)->whereYear('event_date', $searchForDate->year)->select('event_date')->distinct()->orderBy('event_date')->pluck('event_date');
@@ -72,7 +83,7 @@ class HomeController extends Controller
         //dd($tasks);
 
 
-        return view('home', compact('now', 'previousMonth', 'nextMonth', 'thisDaysEvents', 'searchForDate', 'thisMonthsEvents', 'month', 'projects', 'tasks'));
+        return view('home', compact('now', 'previousMonth', 'nextMonth', 'thisDaysEvents', 'searchForDate', 'thisMonthsEvents', 'month', 'projects', 'tasks', 'totalDuration'));
 
     }
 }
