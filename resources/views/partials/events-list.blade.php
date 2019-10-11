@@ -21,7 +21,7 @@
             <div class="table-cell  border-b-2">{{$event->project->name ?? "No Project!"}}</div>
             <div class="table-cell  border-b-2">
                 @isset($event->time_start)
-                {{$event->start()->format('H:i'r)}}
+                {{$event->start()->format('H:i')}}
                 @endisset
             </div>
             <div class="table-cell border-b-2">
