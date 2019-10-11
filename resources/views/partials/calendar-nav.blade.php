@@ -27,26 +27,31 @@
 
 
     @foreach ($month->weeks() as $week)
-        <div class="flex">
-            @foreach ($week->days() as $day)
-                @php
-                    $calendarClasses = ["w-1/7", "border-black", "text-center"];
-                    if ($day->isOverflow()) {
-                        $calendarClasses[] = 'text-gray-500';
-                    }
-                    elseif($now->isSameDay($day->date())) {
-                        $calendarClasses[] = 'bg-green-500';
-                    }
-                    elseif($thisMonthsEvents->contains($day->date())) {
-                        $calendarClasses[] = 'bg-blue-500';
-                    }
-                @endphp
-                <div class="{{implode(' ', $calendarClasses)}}">
-                    <a href="{{$day->date()->format('Y-m-d')}}" class="">{{ $day->date()->format('j') }}</a>
-                </div>
-            @endforeach
+    <div class="flex">
+        @foreach ($week->days() as $day)
+        @php
+        $calendarClasses = ["w-1/7", "border-black", "text-center"];
+        if ($day->isOverflow()) {
+        $calendarClasses[] = 'text-gray-500';
+        }
+        elseif($now->isSameDay($day->date())) {
+        $calendarClasses[] = 'bg-green-500';
+        }
+        elseif($thisMonthsEvents->contains($day->date())) {
+        $calendarClasses[] = 'bg-blue-500';
+        }
+        @endphp
+        <div class="{{implode(' ', $calendarClasses)}}">
+            <a href="{{$day->date()->format('Y-m-d')}}" class="">{{ $day->date()->format('j') }}</a>
         </div>
+        @endforeach
+    </div>
     @endforeach
+
+    <hr class="border border-black">
+
+    <div class="text-black-50 my-6 text-center"><a href="{{ route('home') }}"> {{ $now->format('l, F jS, Y') }}</a>
+    </div>
 
 
 </div>
