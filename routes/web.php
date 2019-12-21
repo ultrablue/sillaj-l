@@ -40,11 +40,10 @@ Route::post('/events', 'EventController@store');
 
 
 // Projects
+Route::post('/projects', 'ProjectsController@store');
 Route::get('/projects', 'ProjectsController@index')->name('projects-list')->middleware('auth');
-Route::get('/projects/{project}', 'ProjectsController@show')->middleware('auth');
-// TODO This one needs the auth middleware, no?
-// TODO What does this one do?
-Route::post('/projects/{project}/tasks', 'TasksController@store');
+Route::get('/projects/{project}', 'ProjectsController@show')->name('project-show')->middleware('auth');
+Route::put('projects/{project}', 'ProjectsController@update')->middleware('auth');
 
 // Tasks
 Route::get('/tasks', 'TasksController@index')->name('tasks-list');

@@ -8,6 +8,9 @@ use Auth;
 
 class Project extends Model
 {
+
+    protected $fillable = ['name', 'description', 'display', 'share', 'use_in_reports'];
+
     public function tasks()
     {
         return $this->belongsToMany(Task::class)->withTimestamps();
@@ -59,10 +62,10 @@ class Project extends Model
      */
     public function scopeOtherShared()
     {
-        return $this->where('share', '=',  true)
+        return $this->where('share', '=', true)
             ->where('user_id', '<>', Auth::id());
     }
-    
+
     /**
      * Returns the User's Projects and Shared Projects that belong to any User.
      * Keep in mind that this query doesn't rely on a many to many.
@@ -71,8 +74,8 @@ class Project extends Model
      */
     public function scopeAllAvailable()
     {
-        return $this->where('user_id','=',Auth::id())
-            ->orWhere(function($query){
+        return $this->where('user_id', '=', Auth::id())
+            ->orWhere(function ($query) {
                 $query->where('share', '=', true);
                 $query->where('user_id', '<>', Auth::id());
             });
