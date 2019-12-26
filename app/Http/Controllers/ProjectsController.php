@@ -29,7 +29,9 @@ class ProjectsController extends Controller
      */
     public function create()
     {
-        //
+        $allTasks = Task::allAvailable()->get();
+//        dd($allTasks);
+        return view('projects.create', compact('allTasks'));
     }
 
 
@@ -41,18 +43,17 @@ class ProjectsController extends Controller
      */
     public function store(Request $request)
     {
-
-//        dd($request);
-
-        // dd($validatedData);
-
-
-//        dd($request->all());
+        $validatedData = $request->validate([
+            'name' => 'required|unique:projects|max:255'
+        ]);
 
         $project = Auth::user()->projects()->create($request->all());
 
+        $project->tasks()->sync($request->get('tasks'));
+        session()->flash('project_id', $project->id);
 
-        return redirect()->route('home');
+        return redirect()->route('projects-list');
+
 
     }
 
