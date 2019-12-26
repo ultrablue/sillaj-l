@@ -64,7 +64,7 @@
                     <div class="relative">
                         <select class="block appearance-none bg-gray-200 border border-gray-200 text-gray-700 py-1 px-1 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="task" name="task_id">
                             @foreach($tasks as $task)
-                                <option value="{{$task->id}}">{{$task->neventame}}</option>
+                                <option value="{{$task->id}}">{{$task->name}}</option>
                             @endforeach
                         </select>
                         <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
@@ -85,7 +85,7 @@
 
         <div class="w-full px-3 mb-6 ">
             <div>
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
                     Save
                 </button>
             </div>
