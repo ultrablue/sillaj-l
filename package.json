@@ -20,6 +20,7 @@
         "vue": "^2.6.10"
     },
     "dependencies": {
+        "tailwindcss": "^1.1.2",
         "v-calendar": "^0.9.7",
         "vue-template-compiler": "^2.6.10"
     }

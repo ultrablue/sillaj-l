@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Project;
+use App\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectsController extends Controller
 {
@@ -16,7 +18,7 @@ class ProjectsController extends Controller
     {
         // Get the User's Projects.
         $projects = Project::where('user_id', $request->user()->id)->orderBy('name')->get() ?? '';
-        $otherSharedProjects = Project::where([['user_id', '<>',$request->user()->id], ['share', '=', true]])->get();
+        $otherSharedProjects = Project::where([['user_id', '<>', $request->user()->id], ['share', '=', true]])->get();
         return view('projects.index', compact('projects', 'otherSharedProjects'));
     }
 
@@ -27,35 +29,50 @@ class ProjectsController extends Controller
      */
     public function create()
     {
-        //
+        $allTasks = Task::allAvailable()->get();
+//        dd($allTasks);
+        return view('projects.create', compact('allTasks'));
     }
+
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required|unique:projects|max:255'
+        ]);
+
+        $project = Auth::user()->projects()->create($request->all());
+
+        $project->tasks()->sync($request->get('tasks'));
+        session()->flash('project_id', $project->id);
+
+        return redirect()->route('projects-list');
+
+
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Project  $project
+     * @param \App\Project $project
      * @return \Illuminate\Http\Response
      */
     public function show(Project $project)
     {
-        return view('projects.show', compact('project'));
+        $allTasks = Task::allAvailable()->orderBy('name')->get();
+        return view('projects.show', compact('project', 'allTasks'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Project  $project
+     * @param \App\Project $project
      * @return \Illuminate\Http\Response
      */
     public function edit(Project $project)
@@ -66,19 +83,25 @@ class ProjectsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Project  $project
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Project $project
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Project $project)
     {
-        //
+//        dd($request->get('tasks'));
+
+        $project->update($request->all());
+        $project->tasks()->sync($request->get('tasks'));
+        session()->flash('project_id', $project->id);
+        return redirect()->route('projects-list');
+
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Project  $project
+     * @param \App\Project $project
      * @return \Illuminate\Http\Response
      */
     public function destroy(Project $project)

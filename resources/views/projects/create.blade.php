@@ -2,10 +2,26 @@
 
 @section('content')
 
+    @if($errors->any())
+        <div role="alert">
+            <div class="bg-red-500 text-white font-bold rounded-t px-4 py-2">
+                <span class="oi" data-glyph="warning"></span> Danger
+            </div>
+            <div class="border border-t-0 border-red-400 rounded-b bg-red-100 px-4 py-3 text-red-700">
+                @foreach ($errors->all() as $message)
+                    <p>{{$message}}</p>
+                @endforeach
+            </div>
+        </div>
+    @endif
 
+    <h2>Create a new Project!</h2>
 
-    {!! Form::model($project, ['action' => ['ProjectsController@update', $project->id], 'method' => 'put']) !!}
-
+    @if(isset ($project))
+        {!! Form::model($project, ['action' => ['ProjectsController@update']]) !!}
+    @else
+        {{ Form::open(['action' => 'ProjectsController@store']) }}
+    @endif
     <div class="w-full px-3 mb-6">
         {{Form::label('name', 'Name:', ['class' => 'block text-gray-700 text-sm']) }}
         {{ Form::text('name',null,['class' => 'text-field focus:outline-none focus:shadow-outline']) }}
@@ -37,22 +53,18 @@
 
     <div class="w-full px-3 mb-6">
 
-        @foreach ($project->tasks as $task)
-            {{ Form::Label($task->name) }}
-            {{ $task->id }}
-        @endforeach
-
-    </div>
-
-
-    <div class="w-full px-3 mb-6">
-
         @foreach ($allTasks as $task)
 
-            {{-- TODO This is probably horribly ineffecient!! --}}
-            @php $checked = in_array($task->id, $project->tasks->pluck('id')->toArray()) ? true : false @endphp
-            {{ Form::checkbox('tasks[]',$task->id) }} {{ $task->name }}<br>
+            @if(isset($project))
+                {{-- TODO This is probably horribly ineffecient!! --}}
+                @php $checked = in_array($task->id, $project->tasks->pluck('id')->toArray()) ? true : false @endphp
+                {{ Form::checkbox('tasks[]',$task->id) }} {{ $task->name }}<br>
+            @else
+                {{ Form::checkbox('tasks[]',$task->id) }} {{ $task->name }}<br>
+            @endif
+
         @endforeach
+
 
     </div>
 
@@ -62,6 +74,5 @@
 
     {!! Form::close() !!}
 
-
 @endsection
-
+ 

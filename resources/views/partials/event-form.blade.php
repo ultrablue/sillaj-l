@@ -1,68 +1,87 @@
-<div class="card border-secondary">
-    <div class="card-body">
-        <form style="" action="{{action('EventController@store')}}" method="post">
-            @csrf
-            <div class="form-row">
-                <div class="col" style="">
+<div class="border-gray-300 border w-1/2 m-2 text-xs">
 
-                    <label for="project">Project</label>
-                    <select class="form-control form-control-sm" id="project" name="project_id" autofocus>
-                        @foreach($projects as $project)
-                            <option value="{{$project->id}}">{{$project->name}}</option>
-                        @endforeach
-                    </select>
-                </div>
+    {{ Form::open(['action' => 'EventController@store']) }}
 
+    <div class="flex px-3">
+        <div class="mb-4 mr-2">
+            {{ Form::label('event_date', 'Date', ['class' => 'block text-gray-700 text-sm']) }}
+            {{ Form::text('event_date', null, ['class' => 'text-field focus:outline-none focus:shadow-outline', 'placeholder' => 'yyyy-mm-dd']) }}
+        </div>
 
-                <div class="col" style="">
-                    <label for="task">Task</label>
-                    <select class="form-control form-control-sm" id="task" name="task_id" placeholder="Task">
-                        @foreach($tasks as $task)
-                            <option value="{{$task->id}}">{{$task->name}}</option>
-                        @endforeach
+        <div class="mb-4 mr-2">
+            {{ Form::label('time_start', 'Start', ['class' => 'block text-gray-700 text-sm']) }}
+            {{ Form::text('time_start', null, ['class' => 'text-field focus:outline-none focus:shadow-outline', 'placeholder' => '24:00', 'size' => '5']) }}
+        </div>
 
-                    </select>
-                </div>
-            </div><!-- /form-row-->
+        <div class="mb-4 mr-2">
+            {{ Form::label('time_end', 'End', ['class' => 'block text-gray-700 text-sm']) }}
+            {{ Form::text('time_end', null, ['class' => 'text-field focus:outline-none focus:shadow-outline', 'placeholder' => '24:00', 'size' => '5']) }}
+        </div>
 
-
-            <div class="form-row">
-
-                <div class="col-md-3">
-                    <label for="date">Date</label>
-                    <input type="text" class="form-control form-control-sm" id="date" name="event_date"
-                           aria-describedby="Date" placeholder="Enter date">
-                </div>
-
-                <div class="col-md-3">
-                    <label for="duration">Duration</label>
-                    <input type="text" class="form-control form-control-sm" id="duration" name="duration"
-                           aria-describedby="duration" placeholder="Duration">
-                </div>
-
-                <div class="col-md-3">
-                    <label for="start">Start Time</label>
-                    <input type="text" class="form-control form-control-sm" id="start" name="time_start"
-                           aria-describedby="start" placeholder="Start Time">
-                </div>
-
-                <div class="col-md-3">
-                    <label for="end">End Time</label>
-                    <input type="text" class="form-control form-control-sm" id="end" name="time_end"
-                           aria-describedby="end" placeholder="End Time">
-                </div>
-
-            </div><!-- /form-row-->
-
-            <div class="form-row">
-                <label for="note">Notes</label>
-                <textarea class="form-control" id="note" rows="3" name="note"></textarea>
-            </div><!-- /form-row-->
-
-            <div class="form-row">
-                <button type="submit" class="btn btn-primary my-1">Submit</button>
-            </div><!-- /form-row-->
-
-        </form>
+        <div class="mb-4">
+            {{ Form::label('duration', 'Duration', ['class' => 'block text-gray-700 text-sm']) }}
+            {{ Form::text('duration', null, ['class' => 'text-field focus:outline-none focus:shadow-outline', 'placeholder' => '24:00', 'size' => '5']) }}
+        </div>
     </div>
+
+
+    <div>
+        <div class="flex flex-row">
+
+            <div class="px-3">
+                {{ Form::label('project_id', 'Project', ['class' => 'block text-gray-700 text-sm']) }}
+
+                <div class="relative">
+                    {{ Form::select('project_id',
+                        $projects->pluck('name', 'id'),
+                        null,
+                        ['class' => 'block appearance-none bg-gray-200 border border-gray-200 text-gray-700 py-1 px-1 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500'],
+                        [],
+                        []
+                        ) }}
+
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-blue-500">
+                        <span class="oi" data-glyph="chevron-bottom"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-3 mb-6 ">
+                {{ Form::label('task_id', 'Task', ['class' => 'block text-gray-700 text-sm']) }}
+
+                <div class="relative">
+                    {{ Form::select('task_id',
+                        $tasks->pluck('name', 'id'),
+                        null,
+                        ['class' => 'block appearance-none bg-gray-200 border border-gray-200 text-gray-700 py-1 px-1 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500'],
+                        [],
+                        []
+                        ) }}
+
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-blue-500">
+                        <span class="oi" data-glyph="chevron-bottom"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-full px-3 mb-6">
+        {{ Form::label('note', 'Notes', ['class' => 'block text-gray-700 text-sm']) }}
+        {!! Form::textarea('note',null,['class' => 'w-full text-field focus:outline-none focus:shadow-outline', 'rows' => '3']) !!}
+    </div>
+
+
+    <div class="w-full px-3 mb-6 ">
+        <div>
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                Save
+            </button>
+        </div>
+    </div>
+
+
+    {{ Form::close() }}
+
+
 </div>

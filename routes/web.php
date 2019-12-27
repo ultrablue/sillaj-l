@@ -40,14 +40,19 @@ Route::post('/events', 'EventController@store');
 
 
 // Projects
-Route::get('/projects', 'ProjectsController@index')->middleware('auth');
-Route::get('/projects/{project}', 'ProjectsController@show')->middleware('auth');
-// TODO This one needs the auth middleware, no?
-// TODO What does this one do?
-Route::post('/projects/{project}/tasks', 'TasksController@store');
+// Show a list of all the Projects.
+Route::get('/projects', 'ProjectsController@index')->name('projects-list')->middleware('auth');
+// Display a form to create Projects.
+Route::get('/projects/create', 'ProjectsController@create')->middleware('auth');
+// Process and store the create form's data.
+Route::post('/projects', 'ProjectsController@store');
+// Show a single Project.
+Route::get('/projects/{project}', 'ProjectsController@show')->name('project-show')->middleware('auth');
+// Process and store the data from an existing Project's form.
+Route::put('projects/{project}', 'ProjectsController@update')->middleware('auth');
 
 // Tasks
-Route::get('/tasks', 'TasksController@index');
+Route::get('/tasks', 'TasksController@index')->name('tasks-list');
 Route::get('/tasks/{task}', 'TasksController@show');
 // TODO This one needs the auth middleware, no?
 // TODO What does this one do?

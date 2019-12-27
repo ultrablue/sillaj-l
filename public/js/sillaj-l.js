@@ -243,14 +243,14 @@ $(document).ready(function () {
 
     let today = new Date();
 
-    if (!$('#date').attr('value')) {
+    if (!$('#event_date').attr('value')) {
         let ISODate = today.getFullYear() + '-' + (today.getMonth() + 1).toString().padStart(2, '0') + '-' + today.getDate().toString().padStart(2, '0');
-        $('#date').val(ISODate);
+        $('#event_date').val(ISODate);
     }
 
-    if (!$('#start').attr('value')) {
+    if (!$('#time_start').attr('value')) {
         let currentTime = today.getHours().toString().padStart(2, '0') + ':' + today.getMinutes().toString().padStart(2, '0');
-        $('#start').val(currentTime);
+        $('#time_start').val(currentTime);
     }
 
 

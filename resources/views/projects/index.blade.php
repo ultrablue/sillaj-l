@@ -1,59 +1,62 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Projects</div>
 
-                <div class="card-body">
-                    @if ($projects->isNotEmpty())
-                        @foreach ($projects as $project)
-                            <article>
-                                <h5><a href="{{$project->path()}}">{{ $project->name }}</a>@if ($project->share === 1) <span class="badge badge-info">Shared<span>@endif</h5>
-                                        <div>{{ $project->description }}</div>
-                                        <hr />
-                            </article>
-                        @endforeach
-                    @else
-                        <article>
-                            <h5>You don't have any projects, yet.</h5>
-                        </article>
-                    @endif
+
+    {{--    @dd(Session::get('project_id') == 4);--}}
+
+    <div class="bg-auto px-3 text-xs my-6 rounded border">
+        <h1 class="text-lg">My Projects</h1>
+
+
+        <div class="table w-full table-auto">
+            <div class="table-row font-bold">
+                <div class="table-cell">ID</div>
+                <div class="table-cell">Name</div>
+                <div class="table-cell">Description</div>
+            </div>
+
+            @if ($projects->isNotEmpty())
+                @foreach ($projects as $project)
+
+                    <div class="table-row @if(Session::get('project_id') == $project->id)bg-green-200" @endif row_id="{{$project->id}}">
+                        <div class="table-cell border-b-2"><a href="#">{{$project->id}}</a></div>
+                        <div class="table-cell border-b-2">
+                            <a href="{{route('project-show', ['project' => $project->id])}}">{{$project->name}} @if ( $project->share ===1 )*@endif</a>
+                        </div>
+                        <div class="table-cell border-b-2">{{$project->description}}</div>
+                    </div>
+
+                @endforeach
+
+            @else
+                <h5>You don't have any projects, yet.</h5>
+            @endif
+
+        </div>
+    </div>
+
+    @if (count($otherSharedProjects) >= 1)
+        <div class="bg-auto px-3 text-xs my-6 rounded border">
+            <h1 class="text-lg">Other Shared Projects</h1>
+
+
+            <div class="table w-full table-auto">
+                <div class="table-row font-bold">
+                    <div class="table-cell">Name</div>
+                    <div class="table-cell">Description</div>
                 </div>
-                @if (count($otherSharedProjects) >= 1)
-                    <div class="card-body">
-                        @foreach ($otherSharedProjects as $sharedProject)
-                            <article>
-                                <h4>{{ $sharedProject->name }}</h4>
-                                <div>{{ $sharedProject->description }}</div>
-                                <hr />
-                            </article>
-                        @endforeach
+
+
+                @foreach ($otherSharedProjects as $sharedProject)
+                    <div class="table-row" row_id="{{$sharedProject->id}}">
+                        <div class="table-cell border-b-2">{{ $sharedProject->name }}</div>
+                        <div class="table-cell border-b-2">{{ $sharedProject->description }}</div>
+                    </div>
+                @endforeach
                 @endif
-                </div>
 
-                <div class="card-body">
-                    <h5 class="card-title">Add a Project</h5>
-                    <div class="card-text">
-                    <form method="POST" action="/what-should-this-be?">
-                        <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" id="name">
-                        </div>
-                        <div class="form-group">
-                            <label for="description">Description</label>
-                            <textarea class="form-control" id="description"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Create</button>
-                    </form>
-                </div>
-
-
-            </div> {{-- card --}}
-        </div> {{-- col-md-8 --}}
-    </div> {{-- row justify-content-center --}}
-</div> {{-- container --}}
+            </div>
+        </div>
 @endsection
  
