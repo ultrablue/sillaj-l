@@ -73,6 +73,8 @@ class EventController extends Controller
     public function store(Request $request)
     {
 
+//        dd(@$request->all());
+        
         // TODO Make the space one work for multiple spaces, eg: 1       1.
         $timeAndDurationRegex = '#^(\d{1,2})?([ :\.])?(\d{1,2})?$#';
 

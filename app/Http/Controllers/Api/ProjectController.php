@@ -8,6 +8,8 @@ use App\Project;
 
 class ProjectController extends Controller
 {
+    
+
     /**
      * Gets the Tasks related to this Project.
      *
@@ -17,9 +19,11 @@ class ProjectController extends Controller
      * @param Project $project
      * @return mixed
      */
-    public function getTasks(Project $project){
+    public function getTasks(Project $project)
+    {
         return $project->tasks()->orderBy('name')->get();
     }
+
 
     // The essence of life is to communicate love.
 

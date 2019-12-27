@@ -1,81 +1,53 @@
-<div class="toast hide bg-success" role="alert" aria-live="assertive" aria-atomic="true" id="toast-success">
-    <div class="toast-header" id="success-toast-header">
-        <strong class="mr-auto"></strong>
+<div class="bg-auto px-3 text-xs border my-6 rounded">
+    <h1 class="text-lg">Events List</h1>
 
-        <button type="button" class="close" data-dismiss="toast">
-            <span aria-hidden="true">&times;</span>
-        </button>
+
+    <div class="table w-full table-auto">
+        <div class="table-row font-bold">
+            <div class="table-cell">ID</div>
+            <div class="table-cell">Task</div>
+            <div class="table-cell">Project</div>
+            <div class="table-cell">Start</div>
+            <div class="table-cell">End</div>
+            <div class="table-cell">Duration</div>
+            <div class="table-cell">Description</div>
+        </div>
+
+
+        @foreach($thisDaysEvents as $event)
+        <div class="table-row" row_id="{{$event->id}}">
+            <div class="table-cell border-b-2"><a href="#">{{$event->id}}</a></div>
+            <div class="table-cell  border-b-2">{{$event->task->name ?? "No Task!"}}</div>
+            <div class="table-cell  border-b-2">{{$event->project->name ?? "No Project!"}}</div>
+            <div class="table-cell  border-b-2">
+                @isset($event->time_start)
+                {{$event->start()->format('H:i')}}
+                @endisset
+            </div>
+            <div class="table-cell border-b-2">
+                @isset($event->time_end)
+                {{$event->end()->format('H:i')}}
+                @endisset
+            </div>
+            <div class="table-cell  border-b-2">{{$event->iso_8601_duration->format('%H:%I')}}</div>
+            <div class="table-cell border-b-2">{{ str_limit($event->note, 30) }}</div>
+        </div>
+
+        @endforeach
+
+
+        <div class="table-row font-bold">
+            <div class="table-cell">&nbsp;</div>
+            <div class="table-cell"></div>
+            <div class="table-cell"></div>
+            <div class="table-cell"></div>
+            <div class="table-cell"></div>
+            <div class="table-cell">{{$totalDuration->cascade()->format('%H:%I')}}</div>
+            <div class="table-cell"></div>
+        </div>
+
+
     </div>
 
-    <div class="toast-body" id="success-toast-body">
 
-    </div>
-</div>
-
-
-<div class="toast hide bg-danger" role="alert" aria-live="assertive" aria-atomic="true" id="toast-failure">
-    <div class="toast-header" id="failure-toast-header">
-        <strong class="mr-auto"></strong>
-
-        <button type="button" class="close" data-dismiss="toast">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-
-    <div class="toast-body" id="failure-toast-body">
-
-    </div>
-</div>
-
-
-<div class="card border-secondary mt-3">
-
-
-    <div class="card-body">
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Task ID</th>
-                <th scope="col">Project ID</th>
-                <th scope="col">Start</th>
-                <th scope="col">End</th>
-                <th scope="col">Duration</th>
-                <th scope="col">Note</th>
-                <th scope="col"></th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach($thisDaysEvents as $event)
-                <tr row_id="{{$event->id}}">
-                    <td>{{$event->id}}</td>
-                    <td>{{$event->task->name ?? "No Task!"}}</td>
-                    <td>{{$event->project->name ?? "No Project!"}}</td>
-                    <td>
-                        <div class="row_data" edit_type="click"
-                             col_name="time_start">@isset($event->time_start)
-                                {{$event->start()->format('H:i')}}
-                            @endisset</div>
-                    </td>
-                    <td>
-                        <div class="row_data" edit_type="click" col_name="time_end">@isset($event->time_end)
-                                {{$event->end()->format('H:i')}}
-                            @endisset</div>
-                    </td>
-                    <td>{{$event->iso_8601_duration->format('%H:%I')}}</td>
-                    <td>
-                        <div class="row_data" edit_type="click" col_name="note">{{$event->note}}</div>
-                    </td>
-                    <td>
-                        <span class="btn_edit"><a href="#" class="btn btn-link" row_id="{{$event->id}}"><span class="oi oi-pencil" title="Edit" aria-hidden="true"></span></a></span>
-
-                        <span class="btn_save"><a href="#" class="btn btn-link" row_id="{{$event->id}}"><span class="oi oi-circle-check text-success" title="Save" aria-hidden="true"></span></a></span>
-                        <span class="btn_cancel"><a href="#" class="btn btn-link" row_id="{{$event->id}}"><span class="oi oi-circle-x text-danger" title="Cancel" aria-hidden="true"></span></a></span>
-
-                    </td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
-    </div>
 </div>

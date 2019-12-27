@@ -1,0 +1,10 @@
+@tailwind base;
+
+@tailwind components;
+
+.text-field {
+    @apply appearance-none border rounded px-1 py-1 text-gray-700
+}
+
+
+@tailwind utilities;

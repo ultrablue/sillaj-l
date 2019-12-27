@@ -10,6 +10,7 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
+    <!-- TODO Make partials for these, please!! -->
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
     <script src="{{ asset('js/sillaj-l.js') }}" defer></script>
@@ -22,188 +23,103 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
     <!-- OpenIconic -->
-    <link href="{{asset('open-iconic-master/font/css/open-iconic-bootstrap.css')}}" rel="stylesheet">
-
-
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        ul {
-            list-style-type: none;
-        }
-
-        .month {
-            padding: 7px 20px;
-            width: 100%;
-            background: #1abc9c;
-            text-align: center;
-        }
-
-        .month ul {
-            margin: 0;
-            padding: 0;
-        }
-
-        .month ul li {
-            color: white;
-            font-size: 15px;
-            text-transform: capitalize;
-            /*letter-spacing: 3px;*/
-        }
-
-        .month .prev {
-            float: left;
-            padding-top: 0px;
-        }
-
-        .month .next {
-            float: right;
-            padding-top: 0px;
-        }
-
-        .weekdays {
-            margin: 0;
-            padding: 10px 0;
-            background-color: #ddd;
-        }
-
-        .weekdays li {
-            display: inline-block;
-            width: 12.6%;
-            color: #666;
-            text-align: center;
-            font-size: 12px;
-        }
-
-        .days {
-            padding: 0px 0;
-            background: #eee;
-            margin: 0;
-        }
-
-        .days li {
-            list-style-type: none;
-            display: inline-block;
-            width: 12.6%;
-            text-align: center;
-            margin-bottom: 5px;
-            font-size: 12px;
-            color: #777;
-        }
-
-        .days li.active {
-            /*background: #1abc9c;*/
-            border: 2px solid red;
-            color: white !important
-        }
-
-        .days li.current {
-            border: 2px solid pink;
-        }
-
-        .days li.has-events {
-            border: 2px solid green;
-            font-weight: bold;
-        }
-
-        .days li.overflow {
-            color: #ccc;
-            border: 2px solid black;
-        }
-
-        /* Add media queries for smaller screens
-           @media screen and (max-width:720px) {
-               .weekdays li, .days li {width: 13.1%;}
-           }
-
-           @media screen and (max-width: 420px) {
-               .weekdays li, .days li {width: 12.5%;}
-               .days li .active {padding: 2px;}
-           }
-
-           @media screen and (max-width: 290px) {
-               .weekdays li, .days li {width: 12.2%;}
-           }*/
-    </style>
-
+    <link href="{{asset('open-iconic-master/font/css/open-iconic.css')}}" rel="stylesheet">
 
 </head>
 <body>
 
 
-<div id="app">
-    <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
-        <div class="container">
-            <a class="navbar-brand" href="{{ url('/') }}">
-                {{ config('app.name', 'Laravel xxx') }}
+<!-------------------------------------------------------------->
+<div>
+    <header class="lg:px-16 px-6 bg-white flex flex-wrap items-center lg:py-0 py-2 border-b-2">
+        <div class="flex-1 flex justify-between items-center">
+            <a href="#">
+                {{config('app.name')}}
             </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        </div>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <!-- Left Side Of Navbar -->
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item"><a href="/~sillaj-l-01/sillaj-l/public/projects" class="nav-link">Projects</a>
-                    </li>
-                    <li class="nav-item"><a href="/~sillaj-l-01/sillaj-l/public/tasks" class="nav-link">Tasks</a></li>
-                </ul>
+        <label for="menu-toggle" class="pointer-cursor lg:hidden block">
+            <svg class="fill-current text-red-900" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+                <title>menu</title>
+                <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
+            </svg>
+        </label>
+        <input class="hidden" type="checkbox" id="menu-toggle"/>
 
-                <!-- Right Side Of Navbar -->
-                <ul class="navbar-nav ml-auto">
-                    <!-- Authentication Links -->
+        <div class="hidden lg:flex lg:items-center lg:w-auto w-full" id="menu">
+            <nav>
+                <ul class="lg:flex items-center justify-between text-base text-gray-700 pt-4 lg:pt-0">
+
+
                     @guest
-                        <li><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
-                        <li><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
+                        <li><span class="oi" data-glyph="bell"></span>
+                            <a class="text-sm lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-indigo-400 lg:mb-0 mb-2" href="{{ route('login') }}">{{ __('Login') }}</a>
+                        </li>
+                        <li>
+                            <a class="text-sm lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-indigo-400 lg:mb-0 mb-2" href="{{ route('register') }}">{{ __('Register') }}</a>
+                        </li>
                     @else
-                        <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                {{ Auth::user()->name }} <span class="caret"></span>
+
+                        <li>
+                            <a class="text-sm lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-indigo-400" href="{{@route('projects-list')}}">Projects</a>
+                        </li>
+                        <li>
+                            <a class="text-sm lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-indigo-400" href="{{@route('tasks-list')}}">Tasks</a>
+                        </li>
+                        <li>
+                            <a class="text-sm lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-indigo-400" href="#">Reports</a>
+                        </li>
+                        <li>
+                            <a class="text-sm lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-indigo-400 lg:mb-0 mb-2" href="#">Support</a>
+                        </li>
+
+                        <li>
+                            <a class="text-sm lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-indigo-400 lg:mb-0 mb-2" href="{{ route('logout') }}"
+                               onclick="event.preventDefault();
+                           document.getElementById('logout-form').submit();">
+                                {{ __('Logout') }}
                             </a>
 
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('logout') }}"
-                                   onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                    {{ __('Logout') }}
-                                </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                  style="display: none;">
+                                @csrf
+                            </form>
 
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                      style="display: none;">
-                                    @csrf
-                                </form>
-                            </div>
                         </li>
                     @endguest
-                </ul>
-            </div>
-        </div>
-    </nav>
 
-    <main class="py-4">
-        @yield('content')
-    </main>
+                </ul>
+            </nav>
+
+            @auth
+
+                <a href="#" class="lg:ml-4 flex items-center justify-start lg:mb-0 mb-4 pointer-cursor">
+                    <div class="text-3xl font-bold text-gray-300 rounded-full w-10 h-10 border-2 border-transparent hover:border-indigo-900 bg-green-700 text-center" title="{{Auth::user()->name}}">
+                        {{ Auth::user()->name[0] }}
+                    </div>
+                </a>
+            @endauth
+
+
+        </div>
+
+    </header>
+</div>
+
+<h1 class="my-12 text-2xl"><span class="oi text-indigo-500" data-glyph="bell"></span></h1>
+
+<div class="container mx-auto w-full relative px-16">
+    @yield('content')
+</div>
 </div>
 
 
 <!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<!-- jQuery -->
+<!-- TODO Make a partial for this, please! -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous">
-</script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous">
-</script>
-
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
 </script>
 
 </body>
