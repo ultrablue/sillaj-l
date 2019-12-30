@@ -33,7 +33,7 @@
 <div>
     <header class="lg:px-16 px-6 bg-white flex flex-wrap items-center lg:py-0 py-2 border-b-2">
         <div class="flex-1 flex justify-between items-center">
-            <a href="#">
+            <a href="{{route('home')}}">
                 {{config('app.name')}}
             </a>
         </div>
@@ -106,9 +106,9 @@
     </header>
 </div>
 
-<h1 class="my-12 text-2xl"><span class="oi text-indigo-500" data-glyph="bell"></span></h1>
+{{--<h1 class="my-12 text-2xl"><span class="oi text-indigo-500" data-glyph="bell"></span></h1>--}}
 
-<div class="container mx-auto w-full relative px-16">
+<div class="container mx-auto w-full relative px-16 pt-6">
     @yield('content')
 </div>
 </div>
