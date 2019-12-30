@@ -2,17 +2,6 @@
 
 @section('content')
 
-
-
-
-
-
-
-
-    <h1 class="text-4xl">This should display the task edit form.</h1>
-
-
-
     {{ Form::model($task, ['action' => ['TasksController@update', $task->id], 'method' => 'put']) }}
     <div class="w-full px-3 mb-6">
         {{ Form::label('name', 'Name', ['class' => 'block text-gray-700 text-sm']) }}
