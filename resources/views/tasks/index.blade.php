@@ -2,6 +2,14 @@
 
 @section('content')
 
+    <ul class="flex">
+        <li class="mr-3">
+            <a class="inline-block border border-blue-500 rounded py-1 px-3 bg-blue-500 text-white" href="{{route('task-create')}}">
+                <span class="oi" data-glyph="plus"></span> Create a new Task</a>
+        </li>
+    </ul>
+
+
     <div class="bg-auto px-3 text-xs my-6 rounded border">
         <h1 class="text-lg">My Tasks</h1>
 

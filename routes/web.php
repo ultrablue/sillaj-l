@@ -53,11 +53,13 @@ Route::put('projects/{project}', 'ProjectsController@update')->middleware('auth'
 
 // Tasks
 Route::get('/tasks', 'TasksController@index')->name('tasks-list');
-Route::get('/tasks/{task}', 'TasksController@show')->name('task-show')->middleware('auth');
+// Display a form to create Tasks.
+Route::get('/tasks/create', 'TasksController@create')->name('task-create')->middleware('auth');
 // TODO This one needs the auth middleware, no?
-// TODO What does this one do?
-// TODO Yeah, fix this, please!! What is it doing?
-Route::post('/tasks/{task}/projects', 'TasksController@store');
+Route::post('/tasks', 'TasksController@store');
+
+Route::get('/tasks/{task}', 'TasksController@show')->name('task-show')->middleware('auth');
+
 Route::get('tasks/{task}/edit', 'TasksController@show');
 Route::put('tasks/{task}', 'TasksController@update');
 

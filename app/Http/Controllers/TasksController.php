@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Task;
 use App\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TasksController extends Controller
 {
@@ -40,28 +41,32 @@ class TasksController extends Controller
      */
     public function create()
     {
-        //
+        $allProjects = Project::allAvailable()->get();
+//        dd($allProjects);
+        return view('tasks.create', compact('allProjects'));
+
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param App\Project $project
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Project $project)
+    public function store(Request $request)
     {
-        $project->addTask([
-            'user_id' => auth()->id(),
-            'name' => request('name'),
-            'description' => request('description'),
-            'display' => request('display'),
-            'use_in_reports' => request('use_in_reports'),
-            'share' => request('share'),
+
+        $validatedData = $request->validate([
+            'name' => 'required|unique:tasks|max:255'
         ]);
 
-        // Send them back...
-        return back();
+        $task = Auth::user()->tasks()->create($request->all());
+
+        $task->projects()->sync($request->get('projects'));
+        session()->flash('task_id', $task->id);
+
+        return redirect()->route('tasks-list');
+
     }
 
     /**
