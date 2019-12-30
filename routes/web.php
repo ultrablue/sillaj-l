@@ -43,7 +43,7 @@ Route::post('/events', 'EventController@store');
 // Show a list of all the Projects.
 Route::get('/projects', 'ProjectsController@index')->name('projects-list')->middleware('auth');
 // Display a form to create Projects.
-Route::get('/projects/create', 'ProjectsController@create')->middleware('auth');
+Route::get('/projects/create', 'ProjectsController@create')->name('project-create')->middleware('auth');
 // Process and store the create form's data.
 Route::post('/projects', 'ProjectsController@store');
 // Show a single Project.

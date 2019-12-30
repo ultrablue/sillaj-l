@@ -2,10 +2,7 @@
 
 @section('content')
 
-
-
     @include('partials.project-from')
-
 
 @endsection
 
