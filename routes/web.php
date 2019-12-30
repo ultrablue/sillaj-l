@@ -53,7 +53,7 @@ Route::put('projects/{project}', 'ProjectsController@update')->middleware('auth'
 
 // Tasks
 Route::get('/tasks', 'TasksController@index')->name('tasks-list');
-Route::get('/tasks/{task}', 'TasksController@show');
+Route::get('/tasks/{task}', 'TasksController@show')->name('task-show')->middleware('auth');
 // TODO This one needs the auth middleware, no?
 // TODO What does this one do?
 // TODO Yeah, fix this, please!! What is it doing?
