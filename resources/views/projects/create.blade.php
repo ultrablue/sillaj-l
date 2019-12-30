@@ -17,7 +17,7 @@
 
     <h2>Create a new Project!</h2>
 
-    @include('projects.resources.views.partials.project-form')
+    @include('partials.project-form')
 
 @endsection
  
