@@ -1,5 +1,5 @@
 <?php
- 
+
 namespace App\Http\Controllers;
 
 use App\Task;
@@ -29,7 +29,7 @@ class TasksController extends Controller
     {
         // Get the User's Projects.
         $tasks = Task::where('user_id', $request->user()->id)->orderBy('name')->get() ?? '';
-        $otherSharedTasks = Task::where([['user_id', '<>',$request->user()->id], ['share', '=', true]])->get();
+        $otherSharedTasks = Task::where([['user_id', '<>', $request->user()->id], ['share', '=', true]])->get();
         return view('tasks.index', compact('tasks', 'otherSharedTasks'));
     }
 
@@ -46,18 +46,18 @@ class TasksController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  App\Project $project
+     * @param App\Project $project
      * @return \Illuminate\Http\Response
      */
     public function store(Project $project)
     {
         $project->addTask([
-            'user_id'        => auth()->id(),
-            'name'           => request('name'),
-            'description'    => request('description'),
-            'display'        => request('display'),
+            'user_id' => auth()->id(),
+            'name' => request('name'),
+            'description' => request('description'),
+            'display' => request('display'),
             'use_in_reports' => request('use_in_reports'),
-            'share'          => request('share'),
+            'share' => request('share'),
         ]);
 
         // Send them back...
@@ -67,18 +67,20 @@ class TasksController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Task  $task
+     * @param \App\Task $task
      * @return \Illuminate\Http\Response
      */
     public function show(Task $task)
     {
-       return view('tasks.show', compact('task')); 
+        $allProjects = Project::allAvailable()->orderBy('name')->get();
+//        dd($allProjects);
+        return view('tasks.show', compact('task', 'allProjects'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Task  $task
+     * @param \App\Task $task
      * @return \Illuminate\Http\Response
      */
     public function edit(Task $task)
@@ -89,19 +91,29 @@ class TasksController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Task  $task
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Task $task
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Task $task)
     {
-        //
+
+//        dd($request->get('projects'));
+//
+//        dd($request->all());
+
+
+        $task->update($request->all());
+
+        $task->projects()->sync($request->get('projects'));
+        session()->flash('task_id', $task->id);
+        return redirect()->route('tasks-list');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Task  $task
+     * @param \App\Task $task
      * @return \Illuminate\Http\Response
      */
     public function destroy(Task $task)

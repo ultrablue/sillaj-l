@@ -1,38 +1,62 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{$task->name}}</div>
 
-                <div class="card-body">
-                     <h5 class="card-title">
-                        {{ $task->description }}
-                     </h5>
-                     <ul class="list-group list-group-flush">
-                         <li class="list-group-item">ID: {{$task->id}}</li>
-                         <li class="list-group-item">User: {{$task->user_id}}</li>
-                         <li class="list-group-item">Display: {{$task->display}}</li>
-                         <li class="list-group-item">Share: {{$task->share}}</li>
-                         <li class="list-group-item">Use in Reports: {{$task->use_in_reports}}</li>
-                         <li class="list-group-item">Created: {{$task->created_at->diffForHumans()}}</li>
-                         <li class="list-group-item">Modified: {{$task->updated_at->diffForHumans()}}</li>
-                    </ul>
-                </div>
 
-            <div class="card-body">
-                <h5 class="card-title">Projects</h5>
-                <ul class="list-group list-group-flush">
-                    @foreach ($task->projects as $project)
-                    <li class="list-group-item">{{$project->name}}</li>
-                    @endforeach
-                </ul>
-            </div>
-                
-        </div>
+
+
+
+
+
+
+    <h1 class="text-4xl">This should display the task edit form.</h1>
+
+
+
+    {{ Form::model($task, ['action' => ['TasksController@update', $task->id], 'method' => 'put']) }}
+    <div class="w-full px-3 mb-6">
+        {{ Form::label('name', 'Name', ['class' => 'block text-gray-700 text-sm']) }}
+        {{ Form::text('name', null, ['class' => 'text-field focus:outline-none focus:shadow-outline']) }}
     </div>
-</div>
+
+    <div class="w-full px-3 mb-6">
+        {{ Form::label('description', 'Description:', ['class' => 'block text-gray-700 text-sm']) }}
+        {{ Form::textarea('description',null,['class' => 'text-field focus:outline-none focus:shadow-outline', 'rows' => '3']) }}
+    </div>
+
+    <div class="w-full px-3 mb-6">
+        {{ Form::label('display', 'Display:', ['class' => 'block text-gray-700 text-sm']) }}
+        {{ Form::hidden('display', 0) }}
+        {{ Form::checkbox('display',1,null,null,['class' => 'text-field focus:outline-none focus:shadow-outline']) }}
+    </div>
+
+    <div class="w-full px-3 mb-6">
+        {{ Form::label('share', 'Share:', ['class' => 'block text-gray-700 text-sm']) }}
+        {{ Form::hidden('share', 0) }}
+        {{ Form::checkbox('share',1,null,null,['class' => 'text-field focus:outline-none focus:shadow-outline']) }}
+    </div>
+
+    <div class="w-full px-3 mb-6">
+        {{ Form::label('use_in_reports', 'Use In Reports:', ['class' => 'block text-gray-700 text-sm']) }}
+        {{ Form::hidden('use_in_reports', 0) }}
+        {{ Form::checkbox('use_in_reports',1,null,null,['class' => 'text-field focus:outline-none focus:shadow-outline']) }}
+    </div>
+
+    <div class="w-full px-3 mb-6">
+        @foreach ($allProjects as $project)
+            {{-- TODO This is probably horribly ineffecient!! --}}
+            @php $checked = in_array($project->id, $task->projects->pluck('id')->toArray()) ? true : false @endphp
+            {{ Form::checkbox('projects[]',$project->id) }} {{ $project->name }}<br>
+        @endforeach
+    </div>
+
+    <div class="w-full px-3 mb-6">
+        {{ Form::submit('Save', ['class' => 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline']) }}
+    </div>
+
+
+    {{ Form::close() }}
+
+
 @endsection
 

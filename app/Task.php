@@ -8,9 +8,12 @@ use Auth;
 
 class Task extends Model
 {
-   
-   // Set everything to fillable for testing.
-    protected $guarded = [];
+
+    // TODO What???? Why do I want to set everything to fillable for testing?
+    // Set everything to fillable for testing.
+    // protected $guarded = [];
+
+    protected $fillable = ['name', 'description', 'display', 'use_in_reports', 'share'];
 
     /**
      *
@@ -40,7 +43,7 @@ class Task extends Model
         // We have to indicate that the column is actually called 'user_id'.
         return $this->belongsTo(User::class, 'user_id');
     }
-  
+
     /**
      * Returns the User's Tasks and Shared Tasks that belong to any User.
      * Keep in mind that this query doesn't rely on a many to many.
@@ -49,8 +52,8 @@ class Task extends Model
      */
     public function scopeAllAvailable()
     {
-        return $this->where('user_id','=',Auth::id())
-            ->orWhere(function($query){
+        return $this->where('user_id', '=', Auth::id())
+            ->orWhere(function ($query) {
                 $query->where('share', '=', true);
                 $query->where('user_id', '<>', Auth::id());
             });

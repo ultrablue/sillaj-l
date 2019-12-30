@@ -56,7 +56,10 @@ Route::get('/tasks', 'TasksController@index')->name('tasks-list');
 Route::get('/tasks/{task}', 'TasksController@show');
 // TODO This one needs the auth middleware, no?
 // TODO What does this one do?
+// TODO Yeah, fix this, please!! What is it doing?
 Route::post('/tasks/{task}/projects', 'TasksController@store');
+Route::get('tasks/{task}/edit', 'TasksController@show');
+Route::put('tasks/{task}', 'TasksController@update');
 
 // Framework generated helper for Authentication.
 Auth::routes();

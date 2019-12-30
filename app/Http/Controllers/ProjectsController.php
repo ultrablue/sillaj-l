@@ -89,6 +89,7 @@ class ProjectsController extends Controller
      */
     public function update(Request $request, Project $project)
     {
+//        dd($request->all());
 //        dd($request->get('tasks'));
 
         $project->update($request->all());
