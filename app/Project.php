@@ -78,7 +78,7 @@ class Project extends Model
             ->orWhere(function ($query) {
                 $query->where('share', '=', true);
                 $query->where('user_id', '<>', Auth::id());
-            });
+            })->orderBy('name');
     }
 
 
