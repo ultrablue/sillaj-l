@@ -1,59 +1,62 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">tasks</div>
 
-                <div class="card-body">
-                    @if ($tasks->isNotEmpty())
-                        @foreach ($tasks as $task)
-                            <article>
-                                <h5><a href="{{$task->path()}}">{{ $task->name }}</a>@if ($task->share === 1) <span class="badge badge-info">Shared<span>@endif</h5>
-                                        <div>{{ $task->description }}</div>
-                                        <hr />
-                            </article>
-                        @endforeach
-                    @else
-                        <article>
-                            <h5>You don't have any tasks, yet.</h5>
-                        </article>
-                    @endif
+    <div class="bg-auto px-3 text-xs my-6 rounded border">
+        <h1 class="text-lg">My Tasks</h1>
+
+
+        <div class="table w-full table-auto">
+            <div class="table-row font-bold">
+                <div class="table-cell">ID</div>
+                <div class="table-cell">Name</div>
+                <div class="table-cell">Description</div>
+            </div>
+
+
+            @if ($tasks->isNotEmpty())
+                @foreach ($tasks as $task)
+
+                    <div class="table-row @if(Session::get('task_id') == $task->id)bg-green-200 @endif" data-task-id="{{$task->id}}">
+                        <div class="table-cell border-b-2"><a href="#">{{$task->id}}</a></div>
+                        <div class="table-cell border-b-2">
+                            <a href="{{route('task-show', ['task' => $task->id])}}">{{$task->name}} @if ( $task->share ===1 )*@endif</a>
+                        </div>
+                        <div class="table-cell border-b-2">{{$task->description}}</div>
+                    </div>
+
+                @endforeach
+
+            @else
+                <h5>You don't have any tasks, yet.</h5>
+            @endif
+        </div>
+    </div>
+
+
+
+    @if (count($otherSharedTasks) >= 1)
+        <div class="bg-auto px-3 text-xs my-6 rounded border">
+            <h1 class="text-lg">Other Shared Tasks</h1>
+
+
+            <div class="table w-full table-auto">
+                <div class="table-row font-bold">
+                    <div class="table-cell">Name</div>
+                    <div class="table-cell">Description</div>
                 </div>
-                @if (count($otherSharedTasks) >= 1)
-                    <div class="card-body">
-                        @foreach ($otherSharedTasks as $sharedTask)
-                            <article>
-                                <h4>{{ $sharedTask->name }}</h4>
-                                <div>{{ $sharedTask->description }}</div>
-                                <hr />
-                            </article>
-                        @endforeach
+
+
+                @foreach ($otherSharedTasks as $sharedTask)
+                    <div class="table-row" data-task-id="{{$sharedTask->id}}">
+                        <div class="table-cell border-b-2">{{ $sharedTask->name }}</div>
+                        <div class="table-cell border-b-2">{{ $sharedTask->description }}</div>
+                    </div>
+                @endforeach
                 @endif
-                </div>
-
-                <div class="card-body">
-                    <h5 class="card-title">Add a task</h5>
-                    <div class="card-text">
-                    <form method="POST" action="/what-should-this-be?">
-                        <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" id="name">
-                        </div>
-                        <div class="form-group">
-                            <label for="description">Description</label>
-                            <textarea class="form-control" id="description"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Create</button>
-                    </form>
-                </div>
 
 
-            </div> {{-- card --}}
-        </div> {{-- col-md-8 --}}
-    </div> {{-- row justify-content-center --}}
-</div> {{-- container --}}
+            </div>
+        </div>
 @endsection
  
