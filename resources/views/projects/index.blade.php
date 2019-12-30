@@ -5,7 +5,6 @@
 
     <ul class="flex">
         <li class="mr-3">
-
             <a class="inline-block border border-blue-500 rounded py-1 px-3 bg-blue-500 text-white" href="{{route('project-create')}}">
                 <span class="oi" data-glyph="plus"></span> Create a new Project</a>
         </li>

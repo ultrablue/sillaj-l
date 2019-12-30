@@ -2,7 +2,7 @@
 
 @section('content')
 
-    @include('partials.project-from')
+    @include('projects.resources.views.partials.project-form')
 
 @endsection
 
