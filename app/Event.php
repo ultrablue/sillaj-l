@@ -6,9 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use DateInterval;
+use Collective\Html\Eloquent\FormAccessible;
 
 class Event extends Model
 {
+
+    use FormAccessible;
 
     protected $fillable = ['task_id', 'project_id', 'time_start', 'time_end', 'duration',
         'iso_8601_duration', 'event_date', 'note'];
@@ -71,6 +74,39 @@ class Event extends Model
         } else {
             $this->attributes['event_date'] = $value;
         }
+    }
+
+    /**
+     * Formats the time for display in a form.
+     *
+     * @param $value
+     * @return string
+     */
+    public function formTimeStartAttribute($value)
+    {
+        return Carbon::parse($value)->format('H:i');
+    }
+
+    /**
+     * Formats the time for display in a form.
+     *
+     * @param $value
+     * @return string
+     */
+    public function formTimeEndAttribute($value)
+    {
+        return Carbon::parse($value)->format('H:i');
+    }
+
+    /**
+     * Formats the duration for display in a form.
+     *
+     * @param $value
+     * @return string
+     */
+    public function formDurationAttribute($value)
+    {
+        return Carbon::parse($value)->format('H:i');
     }
 
 //    public function getDurationAttribute($value)
