@@ -1,6 +1,10 @@
 <div class="border-gray-300 border w-1/2 m-2 text-xs">
 
-    {{ Form::open(['action' => 'EventController@store']) }}
+    @if(isset($event))
+        {{ Form::model($event, ['action' => ['EventController@update', $event->id], 'method'=>'put']) }}
+    @else
+        {{ Form::open(['action' => 'EventController@store']) }}
+    @endif
 
     <div class="flex px-3">
         <div class="mb-4 mr-2">

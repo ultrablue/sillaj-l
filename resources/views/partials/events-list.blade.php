@@ -15,23 +15,24 @@
 
 
         @foreach($thisDaysEvents as $event)
-        <div class="table-row" row_id="{{$event->id}}">
-            <div class="table-cell border-b-2"><a href="#">{{$event->id}}</a></div>
-            <div class="table-cell  border-b-2">{{$event->task->name ?? "No Task!"}}</div>
-            <div class="table-cell  border-b-2">{{$event->project->name ?? "No Project!"}}</div>
-            <div class="table-cell  border-b-2">
-                @isset($event->time_start)
-                {{$event->start()->format('H:i')}}
-                @endisset
+            <div class="table-row" row_id="{{$event->id}}">
+                <div class="table-cell border-b-2"><a href="{{ route('event-show', $event->id)}}">{{$event->id}}</a>
+                </div>
+                <div class="table-cell  border-b-2">{{$event->task->name ?? "No Task!"}}</div>
+                <div class="table-cell  border-b-2">{{$event->project->name ?? "No Project!"}}</div>
+                <div class="table-cell  border-b-2">
+                    @isset($event->time_start)
+                        {{$event->start()->format('H:i')}}
+                    @endisset
+                </div>
+                <div class="table-cell border-b-2">
+                    @isset($event->time_end)
+                        {{$event->end()->format('H:i')}}
+                    @endisset
+                </div>
+                <div class="table-cell  border-b-2">{{$event->iso_8601_duration->format('%H:%I')}}</div>
+                <div class="table-cell border-b-2">{{ str_limit($event->note, 30) }}</div>
             </div>
-            <div class="table-cell border-b-2">
-                @isset($event->time_end)
-                {{$event->end()->format('H:i')}}
-                @endisset
-            </div>
-            <div class="table-cell  border-b-2">{{$event->iso_8601_duration->format('%H:%I')}}</div>
-            <div class="table-cell border-b-2">{{ str_limit($event->note, 30) }}</div>
-        </div>
 
         @endforeach
 

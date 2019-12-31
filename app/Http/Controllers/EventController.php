@@ -74,7 +74,7 @@ class EventController extends Controller
     {
 
 //        dd(@$request->all());
-        
+
         // TODO Make the space one work for multiple spaces, eg: 1       1.
         $timeAndDurationRegex = '#^(\d{1,2})?([ :\.])?(\d{1,2})?$#';
 
@@ -105,7 +105,16 @@ class EventController extends Controller
     public
     function show(Event $event)
     {
-        //
+
+        // We'll need a list of Projects
+        $projects = Project::allAvailable()->orderBy('name')->get();
+        //dd($projects);
+
+
+        // And a list of Tasks.
+        $tasks = Task::allAvailable()->orderBy('name')->get();
+        //dd($tasks);
+        return view('events.show', compact('event', 'projects', 'tasks'));
     }
 
     /**
@@ -130,7 +139,11 @@ class EventController extends Controller
     public
     function update(Request $request, Event $event)
     {
-        //
+//        dd($request->all());
+//        dd($event);
+        $event->update($request->all());
+//        $event = Auth::user()->events()->update($request->all());
+        return redirect()->route('home');
     }
 
     /**
