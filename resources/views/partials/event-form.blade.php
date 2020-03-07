@@ -1,5 +1,11 @@
 <div class="border-gray-300 border w-1/2 m-2 text-xs">
 
+    <div class="flex px-3">
+        <div class="mb-4 mr-2">
+            <h1>Create or Edit an Event</h1>
+        </div>
+    </div>
+
     @if(isset($event))
         {{ Form::model($event, ['action' => ['EventController@update', $event->id], 'method'=>'put']) }}
     @else

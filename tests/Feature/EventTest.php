@@ -46,9 +46,9 @@ class EventTest extends TestCase
     {
         // Given a User...
         $user = factory('App\User')->create();
-        // ...that User can see the Event Form (which is where???)
-        $response = $this->actingAs($user)->get('/events/create');
-        $response->assertSee('Create Event');
+        // ...that User can see the Event Form.
+        $response = $this->actingAs($user)->get('/');
+        $response->assertSee('Create or Edit an Event');
     }
 
     /**
