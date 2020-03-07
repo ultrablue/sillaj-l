@@ -16,7 +16,7 @@ class CreateProjectsTable extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id', false, true)->comment('FK for the Users table.');
-            $table->foreign('user_id')->references('id')->on('users'); 
+            $table->foreign('user_id')->references('id')->on('users');
             $table->string('name', 255)->comment('The name of the Project.');
             $table->boolean('display')->nullable()->default(1)->comment('Indicates whether this Project should be displayed.');
             $table->string('description', 255)->nullable()->comment('A description of the Project.');
@@ -34,9 +34,12 @@ class CreateProjectsTable extends Migration
     public function down()
     {
         // Drop the foreign key from events, else you'll get an error when you rollback.
-        Schema::table('events', function (Blueprint $table) {
-            $table->dropForeign(['project_id']);
-        });
+        // If the database driver is SQLite, drop the column, else you'll get an error when you run your tests.
+        if (DB::getDriverName() !== 'sqlite') {
+            Schema::table('events', function (Blueprint $table) {
+                $table->dropForeign(['project_id']);
+            });
+        }
         Schema::dropIfExists('projects');
     }
 }

@@ -33,9 +33,13 @@ class CreateTasksTable extends Migration
     public function down()
     {
         // Drop the foreign key from events, else you'll get an error when you rollback.
-        Schema::table('events', function (Blueprint $table) {
-            $table->dropForeign(['task_id']);
-        });
+        // If the database driver is SQLite, drop the column, else you'll get an error when you run your tests.
+        if (DB::getDriverName() !== 'sqlite') {
+            Schema::table('events', function (Blueprint $table) {
+                $table->dropForeign(['task_id']);
+            });
+        }
+        
         Schema::dropIfExists('tasks');
     }
 }
