@@ -9,7 +9,11 @@
     </div>
 
     <div class="">
-        @include('partials.events-list')
+        @if($thisDaysEvents->isEmpty())
+            <h1>You don't have any Events, yet.</h1>
+        @else
+            @include('partials.events-list')
+        @endif
     </div>
 
 

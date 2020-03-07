@@ -13,17 +13,19 @@ class EventTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function an_authenticated_user_with_no_events_for_a_given_date_sees_no_events_in_the_dashboard() {
+    public function an_authenticated_user_with_no_events_for_a_given_date_sees_no_events_in_the_dashboard()
+    {
         $user = factory('App\User')->create();
         $response = $this->actingAs($user)->get('/');
-        $response->assertSee('You don\'t have any events, yet.');
+        $response->assertSee('You don\'t have any Events, yet.');
     }
 
 
     /**
      * @test
      */
-    public function an_authenticated_user_can_view_all_events_for_a_given_date() {
+    public function an_authenticated_user_can_view_all_events_for_a_given_date()
+    {
         // Given an authenticated User;
         $user = factory('App\User')->create();
         // and a date;
@@ -31,31 +33,34 @@ class EventTest extends TestCase
         // the User can see Events for that Date.
         $firstProject = factory('App\Project')->create(['user_id' => $user->id]);
         $firstTask = factory('App\Task')->create(['user_id' => $user->id]);
-        
+
         $firstEvent = factory('App\Event')->create(['user_id' => $user->id, 'project_id' => $firstProject->id, 'task_id' => $firstTask->id, 'event_date' => $date]);
         $response = $this->actingAs($user)->get('/');
         $response->assertSee($firstEvent->note);
     }
-    
+
     /**
      * @test
      */
-    public function an_authenticated_user_can_view_new_the_event_form() {
+    public function an_authenticated_user_can_view_new_the_event_form()
+    {
         // Given a User...
-        $user= factory('App\User')->create();
+        $user = factory('App\User')->create();
         // ...that User can see the Event Form (which is where???)
         $response = $this->actingAs($user)->get('/events/create');
         $response->assertSee('Create Event');
     }
+
     /**
      * @test
      */
-    public function an_authenticated_user_can_create_a_new_task_with_a_start_and_end_date() {
+    public function an_authenticated_user_can_create_a_new_task_with_a_start_and_end_date()
+    {
         // Given a User...
-        $user= factory('App\User')->create();
+        $user = factory('App\User')->create();
         // ... a Date
         $date = Carbon::now();
-        
+
     }
 
     // More Tests:
