@@ -36,7 +36,7 @@ class EventTest extends TestCase
 
         $firstEvent = factory('App\Event')->create(['user_id' => $user->id, 'project_id' => $firstProject->id, 'task_id' => $firstTask->id, 'event_date' => $date]);
         $response = $this->actingAs($user)->get('/');
-        $response->assertSee($firstEvent->note);
+        $response->assertSee(str_limit($firstEvent->note, 30));
     }
 
     /**
