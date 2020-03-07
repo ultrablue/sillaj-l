@@ -15,6 +15,9 @@ class TestingTest extends TestCase
      */
     public function testExample()
     {
+
+        // TODO Do I need this test?
+        $this->markTestSkipped('TODO - Do I need this test?? 🤷‍');
         $response = $this->get('/');
 
         $response->assertStatus(200);
