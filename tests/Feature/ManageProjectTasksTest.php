@@ -9,11 +9,11 @@ class ManageProjectTasks extends TestCase
 {
 
     use DatabaseMigrations;
-    
-    /** 
+
+    /**
      * @test
-     * @testdox Unauthenticated Users may NOT add new tasks to a Project. 
-    * */
+     * @testdox Unauthenticated Users may NOT add new tasks to a Project.
+     * */
     public function unauthenticated_users_may_not_add_new_tasks_to_a_project()
     {
         $this->expectException('Illuminate\Auth\AuthenticationException');
@@ -31,7 +31,7 @@ class ManageProjectTasks extends TestCase
     public function an_authenticated_user_can_add_new_tasks_to_a_project()
     {
 
-        //Given we have an authenticatd User
+        //Given we have an authenticated User
         $user = factory('App\User')->create();
         $this->be($user);
         //And an existing Project
