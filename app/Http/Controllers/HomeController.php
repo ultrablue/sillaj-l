@@ -34,8 +34,8 @@ class HomeController extends Controller
      */
     public function index(Request $request, $eventdate = null)
     {
-
-
+        // Hmmm. Is binding to a Carbon date a good idea? Can I use a php Date instead? That way, I might be able to
+        // use any Class that used the Date Interface?? Or even as the default value?
         $now = Carbon::now();
         if (!$eventdate) {
             $searchForDate = Carbon::now();
@@ -55,8 +55,10 @@ class HomeController extends Controller
         $previousMonth = $searchForDate->copy()->subMonth()->startOfMonth();
         $nextMonth = $searchForDate->copy()->addMonth()->startOfMonth();
 
-        //dd($eventdate);
+//        dd($searchForDate);
         $thisDaysEvents = Event::where(['user_id' => $request->user()->id])->whereDate('event_date', $searchForDate->toDateString())->orderBy('time_start')->get();
+
+//        dd($thisDaysEvents);
 
         $justDurations = $thisDaysEvents->pluck('iso_8601_duration');
 

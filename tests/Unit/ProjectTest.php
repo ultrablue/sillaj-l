@@ -15,7 +15,7 @@ class ProjectTest extends TestCase
     protected $user;
     protected $project;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->user = factory('App\User')->create();
@@ -40,19 +40,20 @@ class ProjectTest extends TestCase
         // Tests the many to many relationship between Projects and Tasks.
         // TODO Use Faker for this?? Or the Factory???
         $this->project->addTask([
-            'user_id'        => $this->user->id,
-            'name'           => 'A test Task.',
-            'description'    => 'Test Task\'s description.',
-            'display'        => TRUE,
+            'user_id' => $this->user->id,
+            'name' => 'A test Task.',
+            'description' => 'Test Task\'s description.',
+            'display' => TRUE,
             'use_in_reports' => TRUE,
-            'share'          => TRUE,
+            'share' => TRUE,
         ]);
 
-      $this->assertCount(1, $this->project->tasks);
+        $this->assertCount(1, $this->project->tasks);
     }
 
     /** @test */
-    public function a_project_can_list_all_shared_projects() {
+    public function a_project_can_list_all_shared_projects()
+    {
         // The idea here is to see whether the shared Projects created by any User are returned by the Model.
         $users = factory('App\User', 2)->create();
         foreach ($users as $user) {
@@ -61,6 +62,6 @@ class ProjectTest extends TestCase
         }
         $this->assertEquals($this->project->shared()->count(), 4);
         $this->assertEquals($this->project->otherShared($users[0])->count(), 2);
-    } 
+    }
 
 }
