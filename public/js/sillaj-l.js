@@ -49,7 +49,8 @@ $(document).ready(function () {
             .addClass('bg-light')
 
         //--->add the original entry > start
-        tbl_row.find('.row_data').each(function (index, val) {
+        tbl_row.find('.row_data').each(function (index,
+                                                 val) {
             //this will help in case user decided to click on cancel button
             $(this).attr('original_entry', $(this).html());
         });
@@ -80,7 +81,8 @@ $(document).ready(function () {
             .attr('edit_type', 'click')
             .removeClass('bg-light')
 
-        tbl_row.find('.row_data').each(function (index, val) {
+        tbl_row.find('.row_data').each(function (index,
+                                                 val) {
             $(this).html($(this).attr('original_entry'));
         });
     });
@@ -110,23 +112,27 @@ $(document).ready(function () {
 
         //--->get row data > start
         let arr = {};
-        tbl_row.find('.row_data').each(function (index, val) {
-            let col_name = $(this).attr('col_name');
-            let col_val = $(this).html();
+        tbl_row.find('.row_data').each(function (index,
+                                                 val) {
+            let col_name  = $(this).attr('col_name');
+            let col_val   = $(this).html();
             arr[col_name] = col_val;
         });
         //--->get row data > end
 
         $.ajax({
-                url: ajax_url + row_id,
-                type: 'PUT',
-                dataType: 'json',
-                data: arr,
-                beforeSend: function (xhr, settings) {
+                url:        ajax_url + row_id,
+                type:       'PUT',
+                dataType:   'json',
+                data:       arr,
+                beforeSend: function (xhr,
+                                      settings) {
                     // console.info('Saving single field [' + row_id + '] ');
                     // console.table(arr);
                 },
-                success: function (data, status, xhr) {
+                success:    function (data,
+                                      status,
+                                      xhr) {
                     // console.log("Save was successful! 😊 " + status);
                     // console.table(data);
                     // TODO Can we make this a function or something? See Issue #16.
@@ -134,7 +140,9 @@ $(document).ready(function () {
                     $('#success-toast-body').html("Event ID " + row_id + " was updated.");
                     $('#toast-success').toast({delay: 2500, animation: true}).toast('show');
                 },
-                error: function (xhr, status, error) {
+                error:      function (xhr,
+                                      status,
+                                      error) {
                     // console.warn("PATCH failed! " + status + " " + error);
 
                     // TODO Can we make this a function or something? See Issue #16.
@@ -169,9 +177,9 @@ $(document).ready(function () {
             .removeClass(background_highlight_class) // Restore bg css
 
         let col_name = row_div.attr('col_name');
-        let col_val = row_div.html();
+        let col_val  = row_div.html();
 
-        let arr = {};
+        let arr       = {};
         //get the col name and value
         arr[col_name] = col_val;
         //get row id value
@@ -184,26 +192,29 @@ $(document).ready(function () {
 
             //ajax api json data
 
-            var data_obj =
-                {
-                    id: row_id,
-                    col_name: col_name,
-                    col_val: col_val,
-                    call_type: 'single_entry',
-                };
+            var data_obj       =
+                    {
+                        id:        row_id,
+                        col_name:  col_name,
+                        col_val:   col_val,
+                        call_type: 'single_entry',
+                    };
             data_obj[col_name] = col_val;
             console.table(data_obj);
 
             //call ajax api to update the database record
             $.ajax({
-                    url: ajax_url + row_id,
-                    type: 'PUT',
-                    dataType: 'json',
-                    data: data_obj,
-                    beforeSend: function (xhr, settings) {
+                    url:        ajax_url + row_id,
+                    type:       'PUT',
+                    dataType:   'json',
+                    data:       data_obj,
+                    beforeSend: function (xhr,
+                                          settings) {
                         console.info('Saving single field [' + row_id + '] ' + 'field: ' + col_name);
                     },
-                    success: function (data, status, xhr) {
+                    success:    function (data,
+                                          status,
+                                          xhr) {
                         console.log("Save was successful! 😊 " + status);
                         // console.table(data);
 
@@ -214,7 +225,9 @@ $(document).ready(function () {
 
 
                     },
-                    error: function (xhr, status, error) {
+                    error:      function (xhr,
+                                          status,
+                                          error) {
                         // console.warn("PATCH failed! " + status + " " + error);
                         // TODO Can we make this a function or something? See Issue #16.
                         $('#failure-toast-header > strong').html("☹ Something went wrong.");
@@ -250,34 +263,39 @@ $(document).ready(function () {
 
     if (!$('#time_start').attr('value')) {
         // Round the current time's minutes to the nearest 5 (or whatever).
-        let roundTo = 5;
+        let roundTo        = 5;
         let currentMinutes = Math.round(today.getMinutes() / roundTo) * roundTo;
         // console.log(currentMinutes);
         // Create a string with the current time in it and put it in the start time as a courtesy for the user.
         let currentTime = today.getHours().toString().padStart(2, '0') + ':' + currentMinutes.toString().padStart(2, '0');
         $('#time_start').val(currentTime);
         // Move the cursor to the end time field.
-        $('#time_end').focus();
+        $('#time_start').focus().select();
     }
 
+    $('#time_start').on('focus', function () {
+        // $(this)[0].setSelectionRange(3, 4);
+    });
 
-    $('#project').change(function () {
+    $('#project_id').change(function () {
 
 
         $.ajax({
-            url: 'api/projects/' + $('#project').val() + '/tasks',
+            url:      'api/projects/' + $('#project_id').val() + '/tasks',
             dataType: 'json',
-            type: 'GET',
+            type:     'GET',
             // This is query string i.e. project_id=123
             // data: {country_id : $('#country').val()},
-            success: function (data) {
-                console.log(data);
-                $('#task').empty(); // clear the current elements in select box
+            success:  function (data) {
+                //console.log(data);
+                $('#task_id').empty(); // clear the current elements in select box
                 for (row in data) {
-                    $('#task').append($('<option></option>').attr('value', data[row].id).text(data[row].name));
+                    $('#task_id').append($('<option></option>').attr('value', data[row].id).text(data[row].name));
                 }
             },
-            error: function (jqXHR, textStatus, errorThrown) {
+            error:    function (jqXHR,
+                                textStatus,
+                                errorThrown) {
                 console.error(errorThrown);
             }
         });
