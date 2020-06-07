@@ -67,6 +67,7 @@ class ProjectTest extends TestCase
     /** @test */
     public function an_authenticated_user_can_view_a_projects_tasks()
     {
+        // TODO this one appears to fail randomly? Run the tests a few times to see it in action.
         $task = factory('App\Task')->create();
         $this->project->tasks()->attach($task);
 
