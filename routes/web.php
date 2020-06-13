@@ -35,8 +35,8 @@ Route::get('/', 'HomeController@index')->name('home');
 // Events
 //Route::get('/events/{eventdate?}', 'EventController@index');
 Route::get('/events/create', 'EventController@create');
-//Route::post('/events', 'EventController@store')->middleware(\App\Http\Middleware\processTemporalInputs::class);
-Route::post('/events', 'EventController@store');
+Route::post('/events', 'EventController@store')->middleware(\App\Http\Middleware\processTemporalInputs::class);
+//Route::post('/events', 'EventController@store');
 Route::get('events/{event}', 'EventController@show')->name('event-show')->middleware('auth');
 Route::put('events/{event}', 'EventController@update')->middleware('auth');
 

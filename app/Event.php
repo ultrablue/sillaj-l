@@ -50,7 +50,8 @@ class Event extends Model
      */
     public function start()
     {
-        return Carbon::createFromTimeString($this->time_start);
+        if ($this->time_start)
+            return Carbon::createFromTimeString($this->time_start);
     }
 
     /**

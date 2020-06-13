@@ -18,29 +18,43 @@ class processTemporalInputs
      * @param \Closure $next
      * @return mixed
      * @throws \Exception
+     * @noinspection PhpUndefinedFieldInspection
      */
     public function handle($request, Closure $next)
     {
 
-
-        if ($request->duration && (preg_match('#^(\d{1,2})?([ :\.])?(\d{1,2})?$#', $request->duration, $matches))) {
-            $durationHours = (int)$matches[1];
-            $durationDivider = isset($matches[2]) ? $matches[2] : '';
-            // If there was a third match (minutes), use it, otherwise set it to 0.
-            if ($durationDivider === '.') {
-                $durationMinutes = (int)round(((float)('.' . $matches[3])) * 60);
-            } else {
-                $durationMinutes = isset($matches[3]) ? (int)$matches[3] : 0;
-
+        if ($request->time_start || $request->time_end) {
+            // Was there a : in the start time? If not, then attempt to get a time.
+            if (strpos($request->time_start, ':') === false) {
+                $request['time_start'] = $this->parseTimeWithNoColon($request->time_start);
             }
 
-            $carbonDuration = CarbonInterval::create(0, 0, 0, 0, $durationHours, $durationMinutes);
-        } else {
-            $carbonDuration = null;
+            // Do the same for end time.
+            if (strpos($request->time_end, ':') === false) {
+                $request['time_end'] = $this->parseTimeWithNoColon($request->time_end);
+            }
+
         }
 
-        $request['iso_8601_duration'] = $carbonDuration;
-        $request['duration'] = $carbonDuration;
+
+//        if ($request->duration && (preg_match('#^(\d{1,2})?([ :\.])?(\d{1,2})?$#', $request->duration, $matches))) {
+//            $durationHours = (int)$matches[1];
+//            $durationDivider = isset($matches[2]) ? $matches[2] : '';
+//            // If there was a third match (minutes), use it, otherwise set it to 0.
+//            if ($durationDivider === '.') {
+//                $durationMinutes = (int)round(((float)('.' . $matches[3])) * 60);
+//            } else {
+//                $durationMinutes = isset($matches[3]) ? (int)$matches[3] : 0;
+//
+//            }
+//
+//            $carbonDuration = CarbonInterval::create(0, 0, 0, 0, $durationHours, $durationMinutes);
+//        } else {
+//            $carbonDuration = null;
+//        }
+//
+//        $request['iso_8601_duration'] = $carbonDuration;
+//        $request['duration'] = $carbonDuration;
 
 //
 //        $request['carbon_time_start'] = NULL;
@@ -72,4 +86,25 @@ class processTemporalInputs
 
         return $next($request);
     }
+
+
+    /**
+     * Helps with the case where a time was entered without a colon.
+     *
+     * @param $timeString
+     * @return string|void
+     */
+    private function parseTimeWithNoColon($timeString)
+    {
+        if ($timeString === null) {
+            return;
+        }
+        // This will match a three digit start time.
+        preg_match('/(\d{1,2})(\d\d)/', $timeString, $matches);
+        $hours = sprintf("%'.02d", $matches[1]);
+        $minutes = sprintf("%-02s", $matches[2]);
+        return $hours . ':' . $minutes;
+    }
+
+
 }
