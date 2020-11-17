@@ -29,14 +29,14 @@ class TaskTest extends TestCase
         // And antother User made a shared Task;
         $otherUser = factory('App\User')->create();
         $sharedTask = factory('App\Task')->create(['user_id' => $otherUser->id, 'share' => TRUE]);
-        // When we get the list of Tasks... 
+        // When we get the list of Tasks...
         $response = $this->actingAs($user)->get('/tasks');
 
         $response->assertStatus(200);
         // Do we see the Task that the User made?
-        $response->assertSee($task->name);
+        $response->assertSee($task->name, false);
         // Do we see the shared Task?
-        $response->assertSee($sharedTask->name);
+        $response->assertSee($sharedTask->name,false);
 
     }
 
@@ -46,7 +46,7 @@ class TaskTest extends TestCase
     {
         $user = factory('App\User')->create();
         $response = $this->actingAs($user)->get('/tasks');
-        $response->assertSee('You don\'t have any tasks, yet.');
+        $response->assertSee('You don\'t have any tasks, yet.', false);
     }
 
     /** @test */
@@ -61,7 +61,7 @@ class TaskTest extends TestCase
     {
 
         $response = $this->actingAs($this->user)->get('/tasks/' . $this->task->id);
-        $response->assertSee($this->task->name);
+        $response->assertSee($this->task->name, false);
     }
 
     /** @test */
@@ -77,8 +77,8 @@ class TaskTest extends TestCase
         $this->task->projects()->attach($secondProject);
 
         $response = $this->actingAs($this->user)->get('/tasks/' . $this->task->id);
-        $response->assertSee($firstProject->name);
-        $response->assertSee($secondProject->name);
+        $response->assertSee($firstProject->name, false);
+        $response->assertSee($secondProject->name, false);
 
     }
 

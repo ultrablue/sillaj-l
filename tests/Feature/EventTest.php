@@ -17,7 +17,7 @@ class EventTest extends TestCase
     {
         $user = factory('App\User')->create();
         $response = $this->actingAs($user)->get('/');
-        $response->assertSee('You don\'t have any Events, yet.');
+        $response->assertSee('You don\'t have any Events, yet.', false);
     }
 
 
@@ -36,7 +36,7 @@ class EventTest extends TestCase
 
         $firstEvent = factory('App\Event')->create(['user_id' => $user->id, 'project_id' => $firstProject->id, 'task_id' => $firstTask->id, 'event_date' => $date]);
         $response = $this->actingAs($user)->get('/');
-        $response->assertSee(str_limit($firstEvent->note, 30));
+        $response->assertSee(str_limit($firstEvent->note, 30), false);
     }
 
     /**
@@ -48,7 +48,7 @@ class EventTest extends TestCase
         $user = factory('App\User')->create();
         // ...that User can see the Event Form.
         $response = $this->actingAs($user)->get('/');
-        $response->assertSee('Create or Edit an Event');
+        $response->assertSee('Create or Edit an Event', false);
     }
 
     /**

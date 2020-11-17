@@ -25,7 +25,7 @@ class ProjectTest extends TestCase
     {
         $user = factory('App\User')->create();
         $response = $this->actingAs($user)->get('/projects');
-        $response->assertSee('You don\'t have any projects, yet.');
+        $response->assertSee('You don\'t have any projects, yet.', false);
     }
 
 
@@ -42,9 +42,9 @@ class ProjectTest extends TestCase
         // When we get the list of Projects...
         $response = $this->actingAs($user)->get('/projects');
         // Do we see the Project that the User made?
-        $response->assertSee($project->name);
+        $response->assertSee($project->name, false);
         // Do we see the shared Project?
-        $response->assertSee($sharedProject->name);
+        $response->assertSee($sharedProject->name, false);
 
     }
 
@@ -60,7 +60,7 @@ class ProjectTest extends TestCase
     {
 
         $response = $this->actingAs($this->user)->get('/projects/' . $this->project->id);
-        $response->assertSee($this->project->name);
+        $response->assertSee($this->project->name, false);
     }
 
 
@@ -72,7 +72,7 @@ class ProjectTest extends TestCase
         $this->project->tasks()->attach($task);
 
         $response = $this->actingAs($this->user)->get('/projects/' . $this->project->id);
-        $response->assertSee($task->name);
+        $response->assertSee($task->name, false);
 
     }
 
