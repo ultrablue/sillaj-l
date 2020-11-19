@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 
 class ProjectTaskTableSeeder extends Seeder
@@ -19,7 +21,7 @@ class ProjectTaskTableSeeder extends Seeder
                 ['share', '=', 'TRUE'],
                 ['user_id', '<>', $project->user_id]
             ])->get();
-           $project->tasks()->attach($otherUsersSharedTasks->random(2,4)); 
+           $project->tasks()->attach($otherUsersSharedTasks->random(2,4));
         });
     }
 }

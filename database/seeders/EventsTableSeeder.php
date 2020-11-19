@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 
 class EventsTableSeeder extends Seeder
@@ -26,15 +28,15 @@ class EventsTableSeeder extends Seeder
             // Get each Task created by this User and create some Events associated with that Task.
             $user->tasks->each(function ($task) use ($user, $projects) {
                 factory('App\Event', 2)->create([
-                    'user_id'    => $user->id, 
+                    'user_id'    => $user->id,
                     'task_id'    => $task->id,
                     // This probably shouldn't be random, but I'm not sure what to make it for now.
                     'project_id' => $projects->random()->id
                 ]);
 
-                // Create some Events with just durations, no start or end times. 
+                // Create some Events with just durations, no start or end times.
                 factory('App\Event', 2)->states('duration')->create([
-                    'user_id'    => $user->id, 
+                    'user_id'    => $user->id,
                     'task_id'    => $task->id,
                     'project_id' => $projects->random()->id
                 ]);
@@ -45,14 +47,14 @@ class EventsTableSeeder extends Seeder
                 ['share', '=', '1'],
                 ['user_id', '<>', $user->id]
             ]);
-            
+
             $sharedTasks->each(function ($task) use ($user, $projects) {
                factory('App\Event', 2)->create([
-                    'user_id'    => $user->id, 
+                    'user_id'    => $user->id,
                     'task_id'    => $task->id,
                     'project_id' => $projects->random()->id
                 ]);
- 
+
             });
 
 

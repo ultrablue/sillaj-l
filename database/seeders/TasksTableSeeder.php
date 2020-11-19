@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 
 class TasksTableSeeder extends Seeder
@@ -20,13 +22,13 @@ class TasksTableSeeder extends Seeder
 
         // Get all the Users from the database.
         $users = App\User::all();
-        
+
         // Seed Tasks.
         $users->each(function ($user) {
             // Make some that have share set to TRUE.
             factory('App\Task', 5)->create(['user_id' => $user->id, 'share' => TRUE]);
             // Make some that have share set to FALSE.
-            factory('App\Task', 5)->create(['user_id' => $user->id, 'share' => FALSE]); 
+            factory('App\Task', 5)->create(['user_id' => $user->id, 'share' => FALSE]);
         });
     }
 }
