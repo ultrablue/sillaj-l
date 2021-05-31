@@ -47,3 +47,4 @@ tags
 tags.*
 
 
+.phpunit.result.cache
