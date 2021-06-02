@@ -2,64 +2,58 @@
 
 @section('content')
 
+    {{-- The form title. Should this be something else? Another type of markup I mean? --}}
     <div class="text-2xl">{{ __('Login') }} 💕</div>
 
-    <form method="POST" action="{{ route('login') }}">
+
+    <div class="w-full max-w-xs">
+
+    <form method="POST" action="{{ route('login') }}" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         @csrf
 
-        <div class="email bg-gray-500 ">
-            <label for="email" class="col-sm-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
+        <div class="mb-4">
+            <label for="email" class="block text-gray-700 text-sm font-bold mb-2">{{ __('E-Mail Address') }}</label>
 
-            <div class="col-md-6">
-                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
-                       name="email" value="{{ old('email') }}" required autofocus>
+            <div class="">
+                <input id="email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline {{ $errors->has('email') ? ' border-red-500' : '' }}" name="email" value="{{ old('email') }}" autofocus>
 
                 @if ($errors->has('email'))
-                    <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
+                    <p class="text-red-500 text-xs italic">
+                        {{ $errors->first('email') }}
+                    </p>
                 @endif
             </div>
         </div>
 
-        <div class="form-group row">
-            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
-
-            <div class="col-md-6">
-                <input id="password" type="password"
-                       class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password"
-                       required>
-
+        <div class="mb-6">
+            <label for="password" class="block text-gray-700 text-sm font-bold mb-2">{{ __('Password') }}</label>
+                <input id="password" type="password" class=" shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline {{ $errors->has('password') ? ' border-red-500' : '' }}" name="password">
                 @if ($errors->has('password'))
-                    <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                @endif
-            </div>
+                <p class="text-red-500 text-xs italic">
+                    {{ $errors->first('password') }}
+                </p>
+                @endif            
         </div>
 
-        <div class="form-group row">
-            <div class="col-md-6 offset-md-4">
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox"
-                               name="remember" {{ old('remember') ? 'checked' : '' }}> {{ __('Remember Me') }}
+        <div class="mb-4">
+                    <label class=" block text-gray-700">
+                        <input type="checkbox" name="remember" class="mr-2 leading-tight" {{ old('remember') ? 'checked' : '' }}> 
+                        <span class="text-sm">{{ __('Remember Me') }}</span>
                     </label>
-                </div>
-            </div>
         </div>
 
-        <div class="form-group row mb-0">
-            <div class="col-md-8 offset-md-4">
-                <button type="submit" class="btn btn-primary">
+        <div class="flex items-center justify-between">
+            
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                     {{ __('Login') }}
                 </button>
 
-                <a class="btn btn-link" href="{{ route('password.request') }}">
+                <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="{{ route('password.request') }}">
                     {{ __('Forgot Your Password?') }}
                 </a>
-            </div>
+            
         </div>
     </form>
+</div>
 
 @endsection
