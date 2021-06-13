@@ -3,34 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Event;
-use Carbon\CarbonInterval;
-use Exception;
-use Illuminate\Http\Request;
-
 use App\Project;
 use App\Task;
 use Auth;
+use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Validator;
-
-use Carbon\Carbon;
-
-use Solution10\Calendar\Calendar as Calendar;
-use Solution10\Calendar\Resolution\MonthResolution;
 
 class EventController extends Controller
 {
     /**
      * Add authentication to this entire Controller; it has no publicly
      * available methods.
-     *
      */
     public function __construct()
     {
         // TODO We can also move this to routes.
         $this->middleware('auth');
     }
-
 
     /**
      * Display a listing of the resource.
@@ -39,7 +29,6 @@ class EventController extends Controller
      */
     public function index(Request $request)
     {
-
         return view('events.index');
     }
 
@@ -54,11 +43,9 @@ class EventController extends Controller
         $projects = Project::allAvailable()->orderBy('name')->get();
         //dd($projects);
 
-
         // And a list of Tasks.
         $tasks = Task::allAvailable()->orderBy('name')->get();
         //dd($tasks);
-
 
         return view('events.create', compact('projects', 'tasks'));
     }
@@ -66,18 +53,16 @@ class EventController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
      * @return Response
-     * @throws Exception Either the start time or duration are required.
+     *
+     * @throws Exception either the start time or duration are required
      */
     public function store(Request $request)
     {
-
-//        dd(@$request->all());
+        // dd(@$request->all());
 
         // TODO Make the space one work for multiple spaces, eg: 1       1.
         $timeAndDurationRegex = '#^(\d{1,2})?([ :\.])?(\d{1,2})?$#';
-
 
         $validatedData = $request->validate([
             'duration' => "nullable|regex:$timeAndDurationRegex",
@@ -85,31 +70,25 @@ class EventController extends Controller
             'time_end' => "nullable|regex:$timeAndDurationRegex",
         ]);
 
-//        dd($validatedData);
+        // dd($validatedData);
 
-
-//        dd($request->all());
+        // dd($request->event_date);
 
         $event = Auth::user()->events()->create($request->all());
 
-
-        return redirect()->route('home');
+        return redirect($request->event_date);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param \App\Event $event
      * @return Response
      */
-    public
-    function show(Event $event)
+    public function show(Event $event)
     {
-
         // We'll need a list of Projects
         $projects = Project::allAvailable()->orderBy('name')->get();
         //dd($projects);
-
 
         // And a list of Tasks.
         $tasks = Task::allAvailable()->orderBy('name')->get();
@@ -120,24 +99,18 @@ class EventController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Event $event
      * @return Response
      */
-    public
-    function edit(Event $event)
+    public function edit(Event $event)
     {
-        //
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param \App\Event $event
      * @return Response
      */
-    public
-    function update(Request $request, Event $event)
+    public function update(Request $request, Event $event)
     {
 //        dd($request->all());
 //        dd($event);
@@ -149,12 +122,9 @@ class EventController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Event $event
      * @return Response
      */
-    public
-    function destroy(Event $event)
+    public function destroy(Event $event)
     {
-        //
     }
 }

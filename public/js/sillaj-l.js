@@ -256,6 +256,7 @@ $(document).ready(function () {
 
     let today = new Date();
 
+    // This is part of issue-47.
     if (!$('#event_date').attr('value')) {
         let ISODate = today.getFullYear() + '-' + (today.getMonth() + 1).toString().padStart(2, '0') + '-' + today.getDate().toString().padStart(2, '0');
         $('#event_date').val(ISODate);
