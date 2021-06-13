@@ -15,7 +15,7 @@
     <div class="flex px-3">
         <div class="mb-4 mr-2">
             {{ Form::label('event_date', 'Date', ['class' => 'block text-gray-700 text-sm']) }}
-            {{ Form::text('event_date', null, ['class' => 'text-field focus:outline-none focus:shadow-outline', 'placeholder' => 'yyyy-mm-dd']) }}
+            {{ Form::text('event_date', session('eventdate'), ['class' => 'text-field focus:outline-none focus:shadow-outline', 'placeholder' => 'yyyy-mm-dd']) }}
         </div>
 
         <div class="mb-4 mr-2">
