@@ -265,10 +265,16 @@ $(document).ready(function () {
     if (!$('#time_start').attr('value')) {
         // Round the current time's minutes to the nearest 5 (or whatever).
         let roundTo = 5;
-        let currentMinutes = Math.round(today.getMinutes() / roundTo) * roundTo;
+        let currentHours = today.getHours();
+        let currentMinutes = (Math.round(today.getMinutes() / roundTo) * roundTo);
+
+        if (currentMinutes >= 60) {
+            currentMinutes = 0;
+            currentHours += 1;
+        }
         // console.log(currentMinutes);
         // Create a string with the current time in it and put it in the start time as a courtesy for the user.
-        let currentTime = today.getHours().toString().padStart(2, '0') + ':' + currentMinutes.toString().padStart(2, '0');
+        let currentTime = currentHours.toString().padStart(2, '0') + ':' + currentMinutes.toString().padStart(2, '0');
         $('#time_start').val(currentTime);
         // Move the cursor to the end time field.
         $('#time_start').focus().select();
