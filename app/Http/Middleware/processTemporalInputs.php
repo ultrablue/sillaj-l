@@ -2,12 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
-
-use Symfony\Component\HttpFoundation\ParameterBag;
-
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
+use Closure;
 
 class processTemporalInputs
 {
@@ -15,14 +12,14 @@ class processTemporalInputs
      * Handle an incoming request.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \Closure $next
+     *
      * @return mixed
+     *
      * @throws \Exception
      * @noinspection PhpUndefinedFieldInspection
      */
     public function handle($request, Closure $next)
     {
-
         if ($request->time_start || $request->time_end) {
             // Was there a : in the start time? If not, then attempt to get a time.
             if (strpos($request->time_start, ':') === false) {
@@ -33,9 +30,7 @@ class processTemporalInputs
             if (strpos($request->time_end, ':') === false) {
                 $request['time_end'] = $this->parseTimeWithNoColon($request->time_end);
             }
-
         }
-
 
 //        if ($request->duration && (preg_match('#^(\d{1,2})?([ :\.])?(\d{1,2})?$#', $request->duration, $matches))) {
 //            $durationHours = (int)$matches[1];
@@ -67,7 +62,6 @@ class processTemporalInputs
 //            $request['carbon_time_end'] = new Carbon($request->time_end);
 //        }
 
-
         // The truth table is this:
         // If there's a start_time and an end_time, calculate the duration, even if the user provided a duration.
         // If there's a start_time and duration, calculate the end_time.
@@ -87,11 +81,16 @@ class processTemporalInputs
         return $next($request);
     }
 
-
     /**
      * Helps with the case where a time was entered without a colon.
+     * Things may not be intuitive. Times wrap via modulo math. So 25 hours becomes 0100.
+     * Minutes are treated similarly. So, 65 minutes becomes 5 minutes. Hours are NOT incrimented.
+     * So, 25:65 becomes 01:05.
+     *
+     * If there are 1 or 2 digts, then it's assumed to be hours. In that case, modulo is used again to reduce it if needed.
      *
      * @param $timeString
+     *
      * @return string|void
      */
     private function parseTimeWithNoColon($timeString)
@@ -100,11 +99,25 @@ class processTemporalInputs
             return;
         }
         // This will match a three digit start time.
+        // The assumption is that 123 becomes 01:23.
         preg_match('/(\d{1,2})(\d\d)/', $timeString, $matches);
-        $hours = sprintf("%'.02d", $matches[1]);
-        $minutes = sprintf("%-02s", $matches[2]);
-        return $hours . ':' . $minutes;
+        if ($matches) {
+            $hours = $matches[1] % 24;
+            $minutes = $matches[2] % 60;
+        } else {
+            $hours = $timeString % 24;
+            $minutes = 0;
+        }
+
+        $hours = sprintf("%'.02d", $hours);
+        $minutes = sprintf('%-02s', $minutes);
+
+        $formattedTime = $hours.':'.$minutes;
+
+        // dump($formattedTime);
+        // dump($hours);
+        // dd($minutes);
+
+        return $formattedTime;
     }
-
-
 }
