@@ -2,13 +2,11 @@
 
 namespace App;
 
-use App\Task;
-use Illuminate\Database\Eloquent\Model;
 use Auth;
+use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
-
     protected $fillable = ['name', 'description', 'display', 'share', 'use_in_reports'];
 
     public function tasks()
@@ -16,19 +14,17 @@ class Project extends Model
         return $this->belongsToMany(Task::class)->withTimestamps();
     }
 
-
     /**
-     *
      * Returns the string representation of the URI for this Model.
      *
-     * @return String the path(?).
+     * @return string the path(?).
      *
      * TODO There's an eloqent helper that might be able to do this.
      */
     public function path()
     {
         // TODO If this is /projects/... it breaks. You should fix that.
-        return 'projects/' . $this->id;
+        return 'projects/'.$this->id;
     }
 
     public function owner()
@@ -75,12 +71,13 @@ class Project extends Model
     public function scopeAllAvailable()
     {
         return $this->where('user_id', '=', Auth::id())
+            ->where('display', '=', true)
             ->orWhere(function ($query) {
                 $query->where('share', '=', true);
                 $query->where('user_id', '<>', Auth::id());
-            })->orderBy('name');
+            })
+            ->orderBy('name');
     }
-
 
     /**
      * Returns shared Projects that don't belong to $user.

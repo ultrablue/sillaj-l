@@ -5,11 +5,9 @@ namespace App\Http\Controllers;
 use App\Event;
 use App\Project;
 use App\Task;
+use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use Illuminate\Http\Request;
-
-use Carbon\Carbon;
-
 use Solution10\Calendar\Calendar as Calendar;
 use Solution10\Calendar\Resolution\MonthResolution;
 
@@ -28,8 +26,8 @@ class HomeController extends Controller
     /**
      * Show the application dashboard.
      *
-     * @param Request $request
-     * @param String $eventdate The date in yyyy-mm-dd format.
+     * @param string $eventdate the date in yyyy-mm-dd format
+     *
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request, $eventdate = null)
@@ -77,15 +75,12 @@ class HomeController extends Controller
 
         // We'll need a list of Projects
         $projects = Project::allAvailable()->orderBy('name')->get();
-        //dd($projects);
-
+        // dd($projects);
 
         // And a list of Tasks.
         $tasks = Task::allAvailable()->orderBy('name')->get();
         //dd($tasks);
 
-
         return view('home', compact('now', 'previousMonth', 'nextMonth', 'thisDaysEvents', 'searchForDate', 'thisMonthsEvents', 'month', 'projects', 'tasks', 'totalDuration'));
-
     }
 }
