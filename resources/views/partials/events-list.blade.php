@@ -40,9 +40,9 @@
             <!-- <div class="table-cell">&nbsp;</div> -->
             <div class="table-cell"></div>
             <div class="table-cell"></div>
-            <div class="table-cell"></div>
-            <div class="table-cell"></div>
             <div class="table-cell">{{$totalDuration->cascade()->format('%H:%I')}}</div>
+            <div class="table-cell"></div>
+            <div class="table-cell"></div>
             <div class="table-cell"></div>
         </div>
 
