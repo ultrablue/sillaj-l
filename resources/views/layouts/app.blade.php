@@ -67,7 +67,7 @@
                             <a class="text-sm lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-indigo-400" href="{{@route('tasks-list')}}">Tasks</a>
                         </li>
                         <li>
-                            <a class="text-sm lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-indigo-400" href="#">Reports</a>
+                            <a class="text-sm lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-indigo-400" href="{{@route('reports-list')}}">Reports</a>
                         </li>
                         <li>
                             <a class="text-sm lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-indigo-400 lg:mb-0 mb-2" href="#">Support</a>
