@@ -64,15 +64,7 @@ Route::get('tasks/{task}/edit', 'TasksController@show');
 Route::put('tasks/{task}', 'TasksController@update');
 
 // Reports
-Route::get('/reports', function () {
-    $events = new App\Event();
-    $eventsCollection = $events->whereBetween('event_date', ['2021-06-21', '2021-06-27'])->with(['task', 'project'])->get();
-    $totalTime = $eventsCollection->sum('duration');
-    // dd($totalTime / (60 * 60));
-    $eventsCollection = $eventsCollection->sortBy(['project.name', 'task.name'])->groupBy(['project.name', 'task.name']);
-
-    return view('reports.show', ['events' => $eventsCollection, 'total' => $totalTime]);
-})->name('reports-list');
+Route::get('/reports', 'ReportController@index')->name('reports-list');
 
 // Framework generated helper for Authentication.
 Auth::routes();

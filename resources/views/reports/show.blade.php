@@ -33,27 +33,27 @@
 
 Total:  {{  vsprintf ('%2d:%02d:%02d', decimalToHms( round($total/(3600),2) ) ) }}   {{   round($total/(3600),2) }}
 
-<hr>
+<hr class="p-0">
 
-<div>
-    <ul>
-        <li>Add layout</li>
+<div class="py-5">
+    <ul class="list-disc py-3">
+        <li class="line-through">Add layout</li>
         <li>Make Table layout for report</li>
         <li>Add Pickers for Grouping and Date Range</li>
-        <li>Make a decimal to h:m:s Helper.</li>
+        <li class="line-through">Make a decimal to h:m:s Helper.</li>
         <li>Make sure you're only getting the Events for the current user.</li>
         <li>Make sure that only authenticanted Users can access the Reports page.</li>
         <li>You need a Reports Controller.</li>
     </ul>
 </div>
 
-<ul>
+<ul class="list-disc py-3">
     <li>By Project</li>
     <li>By Task</li>
 </ul>
 
 
-<ul>
+<ul class="list-disc py-3">
     <li>This week</li>
     <li>This month</li>
     <li>Year to date</li>
