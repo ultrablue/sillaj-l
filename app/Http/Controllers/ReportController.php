@@ -11,6 +11,7 @@ class ReportController extends Controller
     {
         $events = new Event();
         $eventsCollection = $events->whereBetween('event_date', ['2021-06-21', '2021-06-27'])->with(['task', 'project'])->get();
+        // dd($eventsCollection);
         $totalTime = $eventsCollection->sum('duration');
         // dd($totalTime / (60 * 60));
         $eventsCollection = $eventsCollection->sortBy(['project.name', 'task.name'])->groupBy(['project.name', 'task.name']);
