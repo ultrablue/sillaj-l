@@ -27,13 +27,22 @@ class ReportController extends Controller
         $group = $request->input('group-by', 'project');
         $range = $request->input('predefined-range', 'this-week');
 
+        /**
+         * The way I'm dealing with how the View knows how to display the grouping is pretty lazy.
+         * It's achieved in $groupDisplayArray, which is hard-coded here.
+         * There's probably a better way to do it. At some point, for example, when we implement
+         * a Clients group, it'll probably make sense to make it more dynamic.
+         */
         $groupArray = [];
+        $groupDisplayArray = [];
         switch ($group) {
             case 'project':
                 $groupArray = ['project.name', 'task.name'];
+                $groupDisplayArray = ['Project', 'Task'];
                 break;
             case 'task':
                 $groupArray = ['task.name', 'project.name'];
+                $groupDisplayArray = ['Task', 'Project'];
                 break;
         }
 
@@ -58,6 +67,6 @@ class ReportController extends Controller
         // dd($totalTime / (60 * 60));
         $eventsCollection = $eventsCollection->sortBy($groupArray)->groupBy($groupArray);
 
-        return view('reports.show', ['events' => $eventsCollection, 'total' => $totalTime]);
+        return view('reports.show', ['events' => $eventsCollection, 'total' => $totalTime, 'group' => $groupDisplayArray]);
     }
 }

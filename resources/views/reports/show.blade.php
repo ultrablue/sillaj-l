@@ -20,36 +20,40 @@
         <h1 class="text-2xl">Reports...</h1>
 
         {{-- {{ dump($events) }} --}}
+        {{-- {{ dd($group) }} --}}
 
         <hr>
 
         <table class="table-fixed font-mono">
-            @foreach ($events as $project => $tasks)
+            @foreach ($events as $firstLevel => $secondLevel)
                 <thead>
                     <tr class="text-left border-b-2 border-black">
-                        <th colspan="2">{{ $project }}</th>
+                        <th colspan="2">{{ $group[0] }}: {{ $firstLevel }}</th>
                     </tr>
                 </thead>
                 <thead>
                     <tr class="border-b border-black">
-                        <th class="w-1/2 text-left">Task</th>
+                        <th class="w-1/2 text-left">{{ $group[1] }}</th>
                         <th class="w-1/2 text-right">Time</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($tasks as $task => $descriptions)
+                    @foreach ($secondLevel as $secondLevelElement => $descriptions)
                         <tr>
-                            <td>{{ $task }}</td>
+                            <td>{{ $secondLevelElement }}</td>
                             <td class="text-right">
                                 {{ sprintf('%01.2f', round($descriptions->sum('duration') / (60 * 60), 2)) }}</td>
                         </tr>
                     @endforeach
                     <tr class="bg-gray-200">
-                        <td>Project Total:</td>
+                        <td>{{ $group[1] }} Total:</td>
                         <td class="text-right">
-                            {{ round(
-    $tasks->pluck('*.duration')->flatten()->sum() / 3600,
-    2,
+                            {{ sprintf(
+    '%01.2f',
+    round(
+        $secondLevel->pluck('*.duration')->flatten()->sum() / 3600,
+        2,
+    ),
 ) }}
                         </td>
                     </tr>
@@ -86,7 +90,7 @@
         </div>
 
         <ul class="list-disc py-3">
-            <li>By Project</li>
+            <li>By firstLevel</li>
             <li>By Task</li>
         </ul>
 
