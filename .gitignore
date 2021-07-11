@@ -1,6 +1,7 @@
 /node_modules
 /public/hot
 /public/storage
+/publi/error_log
 /storage/*.key
 /vendor
 /.idea
