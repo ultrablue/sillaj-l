@@ -2,83 +2,81 @@
 
 @section('content')
 
+    <h1 class="text-2xl">Reporting</h1>
 
-    <div>
-        <h1>Navigation goes Here</h1>
-        <ul class="lg:flex items-center justify-between text-base text-gray-700 pt-4 lg:pt-0">
-            <li><a class="text-sm lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-indigo-400"
-                    href="#">This week</a></li>
-            <li>This month</li>
-            <li>Year to date</li>
-            <li>All time</li>
-        </ul>
-
-
-
-    </div>
-
-
-    <div class="mt-20">
+    <div class="mt-10">
 
         {!! Form::open(['route' => 'reports-show', 'class' => 'w-full max-w-sm']) !!}
-        <div class="">
-            <div class="">Group By</div>
-            {{ Form::label('group-by-project', 'Project') }}
-            {{ Form::radio('group-by', 'project', ['id' => 'group-by-project']) }}
-            <br>
-            {{ Form::label('group-by-task', 'Task') }}
-            {{ Form::radio('group-by', 'task', ['id' => 'group-by-task']) }}
+        <fieldset class="border-2 rounded-md border-gray-300 border-solid p-2">
+            <legend class="pl-1 pr-5 ">Grouping</legend>
+            <div class="">
+                {{ Form::radio('group-by', 'project', ['id' => 'group-by-project']) }}
+                {{ Form::label('group-by-project', 'Project') }}
+                <br>
+                {{ Form::radio('group-by', 'task', ['id' => 'group-by-task']) }}
+                {{ Form::label('group-by-task', 'Task') }}
+
+            </div>
+        </fieldset>
+        <div class="mt-10">
+            <fieldset class="border-2 rounded-md border-gray-300 border-solid p-2">
+                <legend class="pl-1 pr-5 ">Grouping</legend>
+                {{ Form::radio('predefined-range', 'this-week', ['id' => 'predefined-range-this-week']) }}
+                {{ Form::label('predefined-range-this-week', 'This week') }}
+                <br>
+
+                {{ Form::radio('predefined-range', 'month-to-date', ['id' => 'predefined-range-month-to-date']) }}
+                {{ Form::label('predefined-range-month-to-date', 'Month to date') }}
+                <br>
+
+                {{ Form::radio('predefined-range', 'year-to-date', ['id' => 'predefined-range-year-to-date']) }}
+                {{ Form::label('predefined-range-year-to-date', 'Year to date') }}
+                <br>
+
+                {{ Form::radio('predefined-range', 'all-time', ['id' => 'predefined-range-all-time'], ['disabled' => 'disabled']) }}
+                {{ Form::label('predefined-range-all-time', '(All Time - Not implemented, yet)', ['class' => 'text-gray-400']) }}
+                <br>
+
+                {{ Form::radio('predefined-range', 'custom', ['id' => 'predefined-range-custom'], ['disabled' => 'disabled']) }}
+                {{ Form::label('predefined-range-custom', '(Custom - Not implemented, yet; will display two date pickers)', ['class' => 'text-gray-400']) }}
+            </fieldset>
+
 
         </div>
         <div class="mt-10">
-            <div class="">Predefined Range</div>
-            {{ Form::label('predefined-range-this-week', 'This week') }}
-            {{ Form::radio('predefined-range', 'this-week', ['id' => 'predefined-range-this-week']) }}
-            <br>
-
-            {{ Form::label('predefined-range-this-month', 'This month') }}
-            {{ Form::radio('predefined-range', 'this-month', ['id' => 'predefined-range-this-month']) }}
-            <br>
-
-            {{ Form::label('predefined-range-this-year', 'This year') }}
-            {{ Form::radio('predefined-range', 'this-year', ['id' => 'predefined-range-this-year']) }}
-            <br>
-
-            {{ Form::label('predefined-range-all-time', 'All Time') }}
-            {{ Form::radio('predefined-range', 'all-time', ['id' => 'predefined-range-all-time']) }}
-            <br>
-
-
-        </div>
-        <div class="mt-10">
-            {{ Form::submit('Click Me!', ['class' => 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded']) }}
+            {{ Form::submit('Generate...', ['class' => 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded']) }}
         </div>
         {!! Form::close() !!}
         <hr class="p-0 mt-10">
 
         <div class="py-5">
             <ul class="list-disc py-3">
+                <li class="line-through">Add the current grouping to the report header.</li>
+                <li class="line-through">Add the current date range (as two dates) to the report header.</li>
                 <li class="line-through">Add layout</li>
-                <li>Make Table layout for report</li>
-                <li>Add Pickers for Grouping and Date Range</li>
+                <li class="line-through">Make Table layout for report</li>
+                <li><span class="line-through">Add Pickers for Grouping</span> and Date Range</li>
                 <li class="line-through">Make a decimal to h:m:s Helper.</li>
-                <li>Make sure you're only getting the Events for the current user.</li>
-                <li>Make sure that only authenticanted Users can access the Reports page.</li>
+                <li class="line-through">Make sure you're only getting the Events for the current user.</li>
+                <li class="line-through">Make sure that only authenticanted Users can access the Reports page.</li>
                 <li class="line-through">You need a Reports Controller.</li>
             </ul>
         </div>
 
         <ul class="list-disc py-3">
-            <li>By Project</li>
-            <li>By Task</li>
+            <li class="line-through">By Project</li>
+            <li class="line-through">By Task</li>
         </ul>
 
 
         <ul class="list-disc py-3">
-            <li>This week</li>
-            <li>This month</li>
-            <li>Year to date</li>
+            <li class="line-through">This week (all week)</li>
+            <li class="line-through">This month (month to date)</li>
+            <li>This month (all month) (won't implement)</li>
+            <li class="line-through">Year to date</li>
+            <li>Year to date (all year) (won't implement)</li>
             <li>All time</li>
+            <li>Custom - two date pickers appear</li>
         </ul>
 
     </div>

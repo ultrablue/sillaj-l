@@ -64,9 +64,12 @@ Route::get('tasks/{task}/edit', 'TasksController@show');
 Route::put('tasks/{task}', 'TasksController@update');
 
 // Reports
-Route::get('/reports', 'ReportController@index')->name('reports-list');
-Route::get('/reports/thisyear', 'ReportController@thisYear')->name('report-this-year');
-Route::post('reports', 'ReportController@show')->name('reports-show');
+// All Reports routes require an Authorized User.
+Route::middleware('auth')->group(function () {
+    Route::get('/reports', 'ReportController@index')->name('reports-list');
+    Route::get('/reports/thisyear', 'ReportController@thisYear')->name('report-this-year');
+    Route::post('reports', 'ReportController@show')->name('reports-show');
+});
 
 // Framework generated helper for Authentication.
 Auth::routes();

@@ -10,16 +10,7 @@ class ReportController extends Controller
 {
     public function index(Request $request)
     {
-        $startTime = date('Y-m-d', mktime(0, 0, 0, 1, 1, date('y')));
-        $endTime = date('Y-m-d', mktime(0, 0, 0, date('m'), date('d'), date('y')));
-        $events = new Event();
-        $eventsCollection = $events->whereBetween('event_date', [$startTime, $endTime])->with(['task', 'project'])->get();
-        // dd($eventsCollection);
-        $totalTime = $eventsCollection->sum('duration');
-        // dd($totalTime / (60 * 60));
-        $eventsCollection = $eventsCollection->sortBy(['project.name', 'task.name'])->groupBy(['project.name', 'task.name']);
-
-        return view('reports.index', ['events' => $eventsCollection, 'total' => $totalTime]);
+        return view('reports.index');
     }
 
     public function show(Request $request)
@@ -46,27 +37,40 @@ class ReportController extends Controller
                 break;
         }
 
-        // switch ($range) {
-        //     case 'this-year':
-        //         $startTime = date('Y-m-d', mktime(0, 0, 0, 1, 1, date('y')));
-        //         $endTime = date('Y-m-d', mktime(0, 0, 0, date('m'), date('d'), date('y')));
-        //         break;
-        //     default:
-        // }
+        /*
+         * This bit figures out the start datetime and end datetimes based on what was requested.
+         */
 
+        // So far, we're only interested in ranges that are relative to today, so now will be used a few times.
         $now = new Carbon();
-        $startTime = $now->copy()->startOfWeek();
-        $endTime = $now->copy()->endOfWeek();
 
-        // dd(['Now' => $now->toString(), 'Start' => $startTime->toString(), 'End' => $endTime->toString()]);
+        // this-week
+        // month-to-date
+        // year-to-date
+        // (all-time)
+        switch ($range) {
+            case 'month-to-date':
+                $startTime = $now->copy()->startOfMonth();
+                $endTime = $now;
+                break;
+            case 'year-to-date':
+                $startTime = $now->copy()->startOfYear();
+                $endTime = $now;
+                break;
+            default:
+            case 'this-week':
+                $startTime = $now->copy()->startOfWeek();
+                $endTime = $now->copy()->endOfWeek();
+                break;
+        }
 
         $events = new Event();
-        $eventsCollection = $events->whereBetween('event_date', [$startTime, $endTime])->with(['task', 'project'])->get();
+        $eventsCollection = $events->whereBetween('event_date', [$startTime, $endTime])->with(['task', 'project'])->where(['user_id' => $request->user()->id])->get();
         // dd($eventsCollection);
         $totalTime = $eventsCollection->sum('duration');
         // dd($totalTime / (60 * 60));
         $eventsCollection = $eventsCollection->sortBy($groupArray)->groupBy($groupArray);
 
-        return view('reports.show', ['events' => $eventsCollection, 'total' => $totalTime, 'group' => $groupDisplayArray]);
+        return view('reports.show', ['events' => $eventsCollection, 'total' => $totalTime, 'group' => $groupDisplayArray, 'dates' => [$startTime, $endTime]]);
     }
 }

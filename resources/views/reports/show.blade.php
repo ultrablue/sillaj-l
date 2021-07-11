@@ -3,21 +3,11 @@
 @section('content')
 
 
-    <div>
-        <h1>Navigation goes Here</h1>
-        <ul class="lg:flex items-center justify-between text-base text-gray-700 pt-4 lg:pt-0">
-            <li><a class="text-sm lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-indigo-400"
-                    href="#">This week</a></li>
-            <li>This month</li>
-            <li>Year to date</li>
-            <li>All time</li>
-        </ul>
-    </div>
-
 
     <div class="mt-20">
 
-        <h1 class="text-2xl">Reports...</h1>
+        <h1 class="text-2xl">{{ $group[1] }} by {{ $group[0] }}</h1>
+        <h2>{{ $dates[0]->format('l F jS, Y') }} through {{ $dates[1]->format('l F jS, Y') }}</h2>
 
         {{-- {{ dump($events) }} --}}
         {{-- {{ dd($group) }} --}}
@@ -75,33 +65,4 @@
         </table>
 
 
-        <hr class="p-0">
-
-        <div class="py-5">
-            <ul class="list-disc py-3">
-                <li class="line-through">Add layout</li>
-                <li>Make Table layout for report</li>
-                <li>Add Pickers for Grouping and Date Range</li>
-                <li class="line-through">Make a decimal to h:m:s Helper.</li>
-                <li>Make sure you're only getting the Events for the current user.</li>
-                <li>Make sure that only authenticanted Users can access the Reports page.</li>
-                <li class="line-through">You need a Reports Controller.</li>
-            </ul>
-        </div>
-
-        <ul class="list-disc py-3">
-            <li>By firstLevel</li>
-            <li>By Task</li>
-        </ul>
-
-
-        <ul class="list-disc py-3">
-            <li>This week</li>
-            <li>This month</li>
-            <li>Year to date</li>
-            <li>All time</li>
-        </ul>
-
-    </div>
-
-@endsection
+    @endsection
