@@ -47,38 +47,6 @@
             {{ Form::submit('Generate...', ['class' => 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded']) }}
         </div>
         {!! Form::close() !!}
-        <hr class="p-0 mt-10">
-
-        <div class="py-5">
-            <ul class="list-disc py-3">
-                <li class="line-through">Add the current grouping to the report header.</li>
-                <li class="line-through">Add the current date range (as two dates) to the report header.</li>
-                <li class="line-through">Add layout</li>
-                <li class="line-through">Make Table layout for report</li>
-                <li><span class="line-through">Add Pickers for Grouping</span> and Date Range</li>
-                <li class="line-through">Make a decimal to h:m:s Helper.</li>
-                <li class="line-through">Make sure you're only getting the Events for the current user.</li>
-                <li class="line-through">Make sure that only authenticanted Users can access the Reports page.</li>
-                <li class="line-through">You need a Reports Controller.</li>
-            </ul>
-        </div>
-
-        <ul class="list-disc py-3">
-            <li class="line-through">By Project</li>
-            <li class="line-through">By Task</li>
-        </ul>
 
 
-        <ul class="list-disc py-3">
-            <li class="line-through">This week (all week)</li>
-            <li class="line-through">This month (month to date)</li>
-            <li>This month (all month) (won't implement)</li>
-            <li class="line-through">Year to date</li>
-            <li>Year to date (all year) (won't implement)</li>
-            <li>All time</li>
-            <li>Custom - two date pickers appear</li>
-        </ul>
-
-    </div>
-
-@endsection
+    @endsection
