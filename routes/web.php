@@ -38,6 +38,8 @@ Route::post('/events', 'EventController@store')->middleware(\App\Http\Middleware
 //Route::post('/events', 'EventController@store');
 Route::get('events/{event}', 'EventController@show')->name('event-show')->middleware('auth');
 Route::put('events/{event}', 'EventController@update')->middleware('auth');
+// Delete an Event
+Route::delete('/events/{event}', 'EventController@destroy')->name('event-delete')->middleware('auth');
 
 // Projects
 // Show a list of all the Projects.
