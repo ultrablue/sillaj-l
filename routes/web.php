@@ -63,9 +63,12 @@ Route::get('/tasks/create', 'TasksController@create')->name('task-create')->midd
 Route::post('/tasks', 'TasksController@store');
 
 Route::get('/tasks/{task}', 'TasksController@show')->name('task-show')->middleware('auth');
-
+// TODO This one needs the auth middleware, no?
 Route::get('tasks/{task}/edit', 'TasksController@show');
+// TODO This one needs the auth middleware, no?
 Route::put('tasks/{task}', 'TasksController@update');
+// Delete a Task.
+Route::delete('tasks/{task}', 'TasksController@destroy')->name('task-delete')->middleware('auth');
 
 // Reports
 // All Reports routes require an Authorized User.

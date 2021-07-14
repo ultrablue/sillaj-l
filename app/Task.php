@@ -2,12 +2,13 @@
 
 namespace App;
 
-use App\Project;
-use Illuminate\Database\Eloquent\Model;
 use Auth;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Task extends Model
 {
+    use SoftDeletes;
 
     // TODO What???? Why do I want to set everything to fillable for testing?
     // Set everything to fillable for testing.
@@ -16,19 +17,17 @@ class Task extends Model
     protected $fillable = ['name', 'description', 'display', 'use_in_reports', 'share'];
 
     /**
-     *
      * Returns the string representation of the URI for this Model.
      *
-     * @return String the path(?).
+     * @return string the path(?).
      *
      * TODO There's an eloqent helper that might be able to do this.
      */
     public function path()
     {
         // TODO If this is /projects/... it breaks. You should fix that.
-        return 'tasks/' . $this->id;
+        return 'tasks/'.$this->id;
     }
-
 
     /*
      * TODO Add phpDoc, please.
@@ -58,6 +57,4 @@ class Task extends Model
                 $query->where('user_id', '<>', Auth::id());
             })->orderBy('name');
     }
-
-
 }
