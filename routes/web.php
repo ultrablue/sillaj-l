@@ -50,8 +50,10 @@ Route::get('/projects/create', 'ProjectsController@create')->name('project-creat
 Route::post('/projects', 'ProjectsController@store');
 // Show a single Project.
 Route::get('/projects/{project}', 'ProjectsController@show')->name('project-show')->middleware('auth');
-
+// Update a Project.
 Route::put('projects/{project}', 'ProjectsController@update')->middleware('auth');
+// Delete a Project.
+Route::delete('projects/{project}', 'ProjectsController@destroy')->name('project-delete')->middleware('auth');
 
 // Tasks
 Route::get('/tasks', 'TasksController@index')->name('tasks-list');
