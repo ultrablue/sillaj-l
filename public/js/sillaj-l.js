@@ -312,3 +312,22 @@ $(document).ready(function () {
 
 
 
+
+
+function confirmEventDelete(event) {
+
+    var retVal = confirm("Are you sure?");
+    if (retVal == true) {
+        console.log("👍 Delete confirmed.");
+        return true;
+    } else {
+        console.log("👎 Canceled.");
+        event.preventDefault();
+        return false;
+    }
+
+
+    alert("Are you sure you want to delete that Event?");
+}
+
+

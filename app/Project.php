@@ -4,9 +4,11 @@ namespace App;
 
 use Auth;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Project extends Model
 {
+    use softDeletes;
     protected $fillable = ['name', 'description', 'display', 'share', 'use_in_reports'];
 
     public function tasks()

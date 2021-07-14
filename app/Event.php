@@ -2,19 +2,20 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
-use DateInterval;
 use Collective\Html\Eloquent\FormAccessible;
+use DateInterval;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Event extends Model
 {
-
     use FormAccessible;
+    use SoftDeletes;
 
     protected $fillable = ['task_id', 'project_id', 'time_start', 'time_end', 'duration',
-        'iso_8601_duration', 'event_date', 'note'];
+        'iso_8601_duration', 'event_date', 'note', ];
 
     // These will automatically be turned into Carbon Dates by the framework.
     protected $dates = ['event_date', 'created_at', 'updated_at'];
@@ -50,8 +51,9 @@ class Event extends Model
      */
     public function start()
     {
-        if ($this->time_start)
+        if ($this->time_start) {
             return Carbon::createFromTimeString($this->time_start);
+        }
     }
 
     /**
@@ -81,6 +83,7 @@ class Event extends Model
      * Formats the time for display in a form.
      *
      * @param $value
+     *
      * @return string
      */
     public function formTimeStartAttribute($value)
@@ -92,6 +95,7 @@ class Event extends Model
      * Formats the time for display in a form.
      *
      * @param $value
+     *
      * @return string
      */
     public function formTimeEndAttribute($value)
@@ -103,6 +107,7 @@ class Event extends Model
      * Formats the duration for display in a form.
      *
      * @param $value
+     *
      * @return string
      */
     public function formDurationAttribute($value)
@@ -137,13 +142,11 @@ class Event extends Model
 //        return $value;
 //    }
 
-
 //    public function setDurationAttribute($value)
 //    {
-////        dump($this);
-////        dd($value);
+    ////        dump($this);
+    ////        dd($value);
 //    }
-
 
     public function setIso8601DurationAttribute($value)
     {

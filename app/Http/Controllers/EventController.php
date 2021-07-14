@@ -120,11 +120,14 @@ class EventController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Soft delete the specified resource from storage.
      *
      * @return Response
      */
     public function destroy(Event $event)
     {
+        $event->delete();
+
+        return redirect()->route('home')->with('status', 'Event deleted.');
     }
 }
