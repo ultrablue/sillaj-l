@@ -1,5 +1,18 @@
 <?php
 
+/**
+ * What needs to be displayed:
+ *    The report's title. Something like this:
+ *       Hours for [day: the date; week of [start and end], month of [month name], year to date [start(?) - end]], etc.
+ *    The various Levels (by Project (Level 1) and Task (Level 2), by Task and Project)
+ *       The percentage of the total for the Level.
+ *    A graph of the percentages
+ *       A pie chart seems like the best choice?
+ *
+ *  Report Date Ranges
+ *      Custom/Any - any two dates.
+ */
+
 namespace App\Http\Controllers;
 
 use App\Event;
@@ -78,6 +91,7 @@ class ReportController extends Controller
 
     public function emailReport(Request $request)
     {
+        // dd(auth()->user());
         $groupArray = ['project.name', 'task.name'];
         $groupDisplayArray = ['Project', 'Task'];
         $groupDisplayArray = ['Project', 'Task'];
@@ -92,8 +106,8 @@ class ReportController extends Controller
         // dd($totalTime / (60 * 60));
         $eventsCollection = $eventsCollection->sortBy($groupArray)->groupBy($groupArray);
 
-        return new Report($eventsCollection, $groupDisplayArray, $totalTime);
-        // Mail::to('to@to.to', "To To")->send(new Report('Good day, sir!'));
+        // return new Report($eventsCollection, $groupDisplayArray, $totalTime);
+        Mail::send(new Report($eventsCollection, $groupDisplayArray, $totalTime, $now));
     }
 
     private function reportQuery()
