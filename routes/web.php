@@ -19,6 +19,8 @@
 
 // See the Home Controller for an example of protecting the entire Controller
 // with auth.
+
+
 Route::get('/home/', 'HomeController@index')->name('home');
 // where() constrains the route to the regex supplied.
 Route::get('/{eventdate?}', 'HomeController@index')->name('home')->where('eventdate', '\d\d\d\d-\d\d-\d\d');
@@ -76,7 +78,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/reports', 'ReportController@index')->name('reports-list');
     Route::get('/reports/thisyear', 'ReportController@thisYear')->name('report-this-year');
     Route::post('reports', 'ReportController@show')->name('reports-show');
+    Route::get('/reports/emailreport', 'ReportController@emailReport')->name('reports-email');
 });
 
 // Framework generated helper for Authentication.
+// TODO Huh? Do we need this?
 Auth::routes();
