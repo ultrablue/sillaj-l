@@ -91,9 +91,13 @@ class ReportController extends Controller
 
     public function emailReport(Request $request)
     {
+        // TODO All of the query stuff should be in the Event Model;
+        //      Maybe something like dailyRollUpByProject(), dailyRollUpByTask()
+        //      Then, in the Model, those methods call a private method that abstracts them out a bit.
+        //
+
         // dd(auth()->user());
         $groupArray = ['project.name', 'task.name'];
-        $groupDisplayArray = ['Project', 'Task'];
         $groupDisplayArray = ['Project', 'Task'];
         $now = new Carbon();
         $startTime = $now->copy()->startOfWeek();
