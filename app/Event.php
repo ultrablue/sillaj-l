@@ -64,6 +64,29 @@ class Event extends Model
         return Carbon::createFromTimeString($this->time_end);
     }
 
+    /**
+     * @param $day a Carbon date. The rollup will be made for that day.
+     */
+    public function dailyRollUpByProject(Carbon $day, string $user)
+    {
+        $eventsCollection = $this->whereDate('event_date', '=', $day)->with(['task', 'project'])->where(['user_id' => $user])->get();
+        // dump($eventsCollection);
+        // $eventsCollection = $eventsCollection->sortBy(['project.name', 'task.name'])->groupBy(['project.name', 'task.name']);
+        // $totalTime = $eventsCollection->pluck('*.duration');
+        // dump($eventsCollection->keys());
+        // dd($totalTime);
+        // $eventsCollection = $eventsCollection->merge(['headers' => $groupDisplayArray]);
+        // dd($eventsCollection);
+
+        return $eventsCollection;
+    }
+
+    public function dailyRollUpByTask()
+    {
+    }
+
+    // Accessor and Mutators
+
     // When creating an Event with no event_date, set it to now.
     // TODO Can this be refactored? It seems wierd that I have to
     // set the attribute even if there was a value provided?

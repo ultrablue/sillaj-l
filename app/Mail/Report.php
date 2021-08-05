@@ -39,6 +39,7 @@ class Report extends Mailable
         $this->from('test@test.test', 'Test the Test');
         $this->subject('Daily Hours for '.$this->now->format('l F j, Y'));
         $this->to(auth()->user()->email, auth()->user()->name);
+        // dd('here '.__FILE__.':'.__LINE__);
         // Composes a plain text email.
         // return $this->text('emails.report_plain');
         // Composes a formatted (HTML) email.

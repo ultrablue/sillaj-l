@@ -91,26 +91,16 @@ class ReportController extends Controller
 
     public function emailReport(Request $request)
     {
-        // TODO All of the query stuff should be in the Event Model;
-        //      Maybe something like dailyRollUpByProject(), dailyRollUpByTask()
-        //      Then, in the Model, those methods call a private method that abstracts them out a bit.
-        //
+        // Thew View will need this. I suppose it could get it itself. 🤔
+        $now = new Carbon();
+        $event = new Event();
+        $eventsCollection = $event->dailyRollupByProject($now, $request->user()->id);
+        $totalTime = $eventsCollection->sum('duration');
 
-        // dd(auth()->user());
-        $groupArray = ['project.name', 'task.name'];
+        // I would prefer to do this in the Modle, but if we do, then we can't the total time. Or at least I can't figure out how to make it.
+        $eventsCollection = $eventsCollection->sortBy(['project.name', 'task.name'])->groupBy(['project.name', 'task.name']);
         $groupDisplayArray = ['Project', 'Task'];
         $now = new Carbon();
-        $startTime = $now->copy()->startOfWeek();
-        $endTime = $now->copy()->endOfWeek();
-
-        $events = new Event();
-        $eventsCollection = $events->whereBetween('event_date', [$startTime, $endTime])->with(['task', 'project'])->where(['user_id' => $request->user()->id])->get();
-        // dd($eventsCollection);
-        $totalTime = $eventsCollection->sum('duration');
-        // dd($totalTime / (60 * 60));
-        $eventsCollection = $eventsCollection->sortBy($groupArray)->groupBy($groupArray);
-
-        // return new Report($eventsCollection, $groupDisplayArray, $totalTime);
         Mail::send(new Report($eventsCollection, $groupDisplayArray, $totalTime, $now));
     }
 
