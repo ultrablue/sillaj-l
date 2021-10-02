@@ -26,6 +26,9 @@
         "eamodio.gitlens",
         "felixfbecker.php-debug",
         "felixfbecker.php-intellisense",
-        "fterrag.vscode-php-cs-fixer"
+        "fterrag.vscode-php-cs-fixer",
+        "austenc.laravel-blade-spacer",
+        "onecentlin.laravel-blade",
+        
     ],
 }
