@@ -69,8 +69,13 @@ class Event extends Model
      */
     public function dailyRollUpByProject(Carbon $day, string $user)
     {
-        $eventsCollection = $this->whereDate('event_date', '=', $day)->with(['task', 'project'])->where(['user_id' => $user])->get();
-        // dump($eventsCollection);
+        // TODO Don't pass in the user as a string, silly. Use Laravel's User stuff.
+        // Retrieve the currently authenticated user's ID...
+        //$id = Auth::id();
+        // $eventsCollection = $this->whereDate('event_date', '=', $day)->with(['task', 'project'])->where(['user_id' => $user])->get();
+        $eventsCollection = \Auth::user()->events()->whereBetween('event_date', [$day->toDateString(), $day->toDateString()])->with(['task', 'project'])->get();
+        // ddd($eventsCollection);
+        // dd($eventsCollection);
         // $eventsCollection = $eventsCollection->sortBy(['project.name', 'task.name'])->groupBy(['project.name', 'task.name']);
         // $totalTime = $eventsCollection->pluck('*.duration');
         // dump($eventsCollection->keys());
