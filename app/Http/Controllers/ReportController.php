@@ -91,17 +91,24 @@ class ReportController extends Controller
 
     public function emailReport(Request $request)
     {
+        // TODO - Change the name of the Method to Event::DailyRollUp() (or something).
+        // TODO - Fix the display to handle both (or all?) cases. Right now, it's showing Project even when Task is the top-level group.
+        // TODO 💥- Make some Tests please!!!!!
         // Thew View will need this. I suppose it could get it itself. 🤔
         $now = new Carbon();
         $event = new Event();
         $eventsCollection = $event->dailyRollupByProject($now, $request->user()->id);
         $totalTime = $eventsCollection->sum('duration');
 
-        // I would prefer to do this in the Modle, but if we do, then we can't the total time. Or at least I can't figure out how to make it.
+        // By Project, then Task.
         $eventsCollection = $eventsCollection->sortBy(['project.name', 'task.name'])->groupBy(['project.name', 'task.name']);
+        // By Task, then Project.
+        // $eventsCollection = $eventsCollection->sortBy(['task.name', 'project.name'])->groupBy(['task.name', 'project.name']);
+        // dd($eventsCollection);
         $groupDisplayArray = ['Project', 'Task'];
         $now = new Carbon();
-        Mail::send(new Report($eventsCollection, $groupDisplayArray, $totalTime, $now));
+        // Mail::send(new Report($eventsCollection, $groupDisplayArray, $totalTime, $now));
+        return new Report($eventsCollection, $groupDisplayArray, $totalTime, $now);
     }
 
     private function reportQuery()

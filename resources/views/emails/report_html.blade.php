@@ -1,3 +1,6 @@
+{{-- <x-email.report/> --}}
+
+
 <table style="width:auto; margin:3em; border-collapse: collapse; font-family: Verdana, Geneva, Tahoma, sans-serif;">
     <thead>
         <tr>
