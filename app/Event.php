@@ -119,7 +119,7 @@ class Event extends Model
      *
      * @return Collection of Events
      */
-    public function rollUp(CarbonImmutable $start, CarbonImmutable $end, User $user)
+    public static function rollUp(CarbonImmutable $start, CarbonImmutable $end, User $user)
     {
         $eventsCollection = $user->events()
             ->whereBetween('event_date', [$start->toDateString(), $end->toDateString()])
