@@ -119,7 +119,6 @@ class ReportController extends Controller
         $startOfLastMonth = $now->subMonthsNoOverflow()->startOfMonth();
         $endOfLastMonth = $now->subMonthsNoOverflow()->endOfMonth();
         $user = $request->user();
-        $event = new Event();
 
         $eventsCollection = Event::rollUp($startOfLastMonth, $endOfLastMonth, $user);
         $totalTime = $eventsCollection->sum('duration');
@@ -127,8 +126,27 @@ class ReportController extends Controller
         $eventsCollection = $eventsCollection->sortBy(['project.name', 'task.name'])->groupBy(['project.name', 'task.name']);
         // By Task, then Project.
         // $eventsCollection = $eventsCollection->sortBy(['task.name', 'project.name'])->groupBy(['task.name', 'project.name']);
-        // dd($eventsCollection);
         $groupDisplayArray = ['Project', 'Task'];
+        // TODO - is there a way to determine context? IOW, if this was called from the CLI/Artisan, then do an email. Otherwise, return a view.
+        // Mail::send(new Report($eventsCollection, $groupDisplayArray, $totalTime, $now));
+        return new Report($eventsCollection, $groupDisplayArray, $totalTime, $now);
+    }
+
+    public function previousMonthReportByTask(Request $request)
+    {
+        $now = new CarbonImmutable();
+        $startOfLastMonth = $now->subMonthsNoOverflow()->startOfMonth();
+        $endOfLastMonth = $now->subMonthsNoOverflow()->endOfMonth();
+        $user = $request->user();
+
+        $eventsCollection = Event::rollUp($startOfLastMonth, $endOfLastMonth, $user);
+        $totalTime = $eventsCollection->sum('duration');
+        // By Project, then Task.
+        // $eventsCollection = $eventsCollection->sortBy(['project.name', 'task.name'])->groupBy(['project.name', 'task.name']);
+        // By Task, then Project.
+        $eventsCollection = $eventsCollection->sortBy(['task.name', 'project.name'])->groupBy(['task.name', 'project.name']);
+        $groupDisplayArray = ['Project', 'Task'];
+        // TODO - is there a way to determine context? IOW, if this was called from the CLI/Artisan, then do an email. Otherwise, return a view.
         // Mail::send(new Report($eventsCollection, $groupDisplayArray, $totalTime, $now));
         return new Report($eventsCollection, $groupDisplayArray, $totalTime, $now);
     }
