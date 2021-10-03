@@ -112,6 +112,23 @@ class Event extends Model
         return $eventsCollection;
     }
 
+    /**
+     * @param carbonImmutable $start - The start date for the rollup
+     * @param CarbonImmutable $end   - The end date for the rollup
+     * @param User            $user  - A User
+     *
+     * @return Collection of Events
+     */
+    public function rollUp(CarbonImmutable $start, CarbonImmutable $end, User $user)
+    {
+        $eventsCollection = $user->events()
+            ->whereBetween('event_date', [$start->toDateString(), $end->toDateString()])
+            ->with(['task', 'project'])
+            ->get();
+
+        return $eventsCollection;
+    }
+
     // Accessor and Mutators
 
     // When creating an Event with no event_date, set it to now.
