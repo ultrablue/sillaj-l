@@ -116,9 +116,12 @@ class ReportController extends Controller
     public function previousMonthReport(Request $request)
     {
         $now = new CarbonImmutable();
+        $startOfLastMonth = $now->subMonthsNoOverflow()->startOfMonth();
+        $endOfLastMonth = $now->subMonthsNoOverflow()->endOfMonth();
+        $user = $request->user();
         $event = new Event();
 
-        $eventsCollection = $event->monthlyRollup($now);
+        $eventsCollection = $event->rollUp($startOfLastMonth, $endOfLastMonth, $user);
         $totalTime = $eventsCollection->sum('duration');
         // By Project, then Task.
         $eventsCollection = $eventsCollection->sortBy(['project.name', 'task.name'])->groupBy(['project.name', 'task.name']);
