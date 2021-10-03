@@ -3,6 +3,7 @@
 namespace App;
 
 use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Carbon\CarbonInterval;
 use Collective\Html\Eloquent\FormAccessible;
 use DateInterval;
@@ -70,6 +71,7 @@ class Event extends Model
     public function dailyRollUpByProject(Carbon $day, string $user)
     {
         // TODO Don't pass in the user as a string, silly. Use Laravel's User stuff.
+        // TODO Oops, it's not silly. This Action may or may not be called by an HTTP Controller.
         // Retrieve the currently authenticated user's ID...
         //$id = Auth::id();
         // $eventsCollection = $this->whereDate('event_date', '=', $day)->with(['task', 'project'])->where(['user_id' => $user])->get();
@@ -88,6 +90,26 @@ class Event extends Model
 
     public function dailyRollUpByTask()
     {
+    }
+
+    /**
+     * This is actually *last* month's roll up.
+     */
+    public function monthlyRollup(CarbonImmutable $date)
+    {
+        // Carbon is excellent.
+        $startOfLastMonth = $date->subMonthsNoOverflow()->startOfMonth();
+        $endOfLastMonth = $date->subMonthsNoOverflow()->endOfMonth();
+
+        // We're only interested in the currently logged in User's Events.
+        // TODO Oops, that wont' work. We'll need to pass in a User because this Controller could be called in a non-request context. :/
+        $eventsCollection = \Auth::user()
+            ->events()
+            ->whereBetween('event_date', [$startOfLastMonth->toDateString(), $endOfLastMonth->toDateString()])
+            ->with(['task', 'project'])
+            ->get();
+
+        return $eventsCollection;
     }
 
     // Accessor and Mutators

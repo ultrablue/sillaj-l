@@ -18,6 +18,7 @@ namespace App\Http\Controllers;
 use App\Event;
 use App\Mail\Report;
 use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -106,7 +107,25 @@ class ReportController extends Controller
         // $eventsCollection = $eventsCollection->sortBy(['task.name', 'project.name'])->groupBy(['task.name', 'project.name']);
         // dd($eventsCollection);
         $groupDisplayArray = ['Project', 'Task'];
+        // TODO Ooops, this is a dupe.
         $now = new Carbon();
+        // Mail::send(new Report($eventsCollection, $groupDisplayArray, $totalTime, $now));
+        return new Report($eventsCollection, $groupDisplayArray, $totalTime, $now);
+    }
+
+    public function previousMonthReport(Request $request)
+    {
+        $now = new CarbonImmutable();
+        $event = new Event();
+
+        $eventsCollection = $event->monthlyRollup($now);
+        $totalTime = $eventsCollection->sum('duration');
+        // By Project, then Task.
+        $eventsCollection = $eventsCollection->sortBy(['project.name', 'task.name'])->groupBy(['project.name', 'task.name']);
+        // By Task, then Project.
+        // $eventsCollection = $eventsCollection->sortBy(['task.name', 'project.name'])->groupBy(['task.name', 'project.name']);
+        // dd($eventsCollection);
+        $groupDisplayArray = ['Project', 'Task'];
         // Mail::send(new Report($eventsCollection, $groupDisplayArray, $totalTime, $now));
         return new Report($eventsCollection, $groupDisplayArray, $totalTime, $now);
     }
