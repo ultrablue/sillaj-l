@@ -113,7 +113,7 @@ class ReportController extends Controller
         return new Report($eventsCollection, $groupDisplayArray, $totalTime, $now);
     }
 
-    public function previousMonthReport(Request $request)
+    public function previousMonthReportByProject(Request $request)
     {
         $now = new CarbonImmutable();
         $startOfLastMonth = $now->subMonthsNoOverflow()->startOfMonth();
@@ -121,7 +121,7 @@ class ReportController extends Controller
         $user = $request->user();
         $event = new Event();
 
-        $eventsCollection = $event->rollUp($startOfLastMonth, $endOfLastMonth, $user);
+        $eventsCollection = Event::rollUp($startOfLastMonth, $endOfLastMonth, $user);
         $totalTime = $eventsCollection->sum('duration');
         // By Project, then Task.
         $eventsCollection = $eventsCollection->sortBy(['project.name', 'task.name'])->groupBy(['project.name', 'task.name']);
@@ -133,8 +133,9 @@ class ReportController extends Controller
         return new Report($eventsCollection, $groupDisplayArray, $totalTime, $now);
     }
 
-    private function reportQuery()
+    // Gah. I'm not sure how to DRY this up.
+    private function reportQuery(CarbonImmitable $start, CarbonImmutable $end, User $user, array $grouping)
     {
-        // code...
+        $eventsCollection = Event::rollUp($start, $end, $user);
     }
 }
