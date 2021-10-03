@@ -29,6 +29,6 @@
         "fterrag.vscode-php-cs-fixer",
         "austenc.laravel-blade-spacer",
         "onecentlin.laravel-blade",
-        
+        "ronvanderheijden.phpdoc-generator",
     ],
 }
