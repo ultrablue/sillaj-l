@@ -107,10 +107,11 @@ class ReportController extends Controller
         // $eventsCollection = $eventsCollection->sortBy(['task.name', 'project.name'])->groupBy(['task.name', 'project.name']);
         // dd($eventsCollection);
         $groupDisplayArray = ['Project', 'Task'];
+        $reportHeader = 'Hours for '.$now->format('l F j, Y');
         // TODO Ooops, this is a dupe.
         $now = new Carbon();
         // Mail::send(new Report($eventsCollection, $groupDisplayArray, $totalTime, $now));
-        return new Report($eventsCollection, $groupDisplayArray, $totalTime, $now);
+        return new Report($eventsCollection, $groupDisplayArray, $totalTime, $now, $reportHeader);
     }
 
     public function previousMonthReportByProject(Request $request)
@@ -127,9 +128,10 @@ class ReportController extends Controller
         // By Task, then Project.
         // $eventsCollection = $eventsCollection->sortBy(['task.name', 'project.name'])->groupBy(['task.name', 'project.name']);
         $groupDisplayArray = ['Project', 'Task'];
+        $reportHeader = 'Effort for '.$startOfLastMonth->format('F Y').' by Project';
         // TODO - is there a way to determine context? IOW, if this was called from the CLI/Artisan, then do an email. Otherwise, return a view.
         // Mail::send(new Report($eventsCollection, $groupDisplayArray, $totalTime, $now));
-        return new Report($eventsCollection, $groupDisplayArray, $totalTime, $now);
+        return new Report($eventsCollection, $groupDisplayArray, $totalTime, $now, $reportHeader);
     }
 
     public function previousMonthReportByTask(Request $request)
@@ -145,10 +147,11 @@ class ReportController extends Controller
         // $eventsCollection = $eventsCollection->sortBy(['project.name', 'task.name'])->groupBy(['project.name', 'task.name']);
         // By Task, then Project.
         $eventsCollection = $eventsCollection->sortBy(['task.name', 'project.name'])->groupBy(['task.name', 'project.name']);
-        $groupDisplayArray = ['Project', 'Task'];
+        $groupDisplayArray = ['Task', 'Project'];
+        $reportHeader = 'Effort for '.$startOfLastMonth->format('F Y').' by Task';
         // TODO - is there a way to determine context? IOW, if this was called from the CLI/Artisan, then do an email. Otherwise, return a view.
         // Mail::send(new Report($eventsCollection, $groupDisplayArray, $totalTime, $now));
-        return new Report($eventsCollection, $groupDisplayArray, $totalTime, $now);
+        return new Report($eventsCollection, $groupDisplayArray, $totalTime, $now, $reportHeader);
     }
 
     // Gah. I'm not sure how to DRY this up.

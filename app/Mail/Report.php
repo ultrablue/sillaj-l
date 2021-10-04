@@ -15,18 +15,20 @@ class Report extends Mailable
     public $group;
     public $total;
     public $now;
+    public $reportHeader;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($eventsCollection, $groupDisplayArray, $totalTime, $now)
+    public function __construct($eventsCollection, $groupDisplayArray, $totalTime, $now, $reportHeader)
     {
         $this->events = $eventsCollection;
         $this->group = $groupDisplayArray;
         $this->total = $totalTime;
         $this->now = $now;
+        $this->reportHeader = $reportHeader;
     }
 
     /**

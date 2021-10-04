@@ -5,9 +5,7 @@
     <thead>
         <tr>
             <th colspan="2" style="font-size:1.5em;">
-                {{-- Hours for the week of {{ Carbon::now()->startOfWeek()->format('F j, Y') }} --}}
-                Hours for {{ Carbon::now()->format('l F j, Y') }}
-                {{-- This should be the period requested (day, week, month, year, etc.) --}}
+                {{ $reportHeader }}
             </th>
         </tr>
     </thead>
