@@ -121,7 +121,18 @@ class ReportController extends Controller
         $endOfLastMonth = $now->subMonthsNoOverflow()->endOfMonth();
         $user = $request->user();
 
-        $eventsCollection = Event::rollUp($startOfLastMonth, $endOfLastMonth, $user);
+        // TODO Hm. This shouldn't be in Event. The actual query should be made here. OR the method should be in the User Model, which doesn't really make sense.
+        //          Actually this is kind of messed up. The problem is that I'm expecting this Controller to handle both mailed and displayed reports.
+        //          Is that really true????
+        //          Maybe I need an emailReportController?? Hm.
+        // $eventsCollection = Event::rollUp($startOfLastMonth, $endOfLastMonth, $user);
+
+        $eventsCollection = auth()->user()
+        ->events()
+        ->whereBetween('event_date', [$startOfLastMonth->toDateString(), $endOfLastMonth->toDateString()])
+        ->with(['task', 'project'])
+        ->get();
+
         $totalTime = $eventsCollection->sum('duration');
         // By Project, then Task.
         $eventsCollection = $eventsCollection->sortBy(['project.name', 'task.name'])->groupBy(['project.name', 'task.name']);
