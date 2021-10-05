@@ -77,7 +77,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/reports', 'ReportController@index')->name('reports-list');
     Route::get('/reports/thisyear', 'ReportController@thisYear')->name('report-this-year');
     Route::post('reports', 'ReportController@show')->name('reports-show');
-    Route::get('/reports/emailreport', 'ReportController@emailReport')->name('reports-email');
+    Route::get('/reports/currentDayByProject', 'ReportController@currentDayByProjectReport')->name('reports-email');
     Route::get('/reports/lastMonthByProject', 'ReportController@previousMonthReportByProject')->name('reports-previousMonthByProject');
     Route::get('/reports/lastMonthByTask', 'ReportController@previousMonthReportByTask')->name('reports-previousMonthByTask');
 });

@@ -90,7 +90,7 @@ class ReportController extends Controller
         return view('reports.show', ['events' => $eventsCollection, 'total' => $totalTime, 'group' => $groupDisplayArray, 'dates' => [$startTime, $endTime]]);
     }
 
-    public function emailReport(Request $request)
+    public function currentDayByProjectReport(Request $request)
     {
         // TODO - Change the name of the Method to Event::DailyRollUp() (or something).
         // TODO - Fix the display to handle both (or all?) cases. Right now, it's showing Project even when Task is the top-level group.
@@ -99,6 +99,9 @@ class ReportController extends Controller
         $now = new Carbon();
         $event = new Event();
         $eventsCollection = $event->dailyRollupByProject($now, $request->user()->id);
+
+        $eventsCollection = \Auth::user()->events()->whereBetween('event_date', [$now->toDateString(), $now->toDateString()])->with(['task', 'project'])->get();
+
         $totalTime = $eventsCollection->sum('duration');
 
         // By Project, then Task.
@@ -127,11 +130,12 @@ class ReportController extends Controller
         //          Maybe I need an emailReportController?? Hm.
         // $eventsCollection = Event::rollUp($startOfLastMonth, $endOfLastMonth, $user);
 
+        // This exact query is duplicated in previousMonthReportByTask. But I'm not what the best way to DRY it.
         $eventsCollection = auth()->user()
-        ->events()
-        ->whereBetween('event_date', [$startOfLastMonth->toDateString(), $endOfLastMonth->toDateString()])
-        ->with(['task', 'project'])
-        ->get();
+                ->events()
+                ->whereBetween('event_date', [$startOfLastMonth->toDateString(), $endOfLastMonth->toDateString()])
+                ->with(['task', 'project'])
+                ->get();
 
         $totalTime = $eventsCollection->sum('duration');
         // By Project, then Task.
@@ -153,11 +157,20 @@ class ReportController extends Controller
         $user = $request->user();
 
         $eventsCollection = Event::rollUp($startOfLastMonth, $endOfLastMonth, $user);
+
+        // This exact query is duplicated in previousMonthReportByProject. But I'm not what the best way to DRY it.
+        $eventsCollection = auth()->user()
+                ->events()
+                ->whereBetween('event_date', [$startOfLastMonth->toDateString(), $endOfLastMonth->toDateString()])
+                ->with(['task', 'project'])
+                ->get();
+
         $totalTime = $eventsCollection->sum('duration');
         // By Project, then Task.
         // $eventsCollection = $eventsCollection->sortBy(['project.name', 'task.name'])->groupBy(['project.name', 'task.name']);
         // By Task, then Project.
         $eventsCollection = $eventsCollection->sortBy(['task.name', 'project.name'])->groupBy(['task.name', 'project.name']);
+
         $groupDisplayArray = ['Task', 'Project'];
         $reportHeader = 'Effort for '.$startOfLastMonth->format('F Y').' by Task';
         // TODO - is there a way to determine context? IOW, if this was called from the CLI/Artisan, then do an email. Otherwise, return a view.
