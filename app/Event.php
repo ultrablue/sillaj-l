@@ -66,53 +66,6 @@ class Event extends Model
     }
 
     /**
-     * @param $day a Carbon date. The rollup will be made for that day.
-     */
-    public function dailyRollUpByProject(Carbon $day, string $user)
-    {
-        // TODO Don't pass in the user as a string, silly. Use Laravel's User stuff.
-        // TODO Oops, it's not silly. This Action may or may not be called by an HTTP Controller.
-        // Retrieve the currently authenticated user's ID...
-        //$id = Auth::id();
-        // $eventsCollection = $this->whereDate('event_date', '=', $day)->with(['task', 'project'])->where(['user_id' => $user])->get();
-        $eventsCollection = \Auth::user()->events()->whereBetween('event_date', [$day->toDateString(), $day->toDateString()])->with(['task', 'project'])->get();
-        // ddd($eventsCollection);
-        // dd($eventsCollection);
-        // $eventsCollection = $eventsCollection->sortBy(['project.name', 'task.name'])->groupBy(['project.name', 'task.name']);
-        // $totalTime = $eventsCollection->pluck('*.duration');
-        // dump($eventsCollection->keys());
-        // dd($totalTime);
-        // $eventsCollection = $eventsCollection->merge(['headers' => $groupDisplayArray]);
-        // dd($eventsCollection);
-
-        return $eventsCollection;
-    }
-
-    public function dailyRollUpByTask()
-    {
-    }
-
-    /**
-     * This is actually *last* month's roll up.
-     */
-    public function monthlyRollup(CarbonImmutable $date)
-    {
-        // Carbon is excellent.
-        $startOfLastMonth = $date->subMonthsNoOverflow()->startOfMonth();
-        $endOfLastMonth = $date->subMonthsNoOverflow()->endOfMonth();
-
-        // We're only interested in the currently logged in User's Events.
-        // TODO Oops, that wont' work. We'll need to pass in a User because this Controller could be called in a non-request context. :/
-        $eventsCollection = \Auth::user()
-            ->events()
-            ->whereBetween('event_date', [$startOfLastMonth->toDateString(), $endOfLastMonth->toDateString()])
-            ->with(['task', 'project'])
-            ->get();
-
-        return $eventsCollection;
-    }
-
-    /**
      * @param carbonImmutable $start - The start date for the rollup
      * @param CarbonImmutable $end   - The end date for the rollup
      * @param User            $user  - A User

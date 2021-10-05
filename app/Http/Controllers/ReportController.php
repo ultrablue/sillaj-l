@@ -92,27 +92,22 @@ class ReportController extends Controller
 
     public function currentDayByProjectReport(Request $request)
     {
-        // TODO - Change the name of the Method to Event::DailyRollUp() (or something).
-        // TODO - Fix the display to handle both (or all?) cases. Right now, it's showing Project even when Task is the top-level group.
         // TODO 💥- Make some Tests please!!!!!
-        // Thew View will need this. I suppose it could get it itself. 🤔
+        // The View will need this. I suppose it could get it itself. 🤔
         $now = new Carbon();
-        $event = new Event();
-        $eventsCollection = $event->dailyRollupByProject($now, $request->user()->id);
 
-        $eventsCollection = \Auth::user()->events()->whereBetween('event_date', [$now->toDateString(), $now->toDateString()])->with(['task', 'project'])->get();
+        $eventsCollection = auth()->user()
+        ->events()
+        ->whereBetween('event_date', [$now->toDateString(), $now->toDateString()])
+        ->with(['task', 'project'])
+        ->get();
 
         $totalTime = $eventsCollection->sum('duration');
 
         // By Project, then Task.
         $eventsCollection = $eventsCollection->sortBy(['project.name', 'task.name'])->groupBy(['project.name', 'task.name']);
-        // By Task, then Project.
-        // $eventsCollection = $eventsCollection->sortBy(['task.name', 'project.name'])->groupBy(['task.name', 'project.name']);
-        // dd($eventsCollection);
         $groupDisplayArray = ['Project', 'Task'];
         $reportHeader = 'Hours for '.$now->format('l F j, Y');
-        // TODO Ooops, this is a dupe.
-        $now = new Carbon();
         // Mail::send(new Report($eventsCollection, $groupDisplayArray, $totalTime, $now));
         return new Report($eventsCollection, $groupDisplayArray, $totalTime, $now, $reportHeader);
     }
@@ -124,12 +119,6 @@ class ReportController extends Controller
         $endOfLastMonth = $now->subMonthsNoOverflow()->endOfMonth();
         $user = $request->user();
 
-        // TODO Hm. This shouldn't be in Event. The actual query should be made here. OR the method should be in the User Model, which doesn't really make sense.
-        //          Actually this is kind of messed up. The problem is that I'm expecting this Controller to handle both mailed and displayed reports.
-        //          Is that really true????
-        //          Maybe I need an emailReportController?? Hm.
-        // $eventsCollection = Event::rollUp($startOfLastMonth, $endOfLastMonth, $user);
-
         // This exact query is duplicated in previousMonthReportByTask. But I'm not what the best way to DRY it.
         $eventsCollection = auth()->user()
                 ->events()
@@ -140,8 +129,6 @@ class ReportController extends Controller
         $totalTime = $eventsCollection->sum('duration');
         // By Project, then Task.
         $eventsCollection = $eventsCollection->sortBy(['project.name', 'task.name'])->groupBy(['project.name', 'task.name']);
-        // By Task, then Project.
-        // $eventsCollection = $eventsCollection->sortBy(['task.name', 'project.name'])->groupBy(['task.name', 'project.name']);
         $groupDisplayArray = ['Project', 'Task'];
         $reportHeader = 'Effort for '.$startOfLastMonth->format('F Y').' by Project';
         // TODO - is there a way to determine context? IOW, if this was called from the CLI/Artisan, then do an email. Otherwise, return a view.
@@ -166,8 +153,6 @@ class ReportController extends Controller
                 ->get();
 
         $totalTime = $eventsCollection->sum('duration');
-        // By Project, then Task.
-        // $eventsCollection = $eventsCollection->sortBy(['project.name', 'task.name'])->groupBy(['project.name', 'task.name']);
         // By Task, then Project.
         $eventsCollection = $eventsCollection->sortBy(['task.name', 'project.name'])->groupBy(['task.name', 'project.name']);
 
