@@ -30,5 +30,6 @@
         "austenc.laravel-blade-spacer",
         "onecentlin.laravel-blade",
         "ronvanderheijden.phpdoc-generator",
+        "bmewburn.vscode-intelephense-client",
     ],
 }
