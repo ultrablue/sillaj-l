@@ -31,10 +31,24 @@
      *
      * @param $decimalNumber the number to convert
      */
-    function decimalToHms($decimalNumber)
+    function decimalToHms(float $decimalNumber)
     {
+        // Tests:
+        //    input is a float.
+        //               string
+        //             an int.
+
+        $decimalNumber = floatval($decimalNumber);
+        // (float) ($decimalNumber);
+        // dump((string) $decimalNumber);
+        // dump(gettype($decimalNumber));
+
         // Stringify the intiger part and the decimal part. Splitting on the decimal point keeps things neat and avoids rounding errors.
         $vars = explode('.', $decimalNumber);
+        if (count($vars) === 1) {
+            $vars[1] = '0';
+        }
+        // dd($vars);
         $hours = (int) $vars[0];
         $tempma = '0.'.$vars[1];
 

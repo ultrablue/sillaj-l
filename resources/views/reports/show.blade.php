@@ -36,7 +36,7 @@
                         </tr>
                     @endforeach
                     <tr class="bg-gray-200">
-                        <td>{{ $group[1] }} Total:</td>
+                        <td>{{ $group[0] }} Total:</td>
                         <td class="text-right">
                             {{ sprintf(
     '%01.2f',
