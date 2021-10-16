@@ -24,7 +24,7 @@ class ReportDailyByProject extends Command
      *
      * @var string
      */
-    protected $description = 'This is a test command to experiment with commands.';
+    protected $description = 'Generates and emails a daily effort report for each user in the system.';
 
     /**
      * Create a new command instance.

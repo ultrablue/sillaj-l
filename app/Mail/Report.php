@@ -38,7 +38,8 @@ class Report extends Mailable
      */
     public function build()
     {
-        $this->from('test@test.test', 'Test the Test');
+        // TODO add "from" info to .env, please.
+        $this->from('noreply@ultraspace.com', 'Hours Emailer');
         $this->subject('Daily Hours for '.$this->now->format('l F j, Y'));
         // $this->to(auth()->user()->email, auth()->user()->name);
         // dd('here '.__FILE__.':'.__LINE__);
