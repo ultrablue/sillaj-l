@@ -10,14 +10,14 @@ use Illuminate\Support\Facades\Mail;
 
 // use Illuminate\Suupport\Fac
 
-class TestCommand extends Command
+class ReportDailyByProject extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'test:command';
+    protected $signature = 'report:dailybyproject';
 
     /**
      * The console command description.
