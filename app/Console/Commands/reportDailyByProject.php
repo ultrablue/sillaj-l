@@ -49,6 +49,7 @@ class ReportDailyByProject extends Command
         foreach ($allUsers as $user) {
             $now = now();
 
+            // TODO Let's move this to the User Model, please.
             $eventsCollection = $user->events()
             ->whereBetween('event_date', [$now->toDateString(), $now->toDateString()])
             ->with(['task', 'project'])
