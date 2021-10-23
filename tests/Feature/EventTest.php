@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Carbon\Carbon;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class EventTest extends TestCase
 {
@@ -19,7 +19,6 @@ class EventTest extends TestCase
         $response = $this->actingAs($user)->get('/');
         $response->assertSee('You don\'t have any Events, yet.', false);
     }
-
 
     /**
      * @test
@@ -60,14 +59,11 @@ class EventTest extends TestCase
         $user = factory('App\User')->create();
         // ... a Date
         $date = Carbon::now();
-
     }
 
-    // More Tests:
+    // TODO More Tests:
     // Test POST
     // Make sure validation works.
     // Start/End versus duration.
     // Shared tasks/projects?
-
-
 }
