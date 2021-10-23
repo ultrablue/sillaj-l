@@ -24,7 +24,11 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
-        $schedule->command('report:dailybyproject')->everyTwoMinutes();
+        // Send the daily roll up every day at 2350 local time.
+        $schedule->command('report:dailybyproject')->dailyAt('23:50')->timezone('America/Denver');
+
+        // Send the weekly roll up every week on Sunday at 2345 local time.
+        $schedule->command('report:weeklybyproject')->sundays()->at('23:45')->timezone('America/Denver');
     }
 
     /**
