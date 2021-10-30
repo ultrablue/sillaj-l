@@ -31,5 +31,6 @@
         "onecentlin.laravel-blade",
         "ronvanderheijden.phpdoc-generator",
         "bmewburn.vscode-intelephense-client",
+        "gruntfuggly.todo-tree",
     ],
 }
