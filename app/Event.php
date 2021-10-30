@@ -168,18 +168,20 @@ class Event extends Model
     ////        dd($value);
 //    }
 
+    //TODO I need some docs, please.
     public function setIso8601DurationAttribute($value)
     {
-//        dd($this->attributes['duration']);
+        //        dd($this->attributes['duration']);
         if ($this->attributes['duration']) {
             $ci = CarbonInterval::seconds($this->attributes['duration'])->cascade()->spec();
-//            dd($ci);
+            //            dd($ci);
             $this->attributes['iso_8601_duration'] = $ci;
         } else {
             $this->attributes['iso_8601_duration'] = null;
         }
     }
 
+    //TODO I need some docs, please.
     public function getIso8601DurationAttribute($value)
     {
         $dur = 0;
