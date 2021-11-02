@@ -32,5 +32,6 @@
         "ronvanderheijden.phpdoc-generator",
         "bmewburn.vscode-intelephense-client",
         "gruntfuggly.todo-tree",
+        // "ms-azuretools.vscode-docker",
     ],
 }
