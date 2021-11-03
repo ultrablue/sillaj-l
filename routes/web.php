@@ -22,8 +22,8 @@
 
 Route::get('/home/', 'HomeController@index')->name('home');
 // where() constrains the route to the regex supplied.
-Route::get('/{eventdate?}', 'HomeController@index')->name('home')->where('eventdate', '\d\d\d\d-\d\d-\d\d');
-Route::get('/', 'HomeController@index')->name('home');
+Route::get('/{eventdate?}', 'HomeController@index')->where('eventdate', '\d\d\d\d-\d\d-\d\d');
+Route::get('/', 'HomeController@index');
 //Route::get('/', 'HomeController@index')->name('home');
 //Route::get('/home/', 'HomeController@index')->name('home');
 
