@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
-use Faker\Generator as Faker;
+// use Faker\Generator as Faker;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class EventFactory extends Factory
