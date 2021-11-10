@@ -7,6 +7,7 @@ use Carbon\CarbonImmutable;
 use Carbon\CarbonInterval;
 use Collective\Html\Eloquent\FormAccessible;
 use DateInterval;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -14,6 +15,7 @@ class Event extends Model
 {
     use FormAccessible;
     use SoftDeletes;
+    use HasFactory;
 
     protected $fillable = ['task_id', 'project_id', 'time_start', 'time_end', 'duration',
         'iso_8601_duration', 'event_date', 'note', ];
@@ -168,18 +170,20 @@ class Event extends Model
     ////        dd($value);
 //    }
 
+    //TODO I need some docs, please.
     public function setIso8601DurationAttribute($value)
     {
-//        dd($this->attributes['duration']);
+        //        dd($this->attributes['duration']);
         if ($this->attributes['duration']) {
             $ci = CarbonInterval::seconds($this->attributes['duration'])->cascade()->spec();
-//            dd($ci);
+            //            dd($ci);
             $this->attributes['iso_8601_duration'] = $ci;
         } else {
             $this->attributes['iso_8601_duration'] = null;
         }
     }
 
+    //TODO I need some docs, please.
     public function getIso8601DurationAttribute($value)
     {
         $dur = 0;

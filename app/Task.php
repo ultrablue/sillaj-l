@@ -3,12 +3,13 @@
 namespace App;
 
 use Auth;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Task extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasFactory;
 
     // TODO What???? Why do I want to set everything to fillable for testing?
     // Set everything to fillable for testing.
@@ -29,7 +30,7 @@ class Task extends Model
         return 'tasks/'.$this->id;
     }
 
-    /*
+    /** 
      * TODO Add phpDoc, please.
     */
     public function projects()

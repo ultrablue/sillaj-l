@@ -1,6 +1,7 @@
 <?php
 
 namespace Database\Seeders;
+use App\User;
 
 use Illuminate\Database\Seeder;
 
@@ -13,8 +14,8 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        // Make the first user manually:
-        factory(App\User::class)->states('firstUser')->create();
-        factory(App\User::class, 5)->create();
+        // Make the first User, which has some specific things for testing and constistancy during development:
+        User::factory()->firstUser()->create();
+        User::factory()->count(5)->create();
     }
 }

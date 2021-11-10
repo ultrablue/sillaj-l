@@ -47,6 +47,7 @@ class ReportDailyByProject extends Command
 
         $allUsers = User::all();
         foreach ($allUsers as $user) {
+            // TODO Make this a CarbonImmutable, please.
             $now = now();
 
             // TODO Let's move this to the User Model, please.
