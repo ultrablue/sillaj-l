@@ -9,16 +9,17 @@ use App\Task;
 
 class TaskTest extends TestCase
 {
-    use RefreshDatabase;
+    // use RefreshDatabase;
 
     /** @test */
     public function a_task_has_an_owner()
     {
         // Create a User.
         $user = User::factory()->create();
-        // Create a 
+        // Create a Task for the User.
         $task = Task::factory()->create(['user_id' => $user->id]);
 
+        // Assert that the relation is returning the proper type.
         $this->assertInstanceOf('App\User', $task->owner);
     }
 }
