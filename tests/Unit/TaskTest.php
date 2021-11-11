@@ -6,14 +6,19 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\User;
 use App\Task;
+use Illuminate\Support\Facades\App;
 
 class TaskTest extends TestCase
 {
-    // use RefreshDatabase;
+    use RefreshDatabase;
 
     /** @test */
     public function a_task_has_an_owner()
     {
+        // dd(App::environment());
+        // dump(config('app.env'));
+        // dump(env('APP_ENV'));
+        // dd(env('DB_CONNECTION'));
         // Create a User.
         $user = User::factory()->create();
         // Create a Task for the User.
