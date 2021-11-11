@@ -15,12 +15,9 @@ class TaskTest extends TestCase
     /** @test */
     public function a_task_has_an_owner()
     {
-        // dd(App::environment());
-        // dump(config('app.env'));
-        // dump(env('APP_ENV'));
-        // dd(env('DB_CONNECTION'));
         // Create a User.
         $user = User::factory()->create();
+        
         // Create a Task for the User.
         $task = Task::factory()->create(['user_id' => $user->id]);
 
