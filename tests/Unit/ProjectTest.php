@@ -4,12 +4,15 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+// use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\User;
+use App\Project;
 
 class ProjectTest extends TestCase
 {
-    use DatabaseMigrations;
+    // use DatabaseMigrations;
+    use RefreshDatabase;
 
     protected $guarded = [];
     protected $user;
@@ -18,8 +21,8 @@ class ProjectTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->user = factory('App\User')->create();
-        $this->project = factory('App\Project')
+        $this->user = User::factory()->create();
+        $this->project = Project::factory()
             ->create(['user_id' => $this->user->id]);
     }
 
@@ -32,11 +35,12 @@ class ProjectTest extends TestCase
     }
 
     /* TODO !! Add a project_has_tasks, please!! IOW, multiple tasks. Or refactor the one below to also add another Task and test for that? */
-    /* TODO Do I even need these?? It seems like I'm testing the many to many features of Laravel itself, no?
+    /* TODO Do I even need these?? It seems like I'm testing the many to many features of Laravel itself, no? */
 
     /** @test */
     public function a_project_can_add_a_task()
     {
+        $this->markTestSkipped('Do I really need this test?');
         // Tests the many to many relationship between Projects and Tasks.
         // TODO Use Faker for this?? Or the Factory???
         $this->project->addTask([
@@ -57,13 +61,12 @@ class ProjectTest extends TestCase
         // Huh? This seems really specific and brittle??
         $this->markTestSkipped('Huh?? This seems really specific and brittle.');
         // The idea here is to see whether the shared Projects created by any User are returned by the Model.
-        $users = factory('App\User', 2)->create();
+        $users = User::factory()->count(2)->create();
         foreach ($users as $user) {
-            factory('App\Project', 2)->create(['user_id' => $user->id, 'share' => TRUE]);
-            factory('App\Project', 2)->create(['user_id' => $user->id, 'share' => FALSE]);
+            Project::factory()->count(2)->create(['user_id' => $user->id, 'share' => TRUE]);
+            Project::factory()->count(2)->create(['user_id' => $user->id, 'share' => FALSE]);
         }
         $this->assertEquals($this->project->shared()->count(), 4);
         $this->assertEquals($this->project->otherShared($users[0])->count(), 2);
     }
-
 }
