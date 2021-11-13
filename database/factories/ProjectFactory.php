@@ -14,9 +14,6 @@ class ProjectFactory extends Factory
 
     public function definition()
     {
-
-
-
         return [
             //'user_id' => '', // This *must* be supplied by the caller!
             'name'           => str_replace('.', '', $this->faker->text(20)),
