@@ -71,6 +71,7 @@ class Project extends Model
      * Keep in mind that this query doesn't rely on a many to many.
      *
      * TODO - Should this go in User?
+     * Yes.
      */
     public function scopeAllAvailable()
     {
