@@ -5,6 +5,9 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
+use App\Task;
+use App\User;
+
 class TaskTest extends TestCase
 {
     use DatabaseMigrations;
@@ -13,8 +16,8 @@ class TaskTest extends TestCase
     {
 
         parent::setUp();
-        $this->user = factory('App\User')->create();
-        $this->task = factory('App\Task')->create(['user_id' => $this->user->id]);
+        $this->user = User::factory()->create();
+        $this->task = Task::factory()->create(['user_id' => $this->user->id]);
 
     }
 
@@ -23,12 +26,12 @@ class TaskTest extends TestCase
     public function an_authenticated_user_can_view_all_tasks()
     {
         // Given we have an authenticatd User;
-        $user = factory('App\User')->create();
+        $user = User::factory()->create();
         // And that User has a Task;
-        $task = factory('App\Task')->create(['user_id' => $user->id]);
+        $task = Task::factory()->create(['user_id' => $user->id]);
         // And antother User made a shared Task;
-        $otherUser = factory('App\User')->create();
-        $sharedTask = factory('App\Task')->create(['user_id' => $otherUser->id, 'share' => TRUE]);
+        $otherUser = User::factory()->create();
+        $sharedTask = Task::factory()->create(['user_id' => $otherUser->id, 'share' => TRUE]);
         // When we get the list of Tasks...
         $response = $this->actingAs($user)->get('/tasks');
 
@@ -44,7 +47,7 @@ class TaskTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_no_tasks_sees_no_tasks_in_tasks_list()
     {
-        $user = factory('App\User')->create();
+        $user = User::factory()->create();
         $response = $this->actingAs($user)->get('/tasks');
         $response->assertSee('You don\'t have any tasks, yet.', false);
     }
