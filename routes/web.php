@@ -20,6 +20,7 @@
 // See the Home Controller for an example of protecting the entire Controller
 // with auth.
 
+// Home - For an authenticated User, these should display the main Event dashboard.
 Route::get('/home/', 'HomeController@index')->name('home');
 // where() constrains the route to the regex supplied.
 Route::get('/{eventdate?}', 'HomeController@index')->where('eventdate', '\d\d\d\d-\d\d-\d\d');
