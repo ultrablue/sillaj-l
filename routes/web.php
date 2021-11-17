@@ -35,6 +35,7 @@ Route::get('/', 'HomeController@index');
 
 // Events
 //Route::get('/events/{eventdate?}', 'EventController@index');
+// TODO We don't use this one any more. Clean in out. It has view as well.
 Route::get('/events/create', 'EventController@create');
 Route::post('/events', 'EventController@store')->middleware(\App\Http\Middleware\processTemporalInputs::class);
 //Route::post('/events', 'EventController@store');
