@@ -65,9 +65,42 @@ class EventTest extends TestCase
         $date = Carbon::now();
     }
 
+
     // TODO More Tests:
     // Test POST
     // Make sure validation works.
     // Start/End versus duration.
     // Shared tasks/projects?
+
+    // GET /events should return a 405.
+    // Create (POST) an Event as an unauthenticated User should fail.
+    // Create an Event with start and end times.
+    // Create an Event with just start time.
+    // Create an Event with just an end time.
+    // Create an Event with just a Duration.
+
+    // GET events/{event} should return a 200.
+    //                           the proper Event should be displayed.
+    // PUT events/{event} should return a 200.
+    //                           the updated Event should be displayed.
+
+    /**
+     * 
+     * Tests GET /events/{event}
+     * 
+     * @return void
+     */
+    public function test_an_authenticated_user_can_get_an_event_by_id()
+    {
+        $user = User::factory()->create();
+        $project = Project::factory()->create(['user_id' => $user->id]);
+        $task = Task::factory()->create(['user_id' => $user->id]);
+
+        $date = Carbon::now();
+
+        $event = Event::factory()->create(['user_id' => $user->id, 'project_id' => $project->id, 'task_id' => $task->id, 'event_date' => $date]);
+        $response = $this->actingAs($user)->get('/events/'.$event->id);
+        $response->assertStatus(200);
+        $response->assertSee($event->note, false);
+    }
 }
