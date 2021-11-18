@@ -69,20 +69,79 @@ class EventTest extends TestCase
     // TODO More Tests:
     // Test POST
     // Make sure validation works.
-    // Start/End versus duration.
-    // Shared tasks/projects?
 
     // GET /events should return a 405.
     // Create (POST) an Event as an unauthenticated User should fail.
-    // Create an Event with start and end times.
-    // Create an Event with just start time.
-    // Create an Event with just an end time.
-    // Create an Event with just a Duration.
 
     // GET events/{event} should return a 200.
     //                           the proper Event should be displayed.
     // PUT events/{event} should return a 200.
     //                           the updated Event should be displayed.
+
+
+    public function test_create_events()
+    {
+        $user = User::factory()->create();
+        $project = Project::factory()->create(['user_id' => $user->id]);
+        $task = Task::factory()->create(['user_id' => $user->id]);
+
+        $startDate = Carbon::create(2021, 1, 1, 10, 0, 0);
+        $endDate = Carbon::create(2021, 1, 1, 11, 0, 0);
+
+        $response = $this->actingAs($user)->post('/events', [
+            'event_date' => $startDate->toDateString(),
+            'time_start' => $startDate->format('H:i'),
+            'time_end' => $endDate->format('H:i'),
+            'project_id' => $project->id,
+            'duration' => null,
+            'task_id' => $task->id
+        ]);
+        $response->assertStatus(302);
+
+
+        $response = $this->actingAs($user)->post('/events', [
+            'event_date' => $startDate->toDateString(),
+            'time_start' => $startDate->format('H:i'),
+            // 'time_end' => $endDate->format('H:i'),
+            'duration' => null,
+            'project_id' => $project->id,
+            'task_id' => $task->id
+        ]);
+        $response->assertStatus(302);
+
+        $response = $this->actingAs($user)->post('/events', [
+            'event_date' => $startDate->toDateString(),
+            'time_start' => $startDate->format('H:i'),
+            // 'time_end' => $endDate->format('H:i'),
+            'duration' => '1:00',
+            'project_id' => $project->id,
+            'task_id' => $task->id
+        ]);
+        $response->assertStatus(302);
+
+
+        $response = $this->actingAs($user)->post('/events', [
+            'event_date' => $startDate->toDateString(),
+            // 'time_start' => $startDate->format('H:i'),
+            'time_end' => $endDate->format('H:i'),
+            'duration' => '1:00',
+            'project_id' => $project->id,
+            'task_id' => $task->id
+        ]);
+        $response->assertStatus(302);
+
+        $response = $this->actingAs($user)->post('/events', [
+            'event_date' => $startDate->toDateString(),
+            // 'time_start' => $startDate->format('H:i'),
+            // 'time_end' => $endDate->format('H:i'),
+            'duration' => '1:00',
+            'project_id' => $project->id,
+            'task_id' => $task->id
+        ]);
+        $response->assertStatus(302);
+
+    }
+
 
     /**
      * 
@@ -99,7 +158,7 @@ class EventTest extends TestCase
         $date = Carbon::now();
 
         $event = Event::factory()->create(['user_id' => $user->id, 'project_id' => $project->id, 'task_id' => $task->id, 'event_date' => $date]);
-        $response = $this->actingAs($user)->get('/events/'.$event->id);
+        $response = $this->actingAs($user)->get('/events/' . $event->id);
         $response->assertStatus(200);
         $response->assertSee($event->note, false);
     }
