@@ -171,6 +171,42 @@ class EventTest extends TestCase
     }
 
 
+
+    public function test_update_an_existing_event()
+    {
+        $user = User::factory()->create();
+        $project = Project::factory()->create(['user_id' => $user->id]);
+        $task = Task::factory()->create(['user_id' => $user->id]);
+
+        $startDate = Carbon::create(2021, 1, 1, 10, 0, 0);
+        $endDate = Carbon::create(2021, 1, 1, 11, 0, 0);
+
+        $event = Event::factory()
+            ->create([
+                'event_date' => $startDate,
+                'event_date' => $endDate,
+                'time_start' => $startDate->format('H:i'),
+                'time_end'   => $endDate->format('H:i'),
+                'project_id' => $project->id,
+                'task_id'    => $task->id,
+                'note'       => 'create for test'
+            ]);
+
+        // Given a User, a date, a time start and end, a Project and Task, make an Event.
+        $response = $this->actingAs($user)->put('/events/'.$event->id, [
+            'event_date' => $startDate->toDateString(),
+            'time_start' => $startDate->format('H:i'),
+            'time_end' => $endDate->format('H:i'),
+            'project_id' => $project->id,
+            'duration' => null,
+            'task_id' => $task->id,
+            'note' => 'updated for test'
+        ]);
+        // The Action redirects back to the main page.
+        $response->assertStatus(302);
+    }
+
+
     /**
      * 
      * Tests GET /events/{event}
