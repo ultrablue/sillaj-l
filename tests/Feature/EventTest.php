@@ -79,6 +79,11 @@ class EventTest extends TestCase
     //                           the updated Event should be displayed.
 
 
+    /**
+     * This one combines a number of Assertions into one Test. 
+     * They're all related to creating Events, so I guess it's ok to 
+     * have them all in one.
+     */
     public function test_create_events()
     {
         $user = User::factory()->create();
@@ -88,6 +93,7 @@ class EventTest extends TestCase
         $startDate = Carbon::create(2021, 1, 1, 10, 0, 0);
         $endDate = Carbon::create(2021, 1, 1, 11, 0, 0);
 
+        // Given a User, a date, a time start and end, a Project and Task, make an Event.
         $response = $this->actingAs($user)->post('/events', [
             'event_date' => $startDate->toDateString(),
             'time_start' => $startDate->format('H:i'),
@@ -96,9 +102,11 @@ class EventTest extends TestCase
             'duration' => null,
             'task_id' => $task->id
         ]);
+        // The Action redirects back to the main page.
         $response->assertStatus(302);
 
 
+        // Given a User, a date, a time start, a Project and Task, make an Event.
         $response = $this->actingAs($user)->post('/events', [
             'event_date' => $startDate->toDateString(),
             'time_start' => $startDate->format('H:i'),
@@ -107,8 +115,10 @@ class EventTest extends TestCase
             'project_id' => $project->id,
             'task_id' => $task->id
         ]);
+        // We should be redirected.
         $response->assertStatus(302);
 
+        // Given a User, a date, a time start, a duration, a Project and Task, make an Event.
         $response = $this->actingAs($user)->post('/events', [
             'event_date' => $startDate->toDateString(),
             'time_start' => $startDate->format('H:i'),
@@ -117,9 +127,11 @@ class EventTest extends TestCase
             'project_id' => $project->id,
             'task_id' => $task->id
         ]);
+        // If the insert was successful, we should be redirected.
         $response->assertStatus(302);
 
 
+        // Given a User, a date, a time end, a duration, a Project and Task, make an Event.
         $response = $this->actingAs($user)->post('/events', [
             'event_date' => $startDate->toDateString(),
             // 'time_start' => $startDate->format('H:i'),
@@ -130,6 +142,7 @@ class EventTest extends TestCase
         ]);
         $response->assertStatus(302);
 
+        // Given a User, a date, a duration, a Project and Task, make an Event.
         $response = $this->actingAs($user)->post('/events', [
             'event_date' => $startDate->toDateString(),
             // 'time_start' => $startDate->format('H:i'),
@@ -140,6 +153,21 @@ class EventTest extends TestCase
         ]);
         $response->assertStatus(302);
 
+
+
+        // // Attempts to test the validator, but it's not working.
+        // $this->expectException('ErrorException');
+        // $response = $this->actingAs($user)->post('/events', [
+        //     'event_date' => $startDate->toDateString(),
+        //     'time_start' => '1PM',
+        //     'time_end' => '2pm',
+        //     'project_id' => $project->id,
+        //     'duration' => null,
+        //     'task_id' => $task->id,
+        //     'note' => 'Testing time format.'
+        // ]);
+        // // The Action redirects back to the main page.
+        // $response->assertStatus(302);
     }
 
 
