@@ -12,7 +12,7 @@ class EventFactory extends Factory
     public function definition()
     {
         // $factory->define(App\Event::class, function (Faker $this->faker) {
-        $startDate = Carbon::createFromTimeStamp($this->faker->dateTimeThisMonth('now')->getTimeStamp());
+        $startDate = Carbon::createFromTimeStamp($this->faker->dateTimeThisMonth('+2 week')->getTimeStamp());
         $endDate = $startDate->copy()->addMinutes($this->faker->numberBetween(5, 180));
         $duration = $endDate->diffAsCarbonInterval($startDate);
 

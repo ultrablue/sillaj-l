@@ -64,6 +64,7 @@ class EventController extends Controller
         // TODO Make the space one work for multiple spaces, eg: 1       1.
         $timeAndDurationRegex = '#^(\d{1,2})?([ :\.])?(\d{1,2})?$#';
 
+        // TODO It's probably better to allow anything that Carbon understands.
         $validatedData = $request->validate([
             'duration' => "nullable|regex:$timeAndDurationRegex",
             'time_start' => "nullable|regex:$timeAndDurationRegex",

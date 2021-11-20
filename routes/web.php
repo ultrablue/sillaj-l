@@ -20,6 +20,7 @@
 // See the Home Controller for an example of protecting the entire Controller
 // with auth.
 
+// Home - For an authenticated User, these should display the main Event dashboard.
 Route::get('/home/', 'HomeController@index')->name('home');
 // where() constrains the route to the regex supplied.
 Route::get('/{eventdate?}', 'HomeController@index')->where('eventdate', '\d\d\d\d-\d\d-\d\d');
@@ -34,6 +35,7 @@ Route::get('/', 'HomeController@index');
 
 // Events
 //Route::get('/events/{eventdate?}', 'EventController@index');
+// TODO We don't use this one any more. Clean in out. It has view as well.
 Route::get('/events/create', 'EventController@create');
 Route::post('/events', 'EventController@store')->middleware(\App\Http\Middleware\processTemporalInputs::class);
 //Route::post('/events', 'EventController@store');
