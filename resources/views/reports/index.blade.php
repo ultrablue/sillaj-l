@@ -20,7 +20,7 @@
         </fieldset>
         <div class="mt-10">
             <fieldset class="border-2 rounded-md border-gray-300 border-solid p-2">
-                <legend class="pl-1 pr-5 ">Grouping</legend>
+                <legend class="pl-1 pr-5 ">Report</legend>
                 {{ Form::radio('predefined-range', 'this-week', true, ['id' => 'predefined-range-this-week']) }}
                 {{ Form::label('predefined-range-this-week', 'This week') }}
                 <br>
@@ -33,8 +33,8 @@
                 {{ Form::label('predefined-range-year-to-date', 'Year to date') }}
                 <br>
 
-                {{ Form::radio('predefined-range', 'all-time', false, ['id' => 'predefined-range-all-time'], ['disabled' => 'disabled']) }}
-                {{ Form::label('predefined-range-all-time', '(All Time - Not implemented, yet)', ['class' => 'text-gray-400']) }}
+                {{ Form::radio('predefined-range', 'all-time', false, ['id' => 'predefined-range-all-time']) }}
+                {{ Form::label('predefined-range-all-time', 'All Time') }}
                 <br>
 
                 {{ Form::radio('predefined-range', 'custom', false, ['id' => 'predefined-range-custom'], ['disabled' => 'disabled']) }}

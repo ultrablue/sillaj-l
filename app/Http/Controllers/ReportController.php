@@ -15,7 +15,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Event;
+use App\Event as Event;
 use App\Mail\Report;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
@@ -31,6 +31,7 @@ class ReportController extends Controller
 
     public function show(Request $request)
     {
+
         $group = $request->input('group-by', 'project');
         $range = $request->input('predefined-range', 'this-week');
 
@@ -68,25 +69,34 @@ class ReportController extends Controller
             case 'month-to-date':
                 $startTime = $now->copy()->startOfMonth();
                 $endTime = $now;
+                $eventsCollection = Event::whereBetween('event_date', [$startTime, $endTime])->with(['task', 'project'])->where(['user_id' => $request->user()->id])->get();
                 break;
             case 'year-to-date':
                 $startTime = $now->copy()->startOfYear();
                 $endTime = $now;
+                $eventsCollection = Event::whereBetween('event_date', [$startTime, $endTime])->with(['task', 'project'])->where(['user_id' => $request->user()->id])->get();
+                break;
+            case 'all-time':
+                // dd($range);
+                // We don't need either of these for this Report.
+                $startTime = null;
+                $endTime = null;
+                $eventsCollection = Event::all();
                 break;
             default:
             case 'this-week':
                 $startTime = $now->copy()->startOfWeek();
                 $endTime = $now->copy()->endOfWeek();
+                $eventsCollection = Event::whereBetween('event_date', [$startTime, $endTime])->with(['task', 'project'])->where(['user_id' => $request->user()->id])->get();
                 break;
         }
 
-        $events = new Event();
-        $eventsCollection = $events->whereBetween('event_date', [$startTime, $endTime])->with(['task', 'project'])->where(['user_id' => $request->user()->id])->get();
-        // dd($eventsCollection);
+        // $events = new Event();
+        dd($eventsCollection->count());
         $totalTime = $eventsCollection->sum('duration');
         // dd($totalTime / (60 * 60));
         $eventsCollection = $eventsCollection->sortBy($groupArray)->groupBy($groupArray);
-
+        dd($eventsCollection);
         return view('reports.show', ['events' => $eventsCollection, 'total' => $totalTime, 'group' => $groupDisplayArray, 'dates' => [$startTime, $endTime]]);
     }
 
@@ -97,17 +107,17 @@ class ReportController extends Controller
         $now = new Carbon();
 
         $eventsCollection = auth()->user()
-        ->events()
-        ->whereBetween('event_date', [$now->toDateString(), $now->toDateString()])
-        ->with(['task', 'project'])
-        ->get();
+            ->events()
+            ->whereBetween('event_date', [$now->toDateString(), $now->toDateString()])
+            ->with(['task', 'project'])
+            ->get();
 
         $totalTime = $eventsCollection->sum('duration');
 
         // By Project, then Task.
         $eventsCollection = $eventsCollection->sortBy(['project.name', 'task.name'])->groupBy(['project.name', 'task.name']);
         $groupDisplayArray = ['Project', 'Task'];
-        $reportHeader = 'Hours for '.$now->format('l F j, Y');
+        $reportHeader = 'Hours for ' . $now->format('l F j, Y');
         // Mail::send(new Report($eventsCollection, $groupDisplayArray, $totalTime, $now));
         return new Report($eventsCollection, $groupDisplayArray, $totalTime, $now, $reportHeader);
     }
@@ -121,16 +131,16 @@ class ReportController extends Controller
 
         // This exact query is duplicated in previousMonthReportByTask. But I'm not what the best way to DRY it.
         $eventsCollection = auth()->user()
-                ->events()
-                ->whereBetween('event_date', [$startOfLastMonth->toDateString(), $endOfLastMonth->toDateString()])
-                ->with(['task', 'project'])
-                ->get();
+            ->events()
+            ->whereBetween('event_date', [$startOfLastMonth->toDateString(), $endOfLastMonth->toDateString()])
+            ->with(['task', 'project'])
+            ->get();
 
         $totalTime = $eventsCollection->sum('duration');
         // By Project, then Task.
         $eventsCollection = $eventsCollection->sortBy(['project.name', 'task.name'])->groupBy(['project.name', 'task.name']);
         $groupDisplayArray = ['Project', 'Task'];
-        $reportHeader = 'Effort for '.$startOfLastMonth->format('F Y').' by Project';
+        $reportHeader = 'Effort for ' . $startOfLastMonth->format('F Y') . ' by Project';
         // TODO - is there a way to determine context? IOW, if this was called from the CLI/Artisan, then do an email. Otherwise, return a view.
         // Mail::send(new Report($eventsCollection, $groupDisplayArray, $totalTime, $now));
         return new Report($eventsCollection, $groupDisplayArray, $totalTime, $now, $reportHeader);
@@ -147,17 +157,17 @@ class ReportController extends Controller
 
         // This exact query is duplicated in previousMonthReportByProject. But I'm not what the best way to DRY it.
         $eventsCollection = auth()->user()
-                ->events()
-                ->whereBetween('event_date', [$startOfLastMonth->toDateString(), $endOfLastMonth->toDateString()])
-                ->with(['task', 'project'])
-                ->get();
+            ->events()
+            ->whereBetween('event_date', [$startOfLastMonth->toDateString(), $endOfLastMonth->toDateString()])
+            ->with(['task', 'project'])
+            ->get();
 
         $totalTime = $eventsCollection->sum('duration');
         // By Task, then Project.
         $eventsCollection = $eventsCollection->sortBy(['task.name', 'project.name'])->groupBy(['task.name', 'project.name']);
 
         $groupDisplayArray = ['Task', 'Project'];
-        $reportHeader = 'Effort for '.$startOfLastMonth->format('F Y').' by Task';
+        $reportHeader = 'Effort for ' . $startOfLastMonth->format('F Y') . ' by Task';
         // TODO - is there a way to determine context? IOW, if this was called from the CLI/Artisan, then do an email. Otherwise, return a view.
         // Mail::send(new Report($eventsCollection, $groupDisplayArray, $totalTime, $now));
         return new Report($eventsCollection, $groupDisplayArray, $totalTime, $now, $reportHeader);
