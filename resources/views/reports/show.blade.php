@@ -3,6 +3,11 @@
 @section('content')
 
 
+    {{-- <div class="mt-20 mb-20">
+        {{ dump($events) }}
+    </div> --}}
+
+
 
     <div class="mt-20">
 
@@ -14,53 +19,48 @@
 
         <hr>
 
-        <table class="table-fixed font-mono">
-            @foreach ($events as $firstLevel => $secondLevel)
-                <thead>
-                    <tr class="text-left border-b-2 border-black">
-                        <th colspan="2">{{ $group[0] }}: {{ $firstLevel }}</th>
+        <table class="table-auto font-mono mt-10">
+            {{-- <thead>
+                <tr class="border-b border-black">
+                    <th class="w-1/2 text-left">Project</th>
+                    <th class="w-1/4 text-left">Task</th>
+                    <th class="w-1/4 text-right">Time</th>
+                </tr>
+            </thead> --}}
+            @php
+                $currentRow = null;
+            @endphp
+            @foreach ($events as $row)
+                @if ($currentRow !== $row->project)
+                    <tr class="border-b-2 border-black">
+                        <td colspan="3">Project: {{ $row->project }}</td>
                     </tr>
-                </thead>
-                <thead>
-                    <tr class="border-b border-black">
-                        <th class="w-1/2 text-left">{{ $group[1] }}</th>
-                        <th class="w-1/2 text-right">Time</th>
-                    </tr>
-                </thead>
+                    @php
+                        $currentRow = $row->project;
+                    @endphp
+                @endif
+
+
                 <tbody>
-                    @foreach ($secondLevel as $secondLevelElement => $descriptions)
+                    @if ($row->task)
                         <tr>
-                            <td>{{ $secondLevelElement }}</td>
-                            <td class="text-right">
-                                {{ sprintf('%01.2f', round($descriptions->sum('duration') / (60 * 60), 2)) }}</td>
+                            <td colspan="2" class="w-1/2 pl-5"><span class="">{{ $row->task }}</span></td>
+                            <td class="text-right">{{ $row->duration }}</td>
                         </tr>
-                    @endforeach
-                    <tr class="bg-gray-200">
-                        <td>{{ $group[0] }} Total:</td>
-                        <td class="text-right">
-                            {{ sprintf(
-    '%01.2f',
-    round(
-        $secondLevel->pluck('*.duration')->flatten()->sum() / 3600,
-        2,
-    ),
-) }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td></td>
-                    </tr>
+                    @elseif (!$row->project && !$row->task)
+                        <tr>
+                            <td colspan="2">Grand Total</td>
+                            <td class="text-right">{{ $row->duration }}</td>
+                        </tr>
+                    @else
+                        <tr>
+                            <td colspan="2" class="pl-10 pb-5">Total</td>
+                            <td class="text-right pb-5">{{ $row->duration }}</td>
+                        </tr>
+                    @endif
                 </tbody>
 
             @endforeach
-            <tr class="bg-gray-300">
-                <td>Grand Total</td>
-                <td class="text-right">
-                    {{-- {{ vsprintf('%2d:%02d:%02d', decimalToHms(round($total / 3600, 2))) }} --}}
-                    {{ sprintf('%01.2f', round($total / 3600, 2)) }}
-                </td>
-            </tr>
 
         </table>
 
