@@ -59,7 +59,7 @@ class ReportController extends Controller
          */
 
         // So far, we're only interested in ranges that are relative to today, so now will be used a few times.
-        $now = new Carbon();
+        $now = new CarbonImmutable();
 
         // this-week
         // month-to-date
@@ -120,17 +120,11 @@ class ReportController extends Controller
                 break;
             default:
             case 'this-week':
-                $startTime = $now->copy()->startOfWeek();
-                $endTime = $now->copy()->endOfWeek();
+                $startTime = $now->startOfWeek();
+                $endTime = $now->endOfWeek();
                 // $eventsCollection = Event::whereBetween('event_date', [$startTime, $endTime])->with(['task', 'project'])->where(['user_id' => $request->user()->id])->get();
                 if ($group === 'project') {
-                    $eventsCollection = Event::where(['events.user_id' => $request->user()->id])
-                        ->groupBy(['events.project_id', 'projects.name'])
-                        ->selectRaw('SUM(duration) as totalDuration, projects.name')
-                        ->whereBetween('event_date', [$startTime, $endTime])
-                        ->join('projects', 'events.project_id', '=', 'projects.id')
-                        ->orderBy('projects.name')
-                        ->get();
+                    $eventsCollection = Event::rollupByProject($startTime, $endTime);
                 } elseif ($group === 'task') {
                     $eventsCollection = Event::where(['events.user_id' => $request->user()->id])
                         ->groupBy(['events.task_id', 'tasks.name'])
@@ -144,12 +138,12 @@ class ReportController extends Controller
         }
 
         // $events = new Event();
-        // dd($eventsCollection->count());
-        $totalTime = $eventsCollection->sum('duration');
+        // dd($eventsCollection);
+        // $totalTime = $eventsCollection->sum('duration');
         // dd($totalTime / (60 * 60));
-        $eventsCollection = $eventsCollection->sortBy($groupArray)->groupBy($groupArray);
-        dd($eventsCollection->first()->first()->count());
-        return view('reports.show', ['events' => $eventsCollection, 'total' => $totalTime, 'group' => $groupDisplayArray, 'dates' => [$startTime, $endTime]]);
+        // $eventsCollection = $eventsCollection->sortBy($groupArray)->groupBy($groupArray);
+        // dd($eventsCollection->first()->first()->count());
+        return view('reports.show', ['events' => $eventsCollection, 'total' => $eventsCollection->last()->duration, 'group' => $groupDisplayArray, 'dates' => [$startTime, $endTime]]);
     }
 
     public function currentDayByProjectReport(Request $request)
