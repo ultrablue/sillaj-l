@@ -69,7 +69,24 @@ class ReportController extends Controller
             case 'month-to-date':
                 $startTime = $now->copy()->startOfMonth();
                 $endTime = $now;
-                $eventsCollection = Event::whereBetween('event_date', [$startTime, $endTime])->with(['task', 'project'])->where(['user_id' => $request->user()->id])->get();
+                // $eventsCollection = Event::whereBetween('event_date', [$startTime, $endTime])->with(['task', 'project'])->where(['user_id' => $request->user()->id])->get();
+                if ($group === 'project') {
+                    $eventsCollection = Event::where(['events.user_id' => $request->user()->id])
+                        ->groupBy(['events.project_id', 'projects.name'])
+                        ->selectRaw('SUM(duration) as totalDuration, projects.name')
+                        ->whereBetween('event_date', [$startTime, $endTime])
+                        ->join('projects', 'events.project_id', '=', 'projects.id')
+                        ->orderBy('projects.name')
+                        ->get();
+                } elseif ($group === 'task') {
+                    $eventsCollection = Event::where(['events.user_id' => $request->user()->id])
+                        ->groupBy(['events.task_id', 'tasks.name'])
+                        ->selectRaw('SUM(duration) as totalDuration, tasks.name')
+                        ->whereBetween('event_date', [$startTime, $endTime])
+                        ->join('tasks', 'events.task_id', '=', 'tasks.id')
+                        ->orderBy('tasks.name')
+                        ->get();
+                }
                 break;
             case 'year-to-date':
                 $startTime = $now->copy()->startOfYear();
@@ -77,26 +94,61 @@ class ReportController extends Controller
                 $eventsCollection = Event::whereBetween('event_date', [$startTime, $endTime])->with(['task', 'project'])->where(['user_id' => $request->user()->id])->get();
                 break;
             case 'all-time':
+                if ($group === 'project') {
+                    $eventsCollection = Event::where(['events.user_id' => $request->user()->id])
+                        ->groupBy(['events.project_id', 'projects.name'])
+                        ->selectRaw('SUM(duration) as totalDuration, projects.name')
+                        ->join('projects', 'events.project_id', '=', 'projects.id')
+                        ->orderBy('projects.name')
+                        ->get();
+                } elseif ($group === 'task') {
+                    $eventsCollection = Event::where(['events.user_id' => $request->user()->id])
+                        ->groupBy(['events.task_id', 'tasks.name'])
+                        ->selectRaw('SUM(duration) as totalDuration, tasks.name')
+                        ->join('tasks', 'events.task_id', '=', 'tasks.id')
+                        ->orderBy('tasks.name')
+                        ->get();
+                }
                 // dd($range);
                 // We don't need either of these for this Report.
-                $startTime = null;
-                $endTime = null;
-                $eventsCollection = Event::all();
+                // $startTime = null;
+                // $endTime = null;
+                // $eventsCollection = Event::where(['user_id' => $request->user()->id])
+                // ->groupBy('project_id', 'id', 'task_id', 'user_id', 'time_start')
+                // ->orderBy('project_id')
+                // ->get();
                 break;
             default:
             case 'this-week':
                 $startTime = $now->copy()->startOfWeek();
                 $endTime = $now->copy()->endOfWeek();
-                $eventsCollection = Event::whereBetween('event_date', [$startTime, $endTime])->with(['task', 'project'])->where(['user_id' => $request->user()->id])->get();
+                // $eventsCollection = Event::whereBetween('event_date', [$startTime, $endTime])->with(['task', 'project'])->where(['user_id' => $request->user()->id])->get();
+                if ($group === 'project') {
+                    $eventsCollection = Event::where(['events.user_id' => $request->user()->id])
+                        ->groupBy(['events.project_id', 'projects.name'])
+                        ->selectRaw('SUM(duration) as totalDuration, projects.name')
+                        ->whereBetween('event_date', [$startTime, $endTime])
+                        ->join('projects', 'events.project_id', '=', 'projects.id')
+                        ->orderBy('projects.name')
+                        ->get();
+                } elseif ($group === 'task') {
+                    $eventsCollection = Event::where(['events.user_id' => $request->user()->id])
+                        ->groupBy(['events.task_id', 'tasks.name'])
+                        ->selectRaw('SUM(duration) as totalDuration, tasks.name')
+                        ->whereBetween('event_date', [$startTime, $endTime])
+                        ->join('tasks', 'events.task_id', '=', 'tasks.id')
+                        ->orderBy('tasks.name')
+                        ->get();
+                }
                 break;
         }
 
         // $events = new Event();
-        dd($eventsCollection->count());
+        // dd($eventsCollection->count());
         $totalTime = $eventsCollection->sum('duration');
         // dd($totalTime / (60 * 60));
         $eventsCollection = $eventsCollection->sortBy($groupArray)->groupBy($groupArray);
-        dd($eventsCollection);
+        dd($eventsCollection->first()->first()->count());
         return view('reports.show', ['events' => $eventsCollection, 'total' => $totalTime, 'group' => $groupDisplayArray, 'dates' => [$startTime, $endTime]]);
     }
 
