@@ -10,6 +10,8 @@ use DateInterval;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class Event extends Model
 {
@@ -17,8 +19,10 @@ class Event extends Model
     use SoftDeletes;
     use HasFactory;
 
-    protected $fillable = ['task_id', 'project_id', 'time_start', 'time_end', 'duration',
-        'iso_8601_duration', 'event_date', 'note', ];
+    protected $fillable = [
+        'task_id', 'project_id', 'time_start', 'time_end', 'duration',
+        'iso_8601_duration', 'event_date', 'note',
+    ];
 
     // These will automatically be turned into Carbon Dates by the framework.
     protected $dates = ['event_date', 'created_at', 'updated_at'];
@@ -84,6 +88,42 @@ class Event extends Model
         return $eventsCollection;
     }
 
+
+    /**
+     * This returns a ROLL UPed results set, sorted and grouped by Project, Task.
+     * Note that MySQL naturally sorts by the GROUP BY columns, in ASC order.
+     * 
+     */
+    public static function rollupByProject(CarbonImmutable $start, CarbonImmutable $end)
+    {
+        return self::join('projects', 'events.project_id', '=', 'projects.id')
+            ->join('tasks', 'events.task_id', '=', 'tasks.id')
+            ->where('events.user_id', '=', auth()->id())
+            ->whereBetween('events.event_date', [$start, $end])
+            ->select('projects.name as project', 'tasks.name as task', DB::raw('SEC_TO_TIME(SUM(duration)) AS duration'))
+            ->groupBy('project', DB::raw('task with rollup'))
+            ->get();
+    }
+
+
+    /**
+     * This returns a ROLL UPed results set, sorted and grouped by Project, Task.
+     * Note that MySQL naturally sorts by the GROUP BY columns, in ASC order.
+     * 
+     */
+    public static function rollupByTask(CarbonImmutable $start, CarbonImmutable $end)
+    {
+        return self::join('projects', 'events.project_id', '=', 'projects.id')
+            ->join('tasks', 'events.task_id', '=', 'tasks.id')
+            ->where('events.user_id', '=', auth()->id())
+            ->whereBetween('events.event_date', [$start, $end])
+            ->select('tasks.name as task', 'projects.name as project', DB::raw('SEC_TO_TIME(SUM(duration)) AS duration'))
+            ->groupBy('task', DB::raw('project with rollup'))
+            ->get();
+    }
+
+
+
     // Accessor and Mutators
 
     // When creating an Event with no event_date, set it to now.
@@ -137,38 +177,38 @@ class Event extends Model
         return Carbon::parse($value)->format('H:i');
     }
 
-//    public function getDurationAttribute($value)
-//    {
-//        dd($value);
-//        // This is totally frustrating; neither carbonInterval nor
-//        // DateInterval do what's needed. So I'm rolling my own.
-//        // I'm also deeply dissatisfied with the fact that I'm bound
-//        // to the format 'HH:mm'. It shouldn't matter, but it's lame.
-//        //$di = new DateInterval('PT' . $value . 'S');
-//        //$carbonInterval = CarbonInterval::seconds($value);
-//        //$carbonInterval = CarbonInterval::instance($di);
-//        //return $carbonInterval;
-//
-//        if ($value) {
-//
-//            // extract hours
-//            $hours = floor($value / (60 * 60));
-//
-//            // extract minutes
-//            $divisor_for_minutes = $value % (60 * 60);
-//            $minutes = floor($divisor_for_minutes / 60);
-//
-//            return sprintf("%02d:%02d", $hours, $minutes);
-//        }
-//
-//        return $value;
-//    }
+    //    public function getDurationAttribute($value)
+    //    {
+    //        dd($value);
+    //        // This is totally frustrating; neither carbonInterval nor
+    //        // DateInterval do what's needed. So I'm rolling my own.
+    //        // I'm also deeply dissatisfied with the fact that I'm bound
+    //        // to the format 'HH:mm'. It shouldn't matter, but it's lame.
+    //        //$di = new DateInterval('PT' . $value . 'S');
+    //        //$carbonInterval = CarbonInterval::seconds($value);
+    //        //$carbonInterval = CarbonInterval::instance($di);
+    //        //return $carbonInterval;
+    //
+    //        if ($value) {
+    //
+    //            // extract hours
+    //            $hours = floor($value / (60 * 60));
+    //
+    //            // extract minutes
+    //            $divisor_for_minutes = $value % (60 * 60);
+    //            $minutes = floor($divisor_for_minutes / 60);
+    //
+    //            return sprintf("%02d:%02d", $hours, $minutes);
+    //        }
+    //
+    //        return $value;
+    //    }
 
-//    public function setDurationAttribute($value)
-//    {
+    //    public function setDurationAttribute($value)
+    //    {
     ////        dump($this);
     ////        dd($value);
-//    }
+    //    }
 
     //TODO I need some docs, please.
     public function setIso8601DurationAttribute($value)
@@ -191,7 +231,7 @@ class Event extends Model
             $dur = $this->attributes['iso_8601_duration'];
         }
 
-//        dd($dur);
+        //        dd($dur);
         return CarbonInterval::fromString($dur);
     }
 }
