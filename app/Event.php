@@ -100,7 +100,7 @@ class Event extends Model
             ->join('tasks', 'events.task_id', '=', 'tasks.id')
             ->where('events.user_id', '=', auth()->id())
             ->whereBetween('events.event_date', [$start, $end])
-            ->select('projects.name as project', 'tasks.name as task', DB::raw('SEC_TO_TIME(SUM(duration)) AS duration'))
+            ->select('projects.name as project', 'tasks.name as task', DB::raw('SUM(duration) AS duration'))
             ->groupBy('project', DB::raw('task with rollup'))
             ->get();
     }
@@ -117,7 +117,7 @@ class Event extends Model
             ->join('tasks', 'events.task_id', '=', 'tasks.id')
             ->where('events.user_id', '=', auth()->id())
             ->whereBetween('events.event_date', [$start, $end])
-            ->select('tasks.name as task', 'projects.name as project', DB::raw('SEC_TO_TIME(SUM(duration)) AS duration'))
+            ->select('tasks.name as task', 'projects.name as project', DB::raw('SUM(duration) AS duration'))
             ->groupBy('task', DB::raw('project with rollup'))
             ->get();
     }

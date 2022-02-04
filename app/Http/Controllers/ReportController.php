@@ -31,6 +31,7 @@ class ReportController extends Controller
 
     public function show(Request $request)
     {
+        dd($request->all());
 
         $group = $request->input('group-by', 'project');
         $range = $request->input('predefined-range', 'this-week');
@@ -109,40 +110,19 @@ class ReportController extends Controller
                         ->orderBy('tasks.name')
                         ->get();
                 }
-                // dd($range);
-                // We don't need either of these for this Report.
-                // $startTime = null;
-                // $endTime = null;
-                // $eventsCollection = Event::where(['user_id' => $request->user()->id])
-                // ->groupBy('project_id', 'id', 'task_id', 'user_id', 'time_start')
-                // ->orderBy('project_id')
-                // ->get();
                 break;
             default:
             case 'this-week':
                 $startTime = $now->startOfWeek();
                 $endTime = $now->endOfWeek();
-                // $eventsCollection = Event::whereBetween('event_date', [$startTime, $endTime])->with(['task', 'project'])->where(['user_id' => $request->user()->id])->get();
                 if ($group === 'project') {
                     $eventsCollection = Event::rollupByProject($startTime, $endTime);
                 } elseif ($group === 'task') {
-                    $eventsCollection = Event::where(['events.user_id' => $request->user()->id])
-                        ->groupBy(['events.task_id', 'tasks.name'])
-                        ->selectRaw('SUM(duration) as totalDuration, tasks.name')
-                        ->whereBetween('event_date', [$startTime, $endTime])
-                        ->join('tasks', 'events.task_id', '=', 'tasks.id')
-                        ->orderBy('tasks.name')
-                        ->get();
+                    $eventsCollection = Event::rollupByTask($startTime, $endTime);
                 }
                 break;
         }
 
-        // $events = new Event();
-        // dd($eventsCollection);
-        // $totalTime = $eventsCollection->sum('duration');
-        // dd($totalTime / (60 * 60));
-        // $eventsCollection = $eventsCollection->sortBy($groupArray)->groupBy($groupArray);
-        // dd($eventsCollection->first()->first()->count());
         return view('reports.show', ['events' => $eventsCollection, 'total' => $eventsCollection->last()->duration, 'group' => $groupDisplayArray, 'dates' => [$startTime, $endTime]]);
     }
 
