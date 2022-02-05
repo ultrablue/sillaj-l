@@ -15,35 +15,35 @@
                 $currentProject = null;
             @endphp
             @foreach ($events as $i => $row)
-                @if (($currentProject !== $row->project) && ($row->project != null))
+                @if ($currentProject !== $row->project && $row->project != null)
                     @php
                         $currentProject = $row->project;
                     @endphp
                     <tr class="border-b-2 border-gray-500">
-                        <th colspan="3" class="pt-5 text-left">$i:{{ $i }} Project: {{ $row->project }}</th>
+                        <th colspan="3" class="pt-5 text-left">Project: {{ $row->project }}</th>
                     </tr>
                 @endif
 
 
-                <tbody>
-                    @if (($row->task) && ($row->project))
+                @if ($row->task && $row->project)
                     {{-- Task Row --}}
-                        <tr>
-                            <td colspan="2" class="w-1/2 pl-5"><span class="">{{ $row->task }}</span></td>
-                            <td class="text-right">{{ Carbon\CarbonInterval::seconds($row->duration)->cascade()->format('%h:%I') }}</td>
-                        </tr>
+                    <tr>
+                        <td colspan="1" class="w-1/2 pl-5"><span class="">{{ $row->task }}</span></td>
+                        <td class="text-right">{{ Carbon\CarbonInterval::seconds($row->duration)->cascade()->format('%h:%I') }}</td>
+                        <td class="pl-5 text-right">{{ round(100*($row->duration/$events->last()->duration)) }}%</td>
+                    </tr>
                     @elseif (!$row->project && !$row->task)
-                        <tr class="bg-blue-300 border-t border-blue-900">
-                            <td colspan="2">Grand Total</td>
-                            <td class="text-right">{{ Carbon\CarbonInterval::seconds($row->duration)->cascade()->format('%h:%I') }}</td>
-                        </tr>
+                    <tr class="bg-blue-300 border-t border-blue-900">
+                        <td colspan="2">Grand Total</td>
+                        <td class="text-right">{{ Carbon\CarbonInterval::seconds($row->duration)->cascade()->format('%h:%I') }}</td>
+                    </tr>
                     @elseif ($row->project && !$row->task)
-                        <tr class="bg-blue-200 pb-5">
-                            <td colspan="2" class="pl-5">{{ $currentProject }} Total</td>
-                            <td class="text-right">{{ Carbon\CarbonInterval::seconds($row->duration)->cascade()->format('%h:%I') }}</td>
-                        </tr>
-                    @endif
-                </tbody>
+                    <tr class="bg-blue-200 pb-5">
+                        <td colspan="1" class="pl-5">{{ $currentProject }} Total</td>
+                        <td class="text-right">{{ Carbon\CarbonInterval::seconds($row->duration)->cascade()->format('%h:%I') }}</td>
+                        <td class="pl-5 text-right">{{ round(100*($row->duration/$events->last()->duration)) }}%</td>
+                    </tr>
+                @endif
 
             @endforeach
 
