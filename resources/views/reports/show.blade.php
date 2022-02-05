@@ -29,24 +29,24 @@
                     {{-- Task Row --}}
                     <tr>
                         <td colspan="1" class="w-1/2 pl-5"><span class="">{{ $row->task }}</span></td>
-                        <td class="text-right">{{ round(Carbon\CarbonInterval::seconds($row->duration)->cascade()->total('hours'),2) }}</td>
+                        <td class="text-right">{{ sprintf('%.2f', round(Carbon\CarbonInterval::seconds($row->duration)->cascade()->total('hours'),2)) }}</td>
                             {{-- {{ Carbon\CarbonInterval::seconds($row->duration)->cascade()->format('%h:%I') }} --}}
-                        <td class="pl-5 text-right">{{ round(100 * ($row->duration / $events->last()->duration)) }}%</td>
+                        <td class="pl-5 text-right">{{ sprintf('%.2f', round(100 * ($row->duration / $events->last()->duration),2)) }}%</td>
                     </tr>
                 @elseif (!$row->project && !$row->task)
                     {{-- Grand Total --}}
-                    <tr class="bg-blue-300 border-t border-blue-900">
+                    <tr class="bg-blue-300 border-t border-blue-900 text-2xl">
                         <td colspan="2">Grand Total</td>
-                        <td class="text-right">{{ round(Carbon\CarbonInterval::seconds($row->duration)->cascade()->total('hours'),2) }}</td>
+                        <td class="text-right">{{ sprintf('%.2f', round(Carbon\CarbonInterval::seconds($row->duration)->cascade()->total('hours'),2)) }}</td>
                             {{-- {{ Carbon\CarbonInterval::seconds($row->duration)->cascade()->format('%h:%I') }} --}}
                     </tr>
                 @elseif ($row->project && !$row->task)
                     {{-- Level 1 Total --}}
-                    <tr class="bg-blue-200 pb-5">
+                    <tr class="bg-blue-200 pb-5 font-bold">
                         <td colspan="1" class="pl-5">{{ $currentProject }} Total</td>
-                        <td class="text-right">{{ round(Carbon\CarbonInterval::seconds($row->duration)->cascade()->total('hours'),2) }}</td>
+                        <td class="text-right">{{ sprintf('%.2f', round(Carbon\CarbonInterval::seconds($row->duration)->cascade()->total('hours'),2)) }}</td>
                             {{-- {{ Carbon\CarbonInterval::seconds($row->duration)->cascade()->format('%h:%I') }} --}}
-                        <td class="pl-5 text-right">{{ round(100 * ($row->duration / $events->last()->duration)) }}%</td>
+                        <td class="pl-5 text-right">{{ sprintf('%.2f', round(100 * ($row->duration / $events->last()->duration),2)) }}%</td>
                     </tr>
                 @endif
 
