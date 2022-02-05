@@ -12,34 +12,35 @@
 
         <table class="table-auto font-mono mt-10">
             @php
-                $currentRow = null;
+                $currentProject = null;
             @endphp
-            @foreach ($events as $row)
-                @if ($currentRow !== $row->project)
-                    <tr class="border-b-2 border-black">
-                        <td colspan="3" class="pt-5">Project: {{ $row->project }}</td>
-                    </tr>
+            @foreach ($events as $i => $row)
+                @if (($currentProject !== $row->project) && ($row->project != null))
                     @php
-                        $currentRow = $row->project;
+                        $currentProject = $row->project;
                     @endphp
+                    <tr class="border-b-2 border-gray-500">
+                        <th colspan="3" class="pt-5 text-left">$i:{{ $i }} Project: {{ $row->project }}</th>
+                    </tr>
                 @endif
 
 
                 <tbody>
-                    @if ($row->task)
+                    @if (($row->task) && ($row->project))
+                    {{-- Task Row --}}
                         <tr>
                             <td colspan="2" class="w-1/2 pl-5"><span class="">{{ $row->task }}</span></td>
-                            <td class="text-right">{{ Carbon\CarbonInterval::seconds($row->duration)->cascade()->format('%h:%I')}}</td>
+                            <td class="text-right">{{ Carbon\CarbonInterval::seconds($row->duration)->cascade()->format('%h:%I') }}</td>
                         </tr>
                     @elseif (!$row->project && !$row->task)
-                        <tr class="bg-gray-400">
+                        <tr class="bg-blue-300 border-t border-blue-900">
                             <td colspan="2">Grand Total</td>
-                            <td class="text-right">{{ Carbon\CarbonInterval::seconds($row->duration)->cascade()->format('%h:%I')}}</td>
+                            <td class="text-right">{{ Carbon\CarbonInterval::seconds($row->duration)->cascade()->format('%h:%I') }}</td>
                         </tr>
-                    @else
-                        <tr class="bg-gray-200 pb-5">
-                            <td colspan="2" class="pl-5">Total</td>
-                            <td class="text-right">{{ Carbon\CarbonInterval::seconds($row->duration)->cascade()->format('%h:%I')}}</td>
+                    @elseif ($row->project && !$row->task)
+                        <tr class="bg-blue-200 pb-5">
+                            <td colspan="2" class="pl-5">{{ $currentProject }} Total</td>
+                            <td class="text-right">{{ Carbon\CarbonInterval::seconds($row->duration)->cascade()->format('%h:%I') }}</td>
                         </tr>
                     @endif
                 </tbody>
