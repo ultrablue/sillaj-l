@@ -1,18 +1,5 @@
 <?php
 
-/**
- * What needs to be displayed:
- *    The report's title. Something like this:
- *       Hours for [day: the date; week of [start and end], month of [month name], year to date [start(?) - end]], etc.
- *    The various Levels (by Project (Level 1) and Task (Level 2), by Task and Project)
- *       The percentage of the total for the Level.
- *    A graph of the percentages
- *       A pie chart seems like the best choice?
- *
- *  Report Date Ranges
- *      Custom/Any - any two dates.
- */
-
 namespace App\Http\Controllers;
 
 use App\Event as Event;
@@ -22,35 +9,49 @@ use Carbon\CarbonImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
+/**
+ * Handles all Report Generation.
+ */
 class ReportController extends Controller
 {
+
+
+    /**
+     * 
+     * The index Action. Displays a parameters form for the reports.
+     * 
+     * @param Request $request
+     * 
+     * @return View.
+     */
     public function index(Request $request)
     {
         return view('reports.index');
     }
 
+    /**
+     * 
+     * Handles creating Report data given the parameters selected in the paramters form.
+     * 
+     * @param Request $request
+     * 
+     * @return [type]
+     */
     public function show(Request $request)
     {
-        dd($request->all());
 
+        // Grouping, which can be by Project or by Task. Defaults to Project.
         $group = $request->input('group-by', 'project');
+        // The date range of the report. Defaults to this week.
         $range = $request->input('predefined-range', 'this-week');
 
-        /**
-         * The way I'm dealing with how the View knows how to display the grouping is pretty lazy.
-         * It's achieved in $groupDisplayArray, which is hard-coded here.
-         * There's probably a better way to do it. At some point, for example, when we implement
-         * a Clients group, it'll probably make sense to make it more dynamic.
-         */
-        $groupArray = [];
+        // The View uses this to properly group the output as well as to display a properly descriptive description in the Report View's header.
         $groupDisplayArray = [];
         switch ($group) {
             case 'project':
-                $groupArray = ['project.name', 'task.name'];
                 $groupDisplayArray = ['Project', 'Task'];
                 break;
             case 'task':
-                $groupArray = ['task.name', 'project.name'];
                 $groupDisplayArray = ['Task', 'Project'];
                 break;
         }
@@ -59,73 +60,51 @@ class ReportController extends Controller
          * This bit figures out the start datetime and end datetimes based on what was requested.
          */
 
-        // So far, we're only interested in ranges that are relative to today, so now will be used a few times.
+        // now will be used a few times.
         $now = new CarbonImmutable();
 
-        // this-week
-        // month-to-date
-        // year-to-date
-        // (all-time)
         switch ($range) {
             case 'month-to-date':
                 $startTime = $now->copy()->startOfMonth();
                 $endTime = $now;
-                // $eventsCollection = Event::whereBetween('event_date', [$startTime, $endTime])->with(['task', 'project'])->where(['user_id' => $request->user()->id])->get();
-                if ($group === 'project') {
-                    $eventsCollection = Event::where(['events.user_id' => $request->user()->id])
-                        ->groupBy(['events.project_id', 'projects.name'])
-                        ->selectRaw('SUM(duration) as totalDuration, projects.name')
-                        ->whereBetween('event_date', [$startTime, $endTime])
-                        ->join('projects', 'events.project_id', '=', 'projects.id')
-                        ->orderBy('projects.name')
-                        ->get();
-                } elseif ($group === 'task') {
-                    $eventsCollection = Event::where(['events.user_id' => $request->user()->id])
-                        ->groupBy(['events.task_id', 'tasks.name'])
-                        ->selectRaw('SUM(duration) as totalDuration, tasks.name')
-                        ->whereBetween('event_date', [$startTime, $endTime])
-                        ->join('tasks', 'events.task_id', '=', 'tasks.id')
-                        ->orderBy('tasks.name')
-                        ->get();
-                }
                 break;
             case 'year-to-date':
                 $startTime = $now->copy()->startOfYear();
                 $endTime = $now;
-                $eventsCollection = Event::whereBetween('event_date', [$startTime, $endTime])->with(['task', 'project'])->where(['user_id' => $request->user()->id])->get();
                 break;
             case 'all-time':
-                if ($group === 'project') {
-                    $eventsCollection = Event::where(['events.user_id' => $request->user()->id])
-                        ->groupBy(['events.project_id', 'projects.name'])
-                        ->selectRaw('SUM(duration) as totalDuration, projects.name')
-                        ->join('projects', 'events.project_id', '=', 'projects.id')
-                        ->orderBy('projects.name')
-                        ->get();
-                } elseif ($group === 'task') {
-                    $eventsCollection = Event::where(['events.user_id' => $request->user()->id])
-                        ->groupBy(['events.task_id', 'tasks.name'])
-                        ->selectRaw('SUM(duration) as totalDuration, tasks.name')
-                        ->join('tasks', 'events.task_id', '=', 'tasks.id')
-                        ->orderBy('tasks.name')
-                        ->get();
-                }
+                $startTime = new CarbonImmutable(Event::where('user_id', '=', auth()->user()->id)->min('event_date'));
+                $endTime = new CarbonImmutable(Event::where('user_id', '=', auth()->user()->id)->max('event_date'));
                 break;
-            default:
-            case 'this-week':
-                $startTime = $now->startOfWeek();
-                $endTime = $now->endOfWeek();
+            case 'custom':
+                // TODO Validate these!!!!
+                $startTime = new CarbonImmutable($request->start_date);
+                $endTime = new CarbonImmutable($request->end_date);
                 if ($group === 'project') {
                     $eventsCollection = Event::rollupByProject($startTime, $endTime);
                 } elseif ($group === 'task') {
                     $eventsCollection = Event::rollupByTask($startTime, $endTime);
                 }
                 break;
+            default:
+            case 'this-week':
+                $startTime = $now->startOfWeek();
+                $endTime = $now->endOfWeek();
+                break;
+        }
+
+        // Get the proper data. Note that the dataset is the result of ROLL UP in the query.
+        if ($group === 'project') {
+            $eventsCollection = Event::rollupByProject($startTime, $endTime);
+        } elseif ($group === 'task') {
+            // ddd($group);
+            $eventsCollection = Event::rollupByTask($startTime, $endTime);
         }
 
         return view('reports.show', ['events' => $eventsCollection, 'total' => $eventsCollection->last()->duration, 'group' => $groupDisplayArray, 'dates' => [$startTime, $endTime]]);
     }
 
+    // I think these ones are for the email reports?
     public function currentDayByProjectReport(Request $request)
     {
         // TODO 💥- Make some Tests please!!!!!
