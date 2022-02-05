@@ -114,14 +114,16 @@ class Event extends Model
      */
     public static function rollupByTask(CarbonImmutable $start, CarbonImmutable $end)
     {
-        return self::join('projects', 'events.project_id', '=', 'projects.id')
+        $records =  self::join('projects', 'events.project_id', '=', 'projects.id')
             ->join('tasks', 'events.task_id', '=', 'tasks.id')
             ->where('events.user_id', '=', auth()->id())
             ->where('events.duration', '>', 0)
             ->whereBetween('events.event_date', [$start, $end])
             ->select('tasks.name as task', 'projects.name as project', DB::raw('SUM(duration) AS duration'))
-            ->groupBy('task', DB::raw('project with rollup'))
-            ->get();
+            ->groupBy('task', DB::raw('project with rollup'));
+
+
+        return $records->get();
     }
 
 
