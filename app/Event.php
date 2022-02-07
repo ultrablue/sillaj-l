@@ -107,6 +107,33 @@ class Event extends Model
     }
 
 
+
+    /**
+     * This returns a ROLL UPed results set, sorted and grouped by Project, Task for a particular User.
+     * Note that MySQL naturally sorts by the GROUP BY columns, in ASC order.
+     * 
+     * TODO This shold be merged with rollupByProject() in some way. I was just too lazy to do it right this time.
+     */
+    public static function rollupByProjectForUser(CarbonImmutable $start, CarbonImmutable $end, User $user)
+    {
+        // dd($start->format('Y-m-d'), $end, $user->id);
+        // DB::enableQueryLog(); // Enable query log
+        $results = self::join('projects', 'events.project_id', '=', 'projects.id')
+            ->join('tasks', 'events.task_id', '=', 'tasks.id')
+            ->where('events.user_id', '=', $user->id)
+            ->where('events.duration', '>', 0)
+            // TODO Why do I have to format the date here, but I don't above????
+            ->whereBetween('events.event_date', [$start->format('Y-m-d'), $end->format('Y-m-d')])
+            ->select('projects.name as project', 'tasks.name as task', DB::raw('SUM(duration) AS duration'))
+            ->groupBy('project', DB::raw('task with rollup'))
+            ->get();
+
+        return $results;
+
+        // dd(DB::getQueryLog()); // Show results of log
+    }
+
+
     /**
      * This returns a ROLL UPed results set, sorted and grouped by Project, Task.
      * Note that MySQL naturally sorts by the GROUP BY columns, in ASC order.
