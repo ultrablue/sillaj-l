@@ -113,6 +113,7 @@ class Event extends Model
      * Note that MySQL naturally sorts by the GROUP BY columns, in ASC order.
      * 
      * TODO This shold be merged with rollupByProject() in some way. I was just too lazy to do it right this time.
+     * TODO You could try a scope here?
      */
     public static function rollupByProjectForUser(CarbonImmutable $start, CarbonImmutable $end, User $user)
     {

@@ -14,7 +14,7 @@ class Report extends Mailable
     public $events;
     public $group;
     public $total;
-    public $now;
+    public $startTime;
     public $reportHeader;
 
     /**
@@ -22,12 +22,12 @@ class Report extends Mailable
      *
      * @return void
      */
-    public function __construct($eventsCollection, $groupDisplayArray, $totalTime, $now, $reportHeader)
+    public function __construct($eventsCollection, $groupDisplayArray, $totalTime, $startTime, $reportHeader)
     {
         $this->events = $eventsCollection;
         $this->group = $groupDisplayArray;
         $this->total = $totalTime;
-        $this->now = $now;
+        $this->startTime = $startTime;
         $this->reportHeader = $reportHeader;
     }
 
@@ -40,7 +40,7 @@ class Report extends Mailable
     {
         // TODO add "from" info to .env, please.
         $this->from('noreply@ultraspace.com', 'Hours Emailer');
-        $this->subject('Daily Hours for '.$this->now->format('l F j, Y'));
+        $this->subject('Daily Hours for ' . $this->startTime->format('l F j, Y'));
         // $this->to(auth()->user()->email, auth()->user()->name);
         // dd('here '.__FILE__.':'.__LINE__);
         // Composes a plain text email.
