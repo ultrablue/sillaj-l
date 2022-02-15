@@ -64,6 +64,12 @@ class ReportDailyByProject extends Command
             $eventsCollection = Event::rollupByProjectForUser($startTime, $endTime, $user);
             // TODO count() doesn't count Events in the ROLL UP table.
 
+            // foreach ($eventsCollection->toArray() as $event) {
+            //     dump($event);
+            // }
+
+            // exit;
+
             $this->info($user->name . ' (id ' . $user->id . '): ' . $eventsCollection->count() .  ' Events');
 
             // If the current User doesn't have any Events, carry on, carry on.

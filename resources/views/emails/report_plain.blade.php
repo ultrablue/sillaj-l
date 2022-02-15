@@ -1,7 +1,9 @@
-@dd($startTime)
+{{-- @dd($startTime) --}}
 
 
-
+Hello. This is a test.
+.
+.
 @php
 $currentProject = null;
 @endphp
