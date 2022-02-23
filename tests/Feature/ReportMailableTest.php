@@ -23,7 +23,7 @@ class ReportMailableTest extends TestCase
     {
         // TODO This should probably make a User, and give it some Events.
         // Given an authenticated User;
-        $user = factory('App\User')->create();
+        $user = User::factory()->create();
         // A date;
         $date = CarbonImmutable::now();
         // A dummy Collection;

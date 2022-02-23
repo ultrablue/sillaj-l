@@ -4,9 +4,15 @@ namespace Tests\Unit;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-// use Tests\TestCase;
 
-use PHPUnit\Framework\TestCase;
+// use PHPUnit\Framework\TestCase;
+
+use Tests\TestCase;
+
+use app\User;
+use app\Event;
+use app\Project;
+use app\Task;
 
 class EventTest extends TestCase
 {
@@ -15,11 +21,11 @@ class EventTest extends TestCase
 
     public function setUp(): void
     {
-        parent:: setup();
-        $this->user = factory('App\User')->create();
-        $this->project = factory('App\Project')->create(['user_id' => $this->user->id]);
-        $this->task = factory('App\Task')->create(['user_id' => $this->user->id]);
-        $this->event = factory('App\Event')->create(['user_id' => $this->user->id, 'project_id' => $this->project->id, 'task_id' => $this->task->id]);
+        parent::setup();
+        $this->user = User::factory()->create();
+        $this->project = Project::factory()->create(['user_id' => $this->user->id]);
+        $this->task = Task::factory()->create(['user_id' => $this->user->id]);
+        $this->event = Event::factory()->create(['user_id' => $this->user->id, 'project_id' => $this->project->id, 'task_id' => $this->task->id]);
         //Event::factory()->make(['user_id' => 1, 'project_id'=>1, 'task_id' => 3])
     }
 
