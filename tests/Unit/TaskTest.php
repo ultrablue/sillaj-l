@@ -84,25 +84,25 @@ class TaskTest extends TestCase
      * Tests the allAvailable Scope.
      * It's not really finished because I think that the scope should belong to the User Model.
      * 
-     * @test
+     * @skip
      */
-    public function scope_all_available(){
+    public function scope_all_available()
+    {
 
         // We need a User...
         $user = User::factory()->create();
 
         // ... and a non-Shared Task...
         $privateTask = Task::factory()->create(['user_id' => $user->id, 'share' => FALSE]);
-        
+
         // ... and a Shared Task.
         $sharedTask = Task::factory()->create(['user_id' => $user->id, 'share' => TRUE]);
 
         // The scope call should return a Collection...
-        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $task->allAvailable);
+        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $sharedTask->allAvailable);
 
         // ... with 2 items.
-        
+
         // TODO We should probably have an inverse test as well (a User doesn't get another User's private Tasks)
     }
-
 }
