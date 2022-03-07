@@ -1,0 +1,27 @@
+INSERT INTO `ultraspa_000-sillaj-l-events-test`.test (task_id,
+    project_id,
+    user_id,
+    time_start,
+    time_end,
+    duration,
+    iso_8601_duration,
+    event_date,
+    note,
+    created_at,
+    updated_at,
+    deleted_at)
+SELECT
+    task_id,
+    project_id,
+    user_id,
+    time_start,
+    time_end,
+    duration,
+    iso_8601_duration,
+    event_date,
+    note,
+    created_at,
+    updated_at,
+    deleted_at
+FROM
+    `ultraspa_sillaj-l-001`.events
