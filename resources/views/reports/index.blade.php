@@ -48,6 +48,7 @@
             <fieldset class="border-2 rounded-md border-gray-300 border-solid p-2">
                 {{ Form::label('start_date', 'Start Date', ['class' => 'block text-gray-700 text-sm']) }}
                 {{ Form::text('start_date', session('start_date'), ['class' => 'text-field focus:outline-none focus:shadow-outline','placeholder' => 'yyyy-mm-dd']) }}
+                {{-- {{ Form::date('start_date', Carbon\Carbon::parse(session('start_date')), ['class' => 'text-field focus:outline-none focus:shadow-outline','placeholder' => 'yyyy-mm-dd']) }} --}}
                 <br>
                 {{ Form::label('end_date', 'End Date', ['class' => 'block text-gray-700 text-sm']) }}
                 {{ Form::text('end_date', session('end_date'), ['class' => 'text-field focus:outline-none focus:shadow-outline','placeholder' => 'yyyy-mm-dd']) }}
