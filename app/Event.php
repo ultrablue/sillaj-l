@@ -106,6 +106,24 @@ class Event extends Model
             ->get();
     }
 
+    // This is the first draft of a query that gets by a "Task Group." A Task Group is an array of Tasks that are grouped for some reason. For example, Leaves.
+    public static function filterByTaskGroup(CarbonImmutable $start, CarbonImmutable $end, array $group)
+    {
+        $result = self::join('tasks', 'events.task_id', '=', 'tasks.id')
+            ->where('events.user_id', '=', auth()->id())
+            ->where('events.duration', '>', 0)
+            ->whereIn('events.task_id', $group)
+            ->whereBetween('events.event_date', [$start, $end])
+            ->select(DB::raw('SUM(events.duration) AS duration'))
+            ->addSelect('tasks.name')
+            ->addSelect('events.event_date')
+            ->groupBy('events.event_date', 'events.task_id', 'tasks.name')
+            ->orderBy('events.event_date')
+            ->orderBy('events.task_id')
+            ->get();
+
+        return $result;
+    }
 
 
     /**
