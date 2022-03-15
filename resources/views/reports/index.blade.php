@@ -46,6 +46,10 @@
                 {{ Form::label('predefined-range-this-week', 'This week') }}
                 <br>
 
+                {{ Form::radio('predefined-range', 'previous-month', false, ['id' => 'predefined-range-pevious-month']) }}
+                {{ Form::label('predefined-range-previous-month', 'Last month') }}
+                <br>
+
                 {{ Form::radio('predefined-range', 'month-to-date', false, ['id' => 'predefined-range-month-to-date']) }}
                 {{ Form::label('predefined-range-month-to-date', 'Month to date') }}
                 <br>

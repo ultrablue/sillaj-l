@@ -67,6 +67,10 @@ class ReportController extends Controller
         $now = new CarbonImmutable();
 
         switch ($range) {
+            case 'previous-month':
+                $startTime = $now->startOfMonth()->subMonthsNoOverflow();
+                $endTime = $now->subMonthsNoOverflow()->endOfMonth();
+                break;
             case 'month-to-date':
                 $startTime = $now->copy()->startOfMonth();
                 $endTime = $now;
