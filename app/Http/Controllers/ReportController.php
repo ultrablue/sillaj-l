@@ -39,11 +39,14 @@ class ReportController extends Controller
      */
     public function show(Request $request)
     {
+        // ddd($request->all());
 
         // Grouping, which can be by Project or by Task. Defaults to Project.
         $group = $request->input('group-by', 'project');
         // The date range of the report. Defaults to this week.
         $range = $request->input('predefined-range', 'this-week');
+        // The Leave filter, if there is one. Defaults to null.
+        $filter = $request->input('filter-by', null);
 
         // The View uses this to properly group the output as well as to display a properly descriptive description in the Report View's header.
         $groupDisplayArray = [];
@@ -86,11 +89,19 @@ class ReportController extends Controller
                     $eventsCollection = Event::rollupByTask($startTime, $endTime);
                 }
                 break;
+            case 'last-week':
+                $startTime = $now->startOfWeek()->subDays(7);
+                $endTime = $startTime->endOfWeek();
+                break;
             default:
             case 'this-week':
                 $startTime = $now->startOfWeek();
                 $endTime = $now->endOfWeek();
                 break;
+        }
+
+
+        if ($filter) {
         }
 
         // Get the proper data. Note that the dataset is the result of ROLL UP in the query.

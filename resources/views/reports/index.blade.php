@@ -1,26 +1,47 @@
 @extends('layouts.app')
 
 @section('content')
-
     <h1 class="text-2xl">Reporting</h1>
 
     <div class="mt-10">
 
         {!! Form::open(['route' => 'reports-show', 'class' => 'w-full max-w-sm']) !!}
-        <fieldset class="border-2 rounded-md border-gray-300 border-solid p-2">
-            <legend class="pl-1 pr-5 ">Grouping</legend>
-            <div class="">
-                {{ Form::radio('group-by', 'project', true, ['id' => 'group-by-project']) }}
-                {{ Form::label('group-by-project', 'Project') }}
-                <br>
-                {{ Form::radio('group-by', 'task', false, ['id' => 'group-by-task']) }}
-                {{ Form::label('group-by-task', 'Task') }}
+        <div class="mt-1">
+            <fieldset class="border-2 rounded-md border-gray-300 border-solid p-2">
+                <legend class="pl-1 pr-5 ">Grouping</legend>
+                <div class="">
+                    {{ Form::radio('group-by', 'project', true, ['id' => 'group-by-project']) }}
+                    {{ Form::label('group-by-project', 'Project') }}
+                    <br>
+                    {{ Form::radio('group-by', 'task', false, ['id' => 'group-by-task']) }}
+                    {{ Form::label('group-by-task', 'Task') }}
 
-            </div>
-        </fieldset>
+                </div>
+            </fieldset>
+        </div>
+
+        <div class="mt-10">
+            <fieldset class="border-2 rounded-md border-gray-300 border-solid p-2">
+                <legend class="pl-1 pr-5">Task Group Filters</legend>
+                <div>
+                    {{ Form::radio('task-group-filter', '1', false) }}
+                    {{ Form::label('filter-by-leave', 'Leave') }}
+                    <br>
+                    {{ Form::radio('task-group-filter', 'none', false) }}
+                    {{ Form::label('filter-by-leave', 'None') }}
+                    <br>
+                    TODO: Add a way to CRUD these filter groups, please.
+                </div>
+            </fieldset>
+        </div>
+
         <div class="mt-10">
             <fieldset class="border-2 rounded-md border-gray-300 border-solid p-2">
                 <legend class="pl-1 pr-5 ">Report</legend>
+                {{ Form::radio('predefined-range','last-week',true,['id' => 'predefined-range-last-week']) }}
+                {{ Form::label('predefined-range-last-week', 'Last week') }}
+                <br>
+
                 {{ Form::radio('predefined-range', 'this-week', true, ['id' => 'predefined-range-this-week']) }}
                 {{ Form::label('predefined-range-this-week', 'This week') }}
                 <br>
@@ -60,6 +81,4 @@
             {{ Form::submit('Generate...', ['class' => 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded']) }}
         </div>
         {!! Form::close() !!}
-
-
     @endsection
