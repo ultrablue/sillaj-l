@@ -107,6 +107,7 @@ class Event extends Model
     }
 
     // This is the first draft of a query that gets by a "Task Group." A Task Group is an array of Tasks that are grouped for some reason. For example, Leaves.
+    // TODO Should this be in User?
     public static function filterByTaskGroup(CarbonImmutable $start, CarbonImmutable $end, array $group)
     {
         $result = self::join('tasks', 'events.task_id', '=', 'tasks.id')
@@ -117,7 +118,9 @@ class Event extends Model
             ->select(DB::raw('SUM(events.duration) AS duration'))
             ->addSelect('tasks.name')
             ->addSelect('events.event_date')
-            ->groupBy('events.event_date', 'events.task_id', 'tasks.name')
+            ->addSelect('events.time_start')
+            ->addSelect('events.time_end')
+            ->groupBy('events.task_id', 'tasks.name', 'events.event_date', 'events.time_start', 'events.time_end')
             ->orderBy('events.event_date')
             ->orderBy('events.task_id')
             ->get();
@@ -283,5 +286,24 @@ class Event extends Model
 
         //        dd($dur);
         return CarbonInterval::fromString($dur);
+    }
+
+
+    public function getTimeStartTimestampAttribute($value)
+    {
+        $timeStamp = $this->attributes['event_date'];
+        if ($this->attributes['time_start']) {
+            $timeStamp .= ' ' . $this->attributes['time_start'];
+        }
+        return new CarbonImmutable($timeStamp);
+    }
+
+    public function getTimeEndTimestampAttribute($value)
+    {
+        $timeStamp = $this->attributes['event_date'];
+        if ($this->attributes['time_end']) {
+            $timeStamp .= ' ' . $this->attributes['time_end'];
+        }
+        return new CarbonImmutable($timeStamp);
     }
 }
