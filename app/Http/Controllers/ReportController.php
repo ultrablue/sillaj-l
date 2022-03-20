@@ -108,7 +108,7 @@ class ReportController extends Controller
         // TODO There's got to be a better way of organizing all of the decisions based on the parameter settings.
         if ($filter) {
             // This is a superduper hack, waiting for the groups to be stored in the database.
-            $filterGroup[1] = [7, 8];
+            $filterGroup[1] = [71, 72];
             $eventsCollection = Event::filterByTaskGroup($startTime, $endTime, $filterGroup[$filter]);
             $groupedEvents = $eventsCollection->groupBy('name');
             // ddd($groupedEvents);
