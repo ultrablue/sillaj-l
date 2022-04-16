@@ -49,3 +49,6 @@ tags.*
 
 
 .phpunit.result.cache
+
+# Hosted site things
+error_log
