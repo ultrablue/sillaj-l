@@ -108,12 +108,11 @@ class ReportController extends Controller
         // TODO There's got to be a better way of organizing all of the decisions based on the parameter settings.
         if ($filter) {
             // This is a superduper hack, waiting for the groups to be stored in the database.
-            $filterGroup[1] = [71, 72];
+            // TODO Implement Filter Groups, please.
+            $filterGroup[1] = explode(',', env('FILTER_GROUP_LEAVE', ''));
             $eventsCollection = Event::filterByTaskGroup($startTime, $endTime, $filterGroup[$filter]);
             $groupedEvents = $eventsCollection->groupBy('name');
-            // ddd($groupedEvents);
             return view('reports.leave', ['events' => $eventsCollection->groupBy('name'), 'dates' => ['start' => $startTime, 'end' => $endTime]]);
-            // ddd($eventsCollection);
         } else {
             // Get the proper data. Note that the dataset is the result of ROLL UP in the query.
             if ($group === 'project') {
