@@ -1,4 +1,72 @@
-@foreach ($events as $firstLevel => $secondLevel)
+{{-- @dd($startTime) --}}
+
+
+Hello. This is a test.
+.
+.
+@php
+$currentProject = null;
+@endphp
+@foreach ($events as $i => $row)
+    @if ($currentProject !== $row[strtolower($group[0])] && $row[strtolower($group[0])] != null)
+        @php
+            $currentProject = $row[strtolower($group[0])];
+        @endphp
+        {{ $group[0] }}: {{ $row[strtolower($group[0])] }}
+    @endif
+
+
+    @if ($row[strtolower($group[0])] && $row[strtolower($group[1])])
+        {{-- Level 2 Row --}}
+        {{ $row[strtolower($group[1])] }} {{ sprintf('%.2f',round(Carbon\CarbonInterval::seconds($row->duration)->cascade()->total('hours'),2)) }}
+        {{ sprintf('%.2f', round(100 * ($row->duration / $events->last()->duration), 2)) }}%
+    @elseif (!$row[strtolower($group[0])] && !$row[strtolower($group[1])])
+        {{-- Grand Total --}}
+        Grand Total {{ sprintf('%.2f',round(Carbon\CarbonInterval::seconds($row->duration)->cascade()->total('hours'),2)) }}
+    @elseif ($row[strtolower($group[0])] && !$row[strtolower($group[1])])
+        {{-- Level 1 Total --}}
+        {{ $currentProject }} Total {{ sprintf('%.2f',round(Carbon\CarbonInterval::seconds($row->duration)->cascade()->total('hours'),2)) }}
+        {{ sprintf('%.2f', round(100 * ($row->duration / $events->last()->duration), 2)) }}%
+    @endif
+
+@endforeach
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{{-- @foreach ($events as $firstLevel => $secondLevel)
     {{ $group[0] }}: {{ $firstLevel }}
     {{ $group[1] }}
 
@@ -17,4 +85,4 @@
 
 Grand Total
 {{-- {{ vsprintf('%2d:%02d', decimalToHms(round($total / 3600, 2))) }} --}}
-{{ sprintf('%01.2f', round($total / 3600, 2)) }}
+{{-- {{ sprintf('%01.2f', round($total / 3600, 2)) }} --}} --}}

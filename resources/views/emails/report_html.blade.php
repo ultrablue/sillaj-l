@@ -1,58 +1,52 @@
 {{-- <x-email.report/> --}}
 
 
-<table style="width:auto; margin:3em; border-collapse: collapse; font-family: Verdana, Geneva, Tahoma, sans-serif;">
-    <thead>
-        <tr>
-            <th colspan="2" style="font-size:1.5em;">
-                {{ $reportHeader }}
-            </th>
-        </tr>
-    </thead>
-    @foreach ($events as $firstLevel => $secondLevel)
-        <tr>
-            <td style="border:0px solid black; padding-top:1em; padding-bottom:.5em; background-color: white; text-align:left; vertical-align: top; font-weight: bold; font-size:1.25em;" colspan="2">
-                {{ $group[0] }}:
-                {{ $firstLevel }}</td>
-        </tr>
-        <tr>
-            <td colspan="1" style=" padding-left: 1em; font-weight: bold; padding-bottom:.5em;"> {{ $group[1] }}</td>
-            <td style="font-weight: bold; padding-bottom:.5em;">Time</td>
-        </tr>
-        @foreach ($secondLevel as $secondLevelElement => $descriptions)
+
+<h1>{{ $group[1] }} by {{ $group[0] }}</h1>
+<h2>{{ $startTime->format('l F jS, Y') }} through {{ $startTime->format('l F jS, Y') }}</h2>
+
+<hr>
+
+<table>
+    @php
+        $currentProject = null;
+    @endphp
+    @foreach ($events as $i => $row)
+        @if ($currentProject !== $row[strtolower($group[0])] && $row[strtolower($group[0])] != null)
+            @php
+                $currentProject = $row[strtolower($group[0])];
+            @endphp
             <tr>
-                <td style="padding-left: 1.75em;">{{ $secondLevelElement }}</td>
-                <td>{{ sprintf('%01.2f', round($descriptions->sum('duration') / (60 * 60), 2)) }}</td>
+                <th colspan="3">{{ $group[0] }}: {{ $row[strtolower($group[0])] }}</th>
             </tr>
-        @endforeach
-        <tr>
-            <td style="padding-top:.5em; padding-bottom: .75em;  margin-bottom: 2em; padding-left: 1em; border-bottom:2px solid black; border-top:1px solid black; ">
-                {{ $group[0] }} Total:
-            </td>
-            <td style="padding-top:.5em; padding-bottom: .75em; margin-bottom: 0em; border-bottom:2px solid black;  border-top:1px solid black; border-collapse: collapse">
-                {{ sprintf(
-    '%01.2f',
-    round(
-        $secondLevel->pluck('*.duration')->flatten()->sum() / 3600,
-        2,
-    ),
-) }}
-                {{-- Urg, this is lame. It calculates (😥) and prints prints the percentage of time spent on the Task or Project. It needs to be cleaned up. Badly. --}}
-                {{ sprintf(
-    '(%01.0f%%)',
-    (round(
-        $secondLevel->pluck('*.duration')->flatten()->sum() / 3600,
-        2,
-    ) /
-        round($total / 3600, 2)) *
-        100,
-) }}
-            </td>
-        </tr>
+        @endif
+
+
+        @if ($row[strtolower($group[0])] && $row[strtolower($group[1])])
+            {{-- Level 2 Row --}}
+            <tr>
+                <td colspan="1">{{ $row[strtolower($group[1])] }}</td>
+                <td>{{ sprintf('%.2f',round(Carbon\CarbonInterval::seconds($row->duration)->cascade()->total('hours'),2)) }}</td>
+                {{-- {{ Carbon\CarbonInterval::seconds($row->duration)->cascade()->format('%h:%I') }} --}}
+                <td>{{ sprintf('%.0f%%', (100 * ($row->duration / $events->last()->duration))) }}</td>
+            </tr>
+        @elseif (!$row[strtolower($group[0])] && !$row[strtolower($group[1])])
+            {{-- Grand Total --}}
+            <tr>
+                <td colspan="1">Grand Total</td>
+                <td>{{ sprintf('%.2f',round(Carbon\CarbonInterval::seconds($row->duration)->cascade()->total('hours'),2)) }}</td>
+                <td></td>
+            </tr>
+        @elseif ($row[strtolower($group[0])] && !$row[strtolower($group[1])])
+            {{-- Level 1 Total --}}
+            <tr>
+                <td colspan="1">{{ $currentProject }} Total</td>
+                <td>{{ sprintf('%.2f',round(Carbon\CarbonInterval::seconds($row->duration)->cascade()->total('hours'),2)) }}</td>
+                {{-- {{ Carbon\CarbonInterval::seconds($row->duration)->cascade()->format('%h:%I') }} --}}
+                <td>{{ sprintf('%.0f%%', (100 * ($row->duration / $events->last()->duration))) }}</td>
+            </tr>
+        @endif
+
     @endforeach
-    <tr style="font-size: 1.25em; background-color: lightgreen;">
-        <td style="padding-top: .5em; padding-bottom: .5em;  padding-left:.5em;">Grand Total</td>
-        {{-- {{ vsprintf('%2d:%02d', decimalToHms(round($total / 3600, 2))) }} --}}
-        <td style="padding-top: .5em;  padding-bottom: .5em;">{{ sprintf('%01.2f', round($total / 3600, 2)) }}</td>
-    </tr>
+
 </table>

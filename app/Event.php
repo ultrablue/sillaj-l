@@ -10,6 +10,8 @@ use DateInterval;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class Event extends Model
 {
@@ -17,8 +19,10 @@ class Event extends Model
     use SoftDeletes;
     use HasFactory;
 
-    protected $fillable = ['task_id', 'project_id', 'time_start', 'time_end', 'duration',
-        'iso_8601_duration', 'event_date', 'note', ];
+    protected $fillable = [
+        'task_id', 'project_id', 'time_start', 'time_end', 'duration',
+        'iso_8601_duration', 'event_date', 'note',
+    ];
 
     // These will automatically be turned into Carbon Dates by the framework.
     protected $dates = ['event_date', 'created_at', 'updated_at'];
@@ -84,6 +88,95 @@ class Event extends Model
         return $eventsCollection;
     }
 
+
+    /**
+     * This returns a ROLL UPed results set, sorted and grouped by Project, Task.
+     * Note that MySQL naturally sorts by the GROUP BY columns, in ASC order.
+     * 
+     */
+    public static function rollupByProject(CarbonImmutable $start, CarbonImmutable $end)
+    {
+        return self::join('projects', 'events.project_id', '=', 'projects.id')
+            ->join('tasks', 'events.task_id', '=', 'tasks.id')
+            ->where('events.user_id', '=', auth()->id())
+            ->where('events.duration', '>', 0)
+            ->whereBetween('events.event_date', [$start, $end])
+            ->select('projects.name as project', 'tasks.name as task', DB::raw('SUM(duration) AS duration'))
+            ->groupBy('project', DB::raw('task with rollup'))
+            ->get();
+    }
+
+    // This is the first draft of a query that gets by a "Task Group." A Task Group is an array of Tasks that are grouped for some reason. For example, Leaves.
+    // TODO Should this be in User?
+    public static function filterByTaskGroup(CarbonImmutable $start, CarbonImmutable $end, array $group)
+    {
+        $result = self::join('tasks', 'events.task_id', '=', 'tasks.id')
+            ->where('events.user_id', '=', auth()->id())
+            ->where('events.duration', '>', 0)
+            ->whereIn('events.task_id', $group)
+            ->whereBetween('events.event_date', [$start, $end])
+            ->select(DB::raw('SUM(events.duration) AS duration'))
+            ->addSelect('tasks.name')
+            ->addSelect('events.event_date')
+            ->addSelect('events.time_start')
+            ->addSelect('events.time_end')
+            ->groupBy('events.task_id', 'tasks.name', 'events.event_date', 'events.time_start', 'events.time_end')
+            ->orderBy('events.event_date')
+            ->orderBy('events.task_id')
+            ->get();
+
+        return $result;
+    }
+
+
+    /**
+     * This returns a ROLL UPed results set, sorted and grouped by Project, Task for a particular User.
+     * Note that MySQL naturally sorts by the GROUP BY columns, in ASC order.
+     * 
+     * TODO This shold be merged with rollupByProject() in some way. I was just too lazy to do it right this time.
+     * TODO You could try a scope here?
+     */
+    public static function rollupByProjectForUser(CarbonImmutable $start, CarbonImmutable $end, User $user)
+    {
+        // dd($start->format('Y-m-d'), $end, $user->id);
+        // DB::enableQueryLog(); // Enable query log
+        $results = self::join('projects', 'events.project_id', '=', 'projects.id')
+            ->join('tasks', 'events.task_id', '=', 'tasks.id')
+            ->where('events.user_id', '=', $user->id)
+            ->where('events.duration', '>', 0)
+            // TODO Why do I have to format the date here, but I don't above????
+            ->whereBetween('events.event_date', [$start->format('Y-m-d'), $end->format('Y-m-d')])
+            ->select('projects.name as project', 'tasks.name as task', DB::raw('SUM(duration) AS duration'))
+            ->groupBy('project', DB::raw('task with rollup'))
+            ->get();
+
+        return $results;
+
+        // dd(DB::getQueryLog()); // Show results of log
+    }
+
+
+    /**
+     * This returns a ROLL UPed results set, sorted and grouped by Project, Task.
+     * Note that MySQL naturally sorts by the GROUP BY columns, in ASC order.
+     * 
+     */
+    public static function rollupByTask(CarbonImmutable $start, CarbonImmutable $end)
+    {
+        $records =  self::join('projects', 'events.project_id', '=', 'projects.id')
+            ->join('tasks', 'events.task_id', '=', 'tasks.id')
+            ->where('events.user_id', '=', auth()->id())
+            ->where('events.duration', '>', 0)
+            ->whereBetween('events.event_date', [$start, $end])
+            ->select('tasks.name as task', 'projects.name as project', DB::raw('SUM(duration) AS duration'))
+            ->groupBy('task', DB::raw('project with rollup'));
+
+
+        return $records->get();
+    }
+
+
+
     // Accessor and Mutators
 
     // When creating an Event with no event_date, set it to now.
@@ -137,38 +230,38 @@ class Event extends Model
         return Carbon::parse($value)->format('H:i');
     }
 
-//    public function getDurationAttribute($value)
-//    {
-//        dd($value);
-//        // This is totally frustrating; neither carbonInterval nor
-//        // DateInterval do what's needed. So I'm rolling my own.
-//        // I'm also deeply dissatisfied with the fact that I'm bound
-//        // to the format 'HH:mm'. It shouldn't matter, but it's lame.
-//        //$di = new DateInterval('PT' . $value . 'S');
-//        //$carbonInterval = CarbonInterval::seconds($value);
-//        //$carbonInterval = CarbonInterval::instance($di);
-//        //return $carbonInterval;
-//
-//        if ($value) {
-//
-//            // extract hours
-//            $hours = floor($value / (60 * 60));
-//
-//            // extract minutes
-//            $divisor_for_minutes = $value % (60 * 60);
-//            $minutes = floor($divisor_for_minutes / 60);
-//
-//            return sprintf("%02d:%02d", $hours, $minutes);
-//        }
-//
-//        return $value;
-//    }
+    //    public function getDurationAttribute($value)
+    //    {
+    //        dd($value);
+    //        // This is totally frustrating; neither carbonInterval nor
+    //        // DateInterval do what's needed. So I'm rolling my own.
+    //        // I'm also deeply dissatisfied with the fact that I'm bound
+    //        // to the format 'HH:mm'. It shouldn't matter, but it's lame.
+    //        //$di = new DateInterval('PT' . $value . 'S');
+    //        //$carbonInterval = CarbonInterval::seconds($value);
+    //        //$carbonInterval = CarbonInterval::instance($di);
+    //        //return $carbonInterval;
+    //
+    //        if ($value) {
+    //
+    //            // extract hours
+    //            $hours = floor($value / (60 * 60));
+    //
+    //            // extract minutes
+    //            $divisor_for_minutes = $value % (60 * 60);
+    //            $minutes = floor($divisor_for_minutes / 60);
+    //
+    //            return sprintf("%02d:%02d", $hours, $minutes);
+    //        }
+    //
+    //        return $value;
+    //    }
 
-//    public function setDurationAttribute($value)
-//    {
+    //    public function setDurationAttribute($value)
+    //    {
     ////        dump($this);
     ////        dd($value);
-//    }
+    //    }
 
     //TODO I need some docs, please.
     public function setIso8601DurationAttribute($value)
@@ -191,7 +284,26 @@ class Event extends Model
             $dur = $this->attributes['iso_8601_duration'];
         }
 
-//        dd($dur);
+        //        dd($dur);
         return CarbonInterval::fromString($dur);
+    }
+
+
+    public function getTimeStartTimestampAttribute($value)
+    {
+        $timeStamp = $this->attributes['event_date'];
+        if ($this->attributes['time_start']) {
+            $timeStamp .= ' ' . $this->attributes['time_start'];
+        }
+        return new CarbonImmutable($timeStamp);
+    }
+
+    public function getTimeEndTimestampAttribute($value)
+    {
+        $timeStamp = $this->attributes['event_date'];
+        if ($this->attributes['time_end']) {
+            $timeStamp .= ' ' . $this->attributes['time_end'];
+        }
+        return new CarbonImmutable($timeStamp);
     }
 }
