@@ -86,23 +86,24 @@ class TaskTest extends TestCase
      * 
      * @test
      */
-    public function scope_all_available(){
+    public function scope_all_available()
+    {
 
+        $this->markTestSkipped("This one isn't finished. See https://github.com/ultrablue/sillaj-l/issues/199");
         // We need a User...
         $user = User::factory()->create();
 
         // ... and a non-Shared Task...
         $privateTask = Task::factory()->create(['user_id' => $user->id, 'share' => FALSE]);
-        
+
         // ... and a Shared Task.
         $sharedTask = Task::factory()->create(['user_id' => $user->id, 'share' => TRUE]);
 
         // The scope call should return a Collection...
-        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $task->allAvailable);
+        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', Task::allAvailable());
 
         // ... with 2 items.
-        
+
         // TODO We should probably have an inverse test as well (a User doesn't get another User's private Tasks)
     }
-
 }
