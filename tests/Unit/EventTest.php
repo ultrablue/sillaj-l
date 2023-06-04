@@ -36,7 +36,7 @@ class EventTest extends TestCase
     /** @test */
     public function an_event_has_an_owner()
     {
-        // Testing the Model's owner() method.
+        // Testing the Model's owner() method, please.
         $this->assertInstanceOf('App\User', $this->event->owner);
     }
 
