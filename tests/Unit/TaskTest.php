@@ -89,6 +89,7 @@ class TaskTest extends TestCase
     public function scope_all_available()
     {
 
+        $this->markTestSkipped("This one isn't finished. See https://github.com/ultrablue/sillaj-l/issues/199");
         // We need a User...
         $user = User::factory()->create();
 
@@ -99,7 +100,7 @@ class TaskTest extends TestCase
         $sharedTask = Task::factory()->create(['user_id' => $user->id, 'share' => TRUE]);
 
         // The scope call should return a Collection...
-        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $sharedTask->allAvailable);
+        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', Task::allAvailable());
 
         // ... with 2 items.
 
