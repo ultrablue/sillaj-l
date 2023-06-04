@@ -13,6 +13,7 @@ use App\Event;
 
 class EventTest extends TestCase
 {
+
     use DatabaseMigrations;
     use RefreshDatabase;
     protected $user;
