@@ -15,7 +15,7 @@ class TaskTest extends TestCase
     use RefreshDatabase;
 
     /**
-     * Make sure that the table exists, please.
+     * Make sure that the table exists.
      *  @test 
      * 
      */
