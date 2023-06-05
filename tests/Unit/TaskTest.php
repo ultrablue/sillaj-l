@@ -87,7 +87,7 @@ class TaskTest extends TestCase
      * Tests the allAvailable Scope.
      * It's not really finished because I think that the scope should belong to the User Model.
      * 
-     * @skip
+     * @test
      */
     public function scope_all_available()
     {
