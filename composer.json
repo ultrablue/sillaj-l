@@ -12,7 +12,6 @@
         "doctrine/dbal": "^3.0",
         "spatie/laravel-ignition": "^2.0",
         "fideloper/proxy": "^4.0",
-        "fzaninotto/faker": "^1.9",
         "laravel/framework": "^10.0",
         "laravel/helpers": "^1.1",
         "laravel/legacy-factories": "^1.1",
