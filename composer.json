@@ -15,7 +15,7 @@
         "laravel/helpers": "^1.1",
         "laravel/legacy-factories": "^1.1",
         "laravel/tinker": "^2.0",
-        "laravel/ui": "^3.0",
+        "laravel/ui": "^3.4",
         "laravelcollective/html": "^6.0",
         "solution10/calendar": "^1.3"
     },
