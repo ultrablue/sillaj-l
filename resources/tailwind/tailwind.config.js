@@ -1,4 +1,13 @@
 module.exports = {
+
+
+    content: [
+        "./resources/**/*.blade.php",
+        "./resources/**/*.js",
+        "./resources/**/*.vue",
+    ],
+
+
     theme: {
         extend: {
             width: {
@@ -11,6 +20,5 @@ module.exports = {
             }
         }
     },
-    variants: {},
     plugins: []
 }
