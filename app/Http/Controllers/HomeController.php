@@ -48,34 +48,35 @@ class HomeController extends Controller
         $viewData = $calendar->viewData();
         // Calendar always returns an array of Months, but we just need one, so let's just get the first element of the array.
         $month = $viewData['contents'][0];
+        // dd($month->weeks()[0]->days()[1]->date()->format('Y-m-d'));
         //dd($calendar);
 
         $previousMonth = $searchForDate->copy()->subMonth()->startOfMonth();
         $nextMonth = $searchForDate->copy()->addMonth()->startOfMonth();
 
-//        dd($searchForDate);
+        // dd($searchForDate);
         $thisDaysEvents = Event::where(['user_id' => $request->user()->id])->whereDate('event_date', $searchForDate->toDateString())->orderBy('time_start')->get();
 
-//        dd($thisDaysEvents);
+        //dd($thisDaysEvents);
 
         $justDurations = $thisDaysEvents->pluck('iso_8601_duration');
 
         $totalDuration = new CarbonInterval(0);
-//        dump($totalDuration);
+        //        dump($totalDuration);
         foreach ($justDurations as $duration) {
             $totalDuration = $totalDuration->add($duration);
         }
-//        dump($justDurations);
+        //dump($justDurations);
 
-//        dd($totalDuration->cascade()->format('%H %I'));
+        //dd($totalDuration->cascade()->format('%H %I'));
 
         // Please comment this!! It's crazy.
         $thisMonthsEvents = Event::whereMonth('event_date', $searchForDate->month)->whereYear('event_date', $searchForDate->year)->select('event_date')->distinct()->orderBy('event_date')->pluck('event_date');
-        //dd($thisMonthsEvents);
+        //dd($thisMonthsEvents->contains('2023-06-01'));
 
         // We'll need a list of Projects
         $projects = Project::allAvailable()->orderBy('name')->get();
-        // dd($projects);
+        //dd($projects);
 
         // And a list of Tasks.
         $tasks = Task::allAvailable()->orderBy('name')->get();
