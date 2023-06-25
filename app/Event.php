@@ -7,6 +7,7 @@ use Carbon\CarbonImmutable;
 use Carbon\CarbonInterval;
 use Collective\Html\Eloquent\FormAccessible;
 use DateInterval;
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -179,7 +180,16 @@ class Event extends Model
     // TODO It looks like the join to get the project name happens fairly often. 
     // TODO Could the join to Projects be relation? Should it?
     // TODO I wonder why I have the join first in the other methods? It seems to make more sense to have the query builder methods sort of like SQL?
-    public static function totalProjectTimeBetweenTwoDates(CarbonImmutable $start, CarbonImmutable $end)
+    /**
+     * Returns a simple Collection that tallies the total Duration for all Projects related to the Events between two dates.
+     * 
+     * This is used for Reports, where displaying the total effort expended on a Project worked on during the time between two dates is very useful.
+     *
+     * @param CarbonImmutable $start
+     * @param CarbonImmutable $end
+     * @return Collection
+     */
+    public static function totalProjectTimeBetweenTwoDates(CarbonImmutable $start, CarbonImmutable $end): Collection
     {
 
         $query = DB::table('events as e')
