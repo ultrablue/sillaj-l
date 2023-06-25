@@ -2,29 +2,30 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use Carbon\CarbonImmutable;
-
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-
-use App\User;
+use App\Event;
 use App\Project;
 use App\Task;
-use App\Event;
-
+use App\User;
+use Carbon\CarbonImmutable;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class ReportsTest extends TestCase
 {
-
     use DatabaseMigrations;
     use RefreshDatabase;
 
-
     protected $user;
-    protected $projectA, $projectB;
-    protected $taskA, $taskB;
+
+    protected $projectA;
+
+    protected $projectB;
+
+    protected $taskA;
+
+    protected $taskB;
+
     protected $events;
 
     public function setUp(): void
@@ -32,20 +33,19 @@ class ReportsTest extends TestCase
         parent::setUp();
 
         // Make a User.
-        $this->user = User::create(["name" => "Report Tester1", "email" => "reportester1@test.com", "password" => "password"]);
+        $this->user = User::create(['name' => 'Report Tester1', 'email' => 'reportester1@test.com', 'password' => 'password']);
 
         // Create two Projects
         // Project A
         // Project B
-        $this->projectA = Project::factory()->create(['user_id' => $this->user->id, "name" => "Test Project A", "description" => "Test Project A", "display" => true, "share" => false, "use_in_reports" => true]);
-        $this->projectB = Project::factory()->create(['user_id' => $this->user->id, "name" => "Test Project B", "description" => "Test Project B", "display" => true, "share" => false, "use_in_reports" => true]);
+        $this->projectA = Project::factory()->create(['user_id' => $this->user->id, 'name' => 'Test Project A', 'description' => 'Test Project A', 'display' => true, 'share' => false, 'use_in_reports' => true]);
+        $this->projectB = Project::factory()->create(['user_id' => $this->user->id, 'name' => 'Test Project B', 'description' => 'Test Project B', 'display' => true, 'share' => false, 'use_in_reports' => true]);
 
         // Create two Tasks.
         // Task A
         // Task B
-        $this->taskA = Task::factory()->create(['user_id' => $this->user->id, "name" => "Test Task A", "description" => "Test Task A", "display" => true, "share" => false, "use_in_reports" => true]);
-        $this->taskB = Task::factory()->create(['user_id' => $this->user->id, "name" => "Test Task B", "description" => "Test Task B", "display" => true, "share" => false, "use_in_reports" => true]);
-
+        $this->taskA = Task::factory()->create(['user_id' => $this->user->id, 'name' => 'Test Task A', 'description' => 'Test Task A', 'display' => true, 'share' => false, 'use_in_reports' => true]);
+        $this->taskB = Task::factory()->create(['user_id' => $this->user->id, 'name' => 'Test Task B', 'description' => 'Test Task B', 'display' => true, 'share' => false, 'use_in_reports' => true]);
 
         // TODO do I need to store these in variables or can I just evoke the Factory?
         $this->events = [];
@@ -89,9 +89,6 @@ class ReportsTest extends TestCase
         $response->assertStatus(200);
     }
 
-
-
-
     /** This tests the query that gets the total time for a Project. I guess that's a Feature? */
     public function test_total_project_time_between_two_dates_returns_correct_data(): void
     {
@@ -109,5 +106,15 @@ class ReportsTest extends TestCase
         //    Project B - 7.25 hours (26100 seconds)
         $this->assertEquals(27000, $results[0]->total_duration);
         $this->assertEquals(26100, $results[1]->total_duration);
+    }
+
+    public function test_some_reports_show_the_total_time_for_fetched_projects(): void
+    {
+        $this->markTestSkipped('We can\'t test MySQL ROLL UP in sqlite. 😿');
+        $this->actingAs($this->user);
+
+        $response = $this->post('/reports', []);
+
+        $response->assertStatus(200);
     }
 }
