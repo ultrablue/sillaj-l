@@ -182,11 +182,14 @@ class Event extends Model
     // TODO The variable shouldn't be called $records. It doesn't have records until it's actually sent to the database. 
     // TODO Will it ever return any other User's records? If not, can that be hidden away?
     // TODO Can I use auth()->user (or whatever it is) if the Test is using ActingAs()?
-    public static function totalProjectTimeBetweenTwoDates($userId, CarbonImmutable $start, CarbonImmutable $end)
+    public static function totalProjectTimeBetweenTwoDates(CarbonImmutable $start, CarbonImmutable $end)
     {
+
+        // dd(auth());
+
         $records = DB::table('events as e')
             ->leftJoin('projects', 'e.project_id', '=', 'projects.id')
-            ->where('e.user_id', '=', $userId)
+            ->where('e.user_id', '=', auth()->id())
             ->whereBetween('e.event_date', [$start, $end])
             ->select('project_id', 'projects.name')
             ->addSelect(DB::raw('(SELECT SUM(duration) FROM events WHERE project_id = e.project_id) AS total_duration'))

@@ -95,10 +95,11 @@ class ReportsTest extends TestCase
     /** This tests the query that gets the total time for a Project. I guess that's a Feature? */
     public function test_total_project_time_between_two_dates_returns_correct_data(): void
     {
+        $this->actingAs($this->user);
 
         // Evoke Event::totalProjectTimeBetweenTwoDates($userId, $start, $end)
         // The start and end times are important. Don't change them unless you also change the data.
-        $results = Event::totalProjectTimeBetweenTwoDates($this->user->id, new CarbonImmutable('2000-03-01'), new CarbonImmutable('2000-03-30'));
+        $results = Event::totalProjectTimeBetweenTwoDates(new CarbonImmutable('2000-03-01'), new CarbonImmutable('2000-03-30'));
 
         // $results should have 2 objects, a total duration for each Project (Project A and Project B).
         $this->assertEquals(2, $results->count());
