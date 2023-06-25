@@ -179,13 +179,8 @@ class Event extends Model
     // TODO It looks like the join to get the project name happens fairly often. 
     // TODO Could the join to Projects be relation? Should it?
     // TODO I wonder why I have the join first in the other methods? It seems to make more sense to have the query builder methods sort of like SQL?
-    // TODO The variable shouldn't be called $records. It doesn't have records until it's actually sent to the database. 
-    // TODO Will it ever return any other User's records? If not, can that be hidden away?
-    // TODO Can I use auth()->user (or whatever it is) if the Test is using ActingAs()?
     public static function totalProjectTimeBetweenTwoDates(CarbonImmutable $start, CarbonImmutable $end)
     {
-
-        // dd(auth());
 
         $query = DB::table('events as e')
             ->leftJoin('projects', 'e.project_id', '=', 'projects.id')
@@ -195,9 +190,6 @@ class Event extends Model
             ->addSelect(DB::raw('(SELECT SUM(duration) FROM events WHERE project_id = e.project_id) AS total_duration'))
             ->groupBy('project_id')
             ->orderBy('projects.name');
-
-        // dd($query->toSql());
-        // dd(Event::where('user_id', '=', $userId)->whereBetween('events.event_date', [$start, $end])->count());
 
         return $query->get();
     }
