@@ -187,7 +187,7 @@ class Event extends Model
 
         // dd(auth());
 
-        $records = DB::table('events as e')
+        $query = DB::table('events as e')
             ->leftJoin('projects', 'e.project_id', '=', 'projects.id')
             ->where('e.user_id', '=', auth()->id())
             ->whereBetween('e.event_date', [$start, $end])
@@ -196,10 +196,10 @@ class Event extends Model
             ->groupBy('project_id')
             ->orderBy('projects.name');
 
-        // dd($records->toSql());
+        // dd($query->toSql());
         // dd(Event::where('user_id', '=', $userId)->whereBetween('events.event_date', [$start, $end])->count());
 
-        return $records->get();
+        return $query->get();
     }
 
 
