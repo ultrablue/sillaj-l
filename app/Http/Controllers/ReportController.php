@@ -117,12 +117,15 @@ class ReportController extends Controller
             // Get the proper data. Note that the dataset is the result of ROLL UP in the query.
             if ($group === 'project') {
                 $eventsCollection = Event::rollupByProject($startTime, $endTime);
+                $projectTotals = Event::totalProjectTimeBetweenTwoDates($startTime, $endTime);
+                $projectTotals = $projectTotals->keyBy('name');
             } elseif ($group === 'task') {
                 // ddd($group);
                 $eventsCollection = Event::rollupByTask($startTime, $endTime);
             }
         }
-        return view('reports.show', ['events' => $eventsCollection, 'total' => $eventsCollection->last()->duration, 'group' => $groupDisplayArray, 'dates' => [$startTime, $endTime]]);
+        // dd($projectTotals);
+        return view('reports.show', ['events' => $eventsCollection, 'total' => $eventsCollection->last()->duration, 'group' => $groupDisplayArray, 'dates' => [$startTime, $endTime], 'projectTotals' => $projectTotals]);
     }
 
     // I think these ones are for the email reports?
