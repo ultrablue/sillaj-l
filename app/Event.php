@@ -197,9 +197,12 @@ class Event extends Model
             ->where('e.user_id', '=', auth()->id())
             ->whereBetween('e.event_date', [$start, $end])
             ->select('project_id', 'projects.name')
-            ->addSelect(DB::raw('(SELECT SUM(duration) FROM events WHERE project_id = e.project_id) AS total_duration'))
+            ->addSelect(DB::raw('(SELECT SUM(duration) FROM events WHERE project_id = e.project_id AND user_id = ' . auth()->id() . ') AS total_duration'))
             ->groupBy('project_id')
             ->orderBy('projects.name');
+
+        // dump($query->toSql(), auth()->id(), $start, $end);
+
 
         return $query->get();
     }
