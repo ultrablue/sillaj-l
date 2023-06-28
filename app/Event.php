@@ -97,14 +97,19 @@ class Event extends Model
      */
     public static function rollupByProject(CarbonImmutable $start, CarbonImmutable $end)
     {
-        return self::join('projects', 'events.project_id', '=', 'projects.id')
+        $query = self::join('projects', 'events.project_id', '=', 'projects.id')
             ->join('tasks', 'events.task_id', '=', 'tasks.id')
             ->where('events.user_id', '=', auth()->id())
             ->where('events.duration', '>', 0)
             ->whereBetween('events.event_date', [$start, $end])
             ->select('projects.name as project', 'tasks.name as task', DB::raw('SUM(duration) AS duration'))
-            ->groupBy('project', DB::raw('task with rollup'))
-            ->get();
+            ->groupBy('project', DB::raw('task with rollup'));
+
+        return $query->get();
+
+
+        // dd(DB::getQueryLog()); // Show results of log
+
     }
 
     // This is the first draft of a query that gets by a "Task Group." A Task Group is an array of Tasks that are grouped for some reason. For example, Leaves.
