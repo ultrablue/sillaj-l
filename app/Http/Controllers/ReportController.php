@@ -122,10 +122,19 @@ class ReportController extends Controller
             } elseif ($group === 'task') {
                 // ddd($group);
                 $eventsCollection = Event::rollupByTask($startTime, $endTime);
+                // TODO Urg, DRY, please.
+                $projectTotals = Event::totalTaskTimeBetweenTwoDates($startTime, $endTime, $group);
+                $projectTotals = $projectTotals->keyBy('name');
             }
         }
-        // dd($projectTotals);
-        return view('reports.show', ['events' => $eventsCollection, 'total' => $eventsCollection->last()->duration, 'group' => $groupDisplayArray, 'dates' => [$startTime, $endTime], 'projectTotals' => $projectTotals]);
+
+        return view('reports.show', [
+            'events'        => $eventsCollection,
+            'total'         => $eventsCollection->last()->duration,
+            'group'         => $groupDisplayArray,
+            'dates'         => [$startTime, $endTime],
+            'projectTotals' => $projectTotals
+        ]);
     }
 
     // I think these ones are for the email reports?

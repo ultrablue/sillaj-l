@@ -90,6 +90,24 @@ class Event extends Model
     }
 
 
+
+
+
+    public static function rollUpTemp(CarbonImmutable $start, CarbonImmutable $end, User $user)
+    {
+        $eventsCollection = $user->events()
+            ->whereBetween('event_date', [$start->toDateString(), $end->toDateString()])
+            // ->where('duration', '>', 0)
+            ->with(['task', 'project'])
+            ->get();
+
+        return $eventsCollection;
+    }
+
+
+
+
+
     /**
      * This returns a ROLL UPed results set, sorted and grouped by Project, Task.
      * Note that MySQL naturally sorts by the GROUP BY columns, in ASC order.
@@ -101,15 +119,14 @@ class Event extends Model
             ->join('tasks', 'events.task_id', '=', 'tasks.id')
             ->where('events.user_id', '=', auth()->id())
             ->where('events.duration', '>', 0)
+            // ->where('tasks.use_in_reports', '=', 1)
             ->whereBetween('events.event_date', [$start, $end])
             ->select('projects.name as project', 'tasks.name as task', DB::raw('SUM(duration) AS duration'))
             ->groupBy('project', DB::raw('task with rollup'));
 
         return $query->get();
 
-
-        // dd(DB::getQueryLog()); // Show results of log
-
+        // ddd($query->get());
     }
 
     // This is the first draft of a query that gets by a "Task Group." A Task Group is an array of Tasks that are grouped for some reason. For example, Leaves.
@@ -190,12 +207,14 @@ class Event extends Model
      * 
      * This is used for Reports, where displaying the total effort expended on a Project worked on during the time between two dates is very useful.
      *
-     * @param CarbonImmutable $start
-     * @param CarbonImmutable $end
+     * @param CarbonImmutable $start The start date of the date range to report upon.
+     * @param CarbonImmutable $end The end date of the date range to report upon.
      * @return Collection
      */
     public static function totalProjectTimeBetweenTwoDates(CarbonImmutable $start, CarbonImmutable $end): Collection
     {
+        // TODO Should this return a query or a results set?
+        // WYA: You need to implelement grouping by task, project. 
 
         $query = DB::table('events as e')
             ->leftJoin('projects', 'e.project_id', '=', 'projects.id')
@@ -208,9 +227,43 @@ class Event extends Model
 
         // dump($query->toSql(), auth()->id(), $start, $end);
 
+        return $query->get();
+    }
+
+
+
+
+    // TODO URG!! DRY, please. This whole Model needs to be cleaned up.
+    /**
+     * Returns a simple Collection that tallies the total Duration for all Projects related to the Events between two dates.
+     * 
+     * This is used for Reports, where displaying the total effort expended on a Project worked on during the time between two dates is very useful.
+     *
+     * @param CarbonImmutable $start The start date of the date range to report upon.
+     * @param CarbonImmutable $end The end date of the date range to report upon.
+     * @return Collection
+     */
+    public static function totalTaskTimeBetweenTwoDates(CarbonImmutable $start, CarbonImmutable $end): Collection
+    {
+        // TODO Should this return a query or a results set?
+        // WYA: You need to implelement grouping by task, project. 
+
+        $query = DB::table('events as e')
+            ->leftJoin('tasks', 'e.task_id', '=', 'tasks.id')
+            ->where('e.user_id', '=', auth()->id())
+            ->whereBetween('e.event_date', [$start, $end])
+            ->select('task_id', 'tasks.name')
+            ->addSelect(DB::raw('(SELECT SUM(duration) FROM events WHERE task_id = e.task_id AND user_id = ' . auth()->id() . ') AS total_duration'))
+            ->groupBy('task_id')
+            ->orderBy('tasks.name');
+
+        // dump($query->toSql(), auth()->id(), $start, $end);
 
         return $query->get();
     }
+
+
+
 
 
     // Accessor and Mutators
