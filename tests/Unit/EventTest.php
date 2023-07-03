@@ -12,6 +12,9 @@ use App\User;
 use App\Project;
 use App\Task;
 use App\Event;
+use Carbon\CarbonImmutable;
+
+use function PHPUnit\Framework\assertEquals;
 
 class EventTest extends TestCase
 {
