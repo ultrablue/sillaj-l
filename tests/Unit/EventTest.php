@@ -74,4 +74,19 @@ class EventTest extends TestCase
 
         $this->assertNull($event->start());
     }
+
+    /** @test */
+    public function an_events_end_method_returns_carbon()
+    {
+        $event = Event::factory()->create(['user_id' => $this->user->id, 'project_id' => $this->project->id, 'task_id' => $this->task->id]);
+
+        $this->assertInstanceOf(Carbon::class, $event->end());
+    }
+
+    /** @test */
+    public function an_events_end_method_returns_null()
+    {
+        $event = Event::factory()->make(['user_id' => $this->user->id, 'project_id' => $this->project->id, 'task_id' => $this->task->id, 'time_end' => '']);
+        $this->assertNull($event->end());
+    }
 }

@@ -72,7 +72,9 @@ class Event extends Model
      */
     public function end()
     {
-        return Carbon::createFromTimeString($this->time_end);
+        if ($this->time_end) {
+            return Carbon::createFromTimeString($this->time_end);
+        }
     }
 
     /**
