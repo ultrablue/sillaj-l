@@ -82,6 +82,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/reports/currentDayByProject', 'ReportController@currentDayByProjectReport')->name('reports-email');
     Route::get('/reports/lastMonthByProject', 'ReportController@previousMonthReportByProject')->name('reports-previousMonthByProject');
     Route::get('/reports/lastMonthByTask', 'ReportController@previousMonthReportByTask')->name('reports-previousMonthByTask');
+    Route::get('/reports/test', 'ReportController@newReportTest')->name('reports-newReportTest');
 });
 
 // Framework generated helper for Authentication.

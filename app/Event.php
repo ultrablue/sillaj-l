@@ -7,6 +7,9 @@ use Carbon\CarbonImmutable;
 use Carbon\CarbonInterval;
 use Collective\Html\Eloquent\FormAccessible;
 use DateInterval;
+use Doctrine\DBAL\Query\QueryBuilder;
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -262,6 +265,35 @@ class Event extends Model
         return $query->get();
     }
 
+
+    // WYA - Testing this one. Unfortunatly, tinker isn't all that helpful, so you're moving on to creating a route, etc.
+    /**
+     * Returns a Collection ready for presentation in Reports. 
+     * 
+     * @param mixed $ordering - Either a string or an array of strings representing the sort column(s).
+     * @param CarbonImmutable $start
+     * @param CarbonImmutable $end
+     * @return QueryBuilder
+     */
+    public static function reportQueryTheLast(array $ordering, CarbonImmutable $start, CarbonImmutable $end): Builder
+    {
+        $query = self::join('projects', 'events.project_id', '=', 'projects.id')
+            ->join('tasks', 'events.task_id', '=', 'tasks.id')
+            ->where('events.user_id', '=', auth()->id())
+            ->where('events.duration', '>', 0)
+            ->whereBetween('events.event_date', [$start, $end])
+            ->select('tasks.name as task', 'projects.name as project', 'events.duration', 'iso_8601_duration');
+
+        foreach ($ordering as $item) {
+            $query->orderBy($item);
+        }
+
+        // $r = $query->get();
+        // dd($r);
+
+
+        return $query;
+    }
 
 
 

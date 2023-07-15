@@ -152,6 +152,7 @@ class ReportController extends Controller
 
         $totalTime = $eventsCollection->sum('duration');
 
+
         // By Project, then Task.
         $eventsCollection = $eventsCollection->sortBy(['project.name', 'task.name'])->groupBy(['project.name', 'task.name']);
         $groupDisplayArray = ['Project', 'Task'];
@@ -212,8 +213,29 @@ class ReportController extends Controller
     }
 
     // Gah. I'm not sure how to DRY this up.
-    private function reportQuery(CarbonImmitable $start, CarbonImmutable $end, User $user, array $grouping)
+    private function reportQuery(CarbonImmutable $start, CarbonImmutable $end, User $user, array $grouping)
     {
         $eventsCollection = Event::rollUp($start, $end, $user);
+    }
+
+    public function newReportTest(Request $request)
+    {
+
+        $start = new CarbonImmutable('2023-06-19');
+        $end   = new CarbonImmutable('2023-06-25');
+        $orderBy = ['project', 'task'];
+
+        $query = Event::reportQueryTheLast($orderBy, $start, $end);
+
+        $results = $query->get();
+        // dd($results);
+        $groupedResults = $results->groupBy($orderBy);
+
+        $projectTotals = Event::totalProjectTimeBetweenTwoDates($start, $end, 'project');
+        $projectTotals = $projectTotals->keyBy('name');
+        // dd($projectTotals["Dolore est iste"]->total_duration);
+
+
+        return view('reports.newReportTest', ['ungroupedEvents' => $results, 'groupedEvents' => $groupedResults, 'projectTotals' => $projectTotals]);
     }
 }

@@ -1,0 +1,5 @@
+$e = App\Event
+auth()->loginUsingId(1)
+$start = '2023-06-19'
+$end = '2023-06-25'
+
