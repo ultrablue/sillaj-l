@@ -57,24 +57,32 @@ class Event extends Model
         return $this->belongsTo('App\Project');
     }
 
+
     /**
-     * TODO I need some phpDoc, please.
+     * Convert Event's time_start value, which is a string, to a Carbon if it's populated, otherwise null.
+     *
+     * @return Carbon|null
      */
-    public function start()
+    public function start(): ?Carbon
     {
         if ($this->time_start) {
             return Carbon::createFromTimeString($this->time_start);
         }
+
+        return null;
     }
 
     /**
-     * TODO I need some phpDoc, please.
+     * Convert Event's time_end value, which is a string, to a Carbon if it's populated, otherwise null.
+     *
+     * @return Carbon|null
      */
-    public function end()
+    public function end(): ?Carbon
     {
         if ($this->time_end) {
             return Carbon::createFromTimeString($this->time_end);
         }
+        return null;
     }
 
     /**
