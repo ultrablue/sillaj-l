@@ -226,7 +226,7 @@ class ReportController extends Controller
         $end   = new CarbonImmutable('2023-06-25');
         $orderBy = ['project', 'task'];
 
-        $query = Event::reportQueryTheLast($orderBy, $start, $end);
+        $query = Event::reportQuery($orderBy, $start, $end);
 
         $results = $query->get();
         // dd($results);

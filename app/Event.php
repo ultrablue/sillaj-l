@@ -285,7 +285,7 @@ class Event extends Model
      * @param CarbonImmutable $end
      * @return QueryBuilder
      */
-    public static function reportQueryTheLast(array $ordering, CarbonImmutable $start, CarbonImmutable $end): Builder
+    public static function reportQuery(array $ordering, CarbonImmutable $start, CarbonImmutable $end): Builder
     {
         $query = self::join('projects', 'events.project_id', '=', 'projects.id')
             ->join('tasks', 'events.task_id', '=', 'tasks.id')
