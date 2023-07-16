@@ -283,9 +283,9 @@ class Event extends Model
      * @param mixed $ordering - Either a string or an array of strings representing the sort column(s).
      * @param CarbonImmutable $start
      * @param CarbonImmutable $end
-     * @return QueryBuilder
+     * @return Collection
      */
-    public static function reportQuery(array $ordering, CarbonImmutable $start, CarbonImmutable $end): Builder
+    public static function reportQuery(array $ordering, CarbonImmutable $start, CarbonImmutable $end): Collection
     {
         $query = self::join('projects', 'events.project_id', '=', 'projects.id')
             ->join('tasks', 'events.task_id', '=', 'tasks.id')
@@ -298,11 +298,7 @@ class Event extends Model
             $query->orderBy($item);
         }
 
-        // $r = $query->get();
-        // dd($r);
-
-
-        return $query;
+        return $query->get();
     }
 
 
