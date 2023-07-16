@@ -11,6 +11,7 @@ class EventFactory extends Factory
 {
     public function definition()
     {
+        // TODO It would be better if these were restricted to more realistic working hours. It's not required, though.
         // I think the idea here is to select a random date within the next two weeks.
         $startDate = Carbon::createFromTimeStamp($this->faker->dateTimeThisMonth('+2 week')->getTimeStamp());
         // This bit sets the time to a multiple of 5 minutes.
