@@ -287,16 +287,20 @@ class Event extends Model
      */
     public static function reportQuery(array $ordering, CarbonImmutable $start, CarbonImmutable $end): Collection
     {
+        // dd($start, $end);
+
         $query = self::join('projects', 'events.project_id', '=', 'projects.id')
             ->join('tasks', 'events.task_id', '=', 'tasks.id')
             ->where('events.user_id', '=', auth()->id())
             ->where('events.duration', '>', 0)
-            ->whereBetween('events.event_date', [$start, $end])
+            ->whereBetween('events.event_date', [$start->toDateString(), $end->toDateString()])
             ->select('tasks.name as task', 'projects.name as project', 'events.duration', 'iso_8601_duration');
 
         foreach ($ordering as $item) {
             $query->orderBy($item);
         }
+
+        // dd($query->toSql());
 
         return $query->get();
     }
