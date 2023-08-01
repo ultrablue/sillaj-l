@@ -5,7 +5,8 @@
 
    <div class="mt-10">
 
-      {!! Form::open(['route' => 'reports-show', 'class' => 'w-full max-w-sm']) !!}
+      {{-- Was: reports-show --}}
+      {!! Form::open(['route' => 'reports-newReportTest', 'class' => 'w-full max-w-sm']) !!}
       <div class="mt-1">
          <fieldset class="border-2 rounded-md border-gray-300 border-solid p-2">
             <legend class="pl-1 pr-5 ">Grouping</legend>
@@ -62,7 +63,7 @@
             {{ Form::label('predefined-range-all-time', 'All Time') }}
             <br>
 
-            {{ Form::radio('predefined-range', 'custom', false, ['id' => 'predefined-range-custom'], ['disabled' => 'disabled']) }}
+            {{ Form::radio('predefined-range', 'custom', false, ['id' => 'predefined-range-custom', 'disabled']) }}
             {{ Form::label('predefined-range-custom', '(Custom - Not implemented, yet; will display two date pickers)', ['class' => 'text-gray-400']) }}
          </fieldset>
 
