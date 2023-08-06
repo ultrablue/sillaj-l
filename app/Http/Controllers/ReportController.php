@@ -3,11 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Event as Event;
+use App\Http\Requests\ReportRequest;
 use App\Mail\Report;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use App\Services\ReportService;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\View\View;
+use Redirect;
 
 /**
  * Handles all Report Generation.
@@ -39,7 +45,7 @@ class ReportController extends Controller
      */
     public function show(Request $request)
     {
-        // ddd($request->all());
+        // dd($request->all());
 
         // Grouping, which can be by Project or by Task. Defaults to Project.
         $group = $request->input('group-by', 'project');
@@ -218,25 +224,105 @@ class ReportController extends Controller
         $eventsCollection = Event::rollUp($start, $end, $user);
     }
 
-    public function newReportTest(Request $request)
+
+
+
+
+
+    /**
+     * *********************************************************************************
+     * *********************************************************************************
+     * *********************************************************************************
+     * *********************************************************************************
+     * *********************************************************************************
+     */
+
+
+
+    public function newReportTest(Request $request, ReportService $reportService): mixed
     {
 
-        // TODO Fix, please.
-        $start = new CarbonImmutable('2023-06-19');
-        $end   = new CarbonImmutable('2023-06-25');
-        $orderBy = ['project', 'task'];
 
-        $results = Event::reportQuery($orderBy, $start, $end);
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'custom-range' => 'nullable|boolean|required_with:start_date|required_with:end_date',
+                'start_date'   => 'nullable|date|required_with:end_date|required_with:custom-range',
+                'end_date'     => 'nullable|date|required_with:start_date|required_with:custom-range',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        if ($request['predefined-range'] === 'all-time') {
+            // dump("Fetch all Events for user.");
+        } elseif ($request['predefined-range'] === 'custom') {
+            // dump("Custom date range");
+        } else {
+            $dates = $reportService->startAndEndDates($request);
+            //dump($dates['start-date']->toString());
+            //dump($dates['end-date']->toString());
+        }
+        // dump($request->all());
+        // dump($dates);
+
+
+
+        // return redirect('/posts');
+
+        // dd($validated);
+
+        // dump($reportService->startAndEndDates($request));
+        // dd($request['foo']);
+
+        // Grouping, which can be by Project or by Task. Defaults to Project.
+        $group = $request->input('group-by', 'project');
+        // The date range of the report. Defaults to this week.
+        $range = $request->input('predefined-range', 'this-week');
+        // The Leave filter, if there is one. Defaults to null.
+        $filter = $request->input('task-group-filter', null);
+
+        // TODO Fix, please.
+        $start   = $dates['start-date'];
+        $end     = $dates['end-date'];
+
+        // The defaut for grouping is project then task, or task by project.
+        $groupBy = ['project', 'task'];
+
+        if ($group === 'task') {
+            $groupBy = ['task', 'project'];
+        }
+        $results = Event::reportQuery($groupBy, $start, $end);
 
         // $results = $query->get();
         // dd($results);
-        $groupedResults = $results->groupBy($orderBy);
+        $groupedResults = $results->groupBy($groupBy);
+        if ($group === 'project') {
+            $projectTotals = Event::totalProjectTimeBetweenTwoDates($start, $end, 'project');
+            $projectTotals = $projectTotals->keyBy('name');
+        } else {
+            $projectTotals = Event::totalTaskTimeBetweenTwoDates($start, $end, 'project');
+            $projectTotals = $projectTotals->keyBy('name');
+        }
 
-        $projectTotals = Event::totalProjectTimeBetweenTwoDates($start, $end, 'project');
-        $projectTotals = $projectTotals->keyBy('name');
-        // dd($projectTotals["Dolore est iste"]->total_duration);
+        return view(
+            'reports.newReportTest',
+            [
+                'group'           => $groupBy,
+                'dates'           => $dates,
+                'ungroupedEvents' => $results,
+                'groupedEvents'   => $groupedResults,
+                'projectTotals'   => $projectTotals
+            ]
+        );
+    }
 
 
-        return view('reports.newReportTest', ['ungroupedEvents' => $results, 'groupedEvents' => $groupedResults, 'projectTotals' => $projectTotals]);
+
+
+    public function xTestX(Request $reqest)
+    {
     }
 }

@@ -21,6 +21,9 @@
 // with auth.
 
 // Home - For an authenticated User, these should display the main Event dashboard.
+
+use App\Http\Middleware\processReportParameters;
+
 Route::get('/home/', 'HomeController@index')->name('home');
 // where() constrains the route to the regex supplied.
 Route::get('/{eventdate?}', 'HomeController@index')->where('eventdate', '\d\d\d\d-\d\d-\d\d');
@@ -82,7 +85,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/reports/currentDayByProject', 'ReportController@currentDayByProjectReport')->name('reports-email');
     Route::get('/reports/lastMonthByProject', 'ReportController@previousMonthReportByProject')->name('reports-previousMonthByProject');
     Route::get('/reports/lastMonthByTask', 'ReportController@previousMonthReportByTask')->name('reports-previousMonthByTask');
-    Route::get('/reports/test', 'ReportController@newReportTest')->name('reports-newReportTest');
+    Route::post('/reports/test', 'ReportController@newReportTest')->name('reports-newReportTest');
 });
 
 // Framework generated helper for Authentication.

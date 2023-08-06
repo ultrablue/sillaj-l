@@ -244,8 +244,6 @@ class Event extends Model
     }
 
 
-
-
     // TODO URG!! DRY, please. This whole Model needs to be cleaned up.
     /**
      * Returns a simple Collection that tallies the total Duration for all Projects related to the Events between two dates.
@@ -274,6 +272,12 @@ class Event extends Model
 
         return $query->get();
     }
+
+
+
+
+
+
 
 
     // WYA - Testing this one. Unfortunatly, tinker isn't all that helpful, so you're moving on to creating a route, etc.

@@ -63,8 +63,8 @@
             {{ Form::label('predefined-range-all-time', 'All Time') }}
             <br>
 
-            {{ Form::radio('predefined-range', 'custom', false, ['id' => 'predefined-range-custom', 'disabled']) }}
-            {{ Form::label('predefined-range-custom', '(Custom - Not implemented, yet; will display two date pickers)', ['class' => 'text-gray-400']) }}
+            {{ Form::radio('custom-range', 'true', false, ['id' => 'custom-range']) }}
+            {{ Form::label('custom-range', '(Custom - Not implemented, yet; will display two date pickers)', ['class' => 'text-gray-400']) }}
          </fieldset>
 
 
