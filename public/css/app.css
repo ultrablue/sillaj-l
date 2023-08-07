@@ -739,6 +739,14 @@ video {
   width: 100%;
 }
 
+.w-64 {
+  width: 16rem;
+}
+
+.min-w-full {
+  min-width: 100%;
+}
+
 .max-w-sm {
   max-width: 24rem;
 }
@@ -751,8 +759,16 @@ video {
   flex: 1 1 0%;
 }
 
+.flex-initial {
+  flex: 0 1 auto;
+}
+
 .table-auto {
   table-layout: auto;
+}
+
+.table-fixed {
+  table-layout: fixed;
 }
 
 .cursor-pointer {
@@ -767,6 +783,10 @@ video {
 
 .flex-row {
   flex-direction: row;
+}
+
+.flex-col {
+  flex-direction: column;
 }
 
 .flex-wrap {

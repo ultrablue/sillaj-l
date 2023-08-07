@@ -37,5 +37,46 @@
 
       </div>
 
+
+      <div class="flex border">
+         <div class="flex-initial w-1/2">
+            <table class="table-auto min-w-full">
+               <thead>
+                  <tr>
+                     <th colspan="4" class="text-left border-b">Adipisci soluta</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr class="border-b">
+                     <td>Expedita temporibus</td>
+                     <td>2:00</td>
+                     <td>2.50</td>
+                     <td>11%</td>
+                  </tr>
+                  <tr>
+                     <td>Ut natus quasi</td>
+                     <td>1:30</td>
+                     <td>1.5</td>
+                     <td>7%</td>
+                  </tr>
+                  <thead>
+                     <tr>
+                        <th>Song</th>
+                        <th>Artist</th>
+                        <th>Year</th>
+                     </tr>
+                  </thead>
+                  <tr>
+                     <td>Shining Star</td>
+                     <td>Earth, Wind, and Fire</td>
+                     <td>1975</td>
+                  </tr>
+               </tbody>
+            </table>
+         </div>
+      </div>
+
+
+
    </div>
 @endsection
