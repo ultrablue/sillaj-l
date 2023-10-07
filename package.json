@@ -21,7 +21,7 @@
         "laravel-mix": "^6.0",
         "lodash": "^4.17.19",
         "popper.js": "^1.15.0",
-        "postcss": "^8.4.24",
+        "postcss": "^8.4.31",
         "tailwindcss": "^3.3.2",
         "vue": "^2.6.10"
     },
